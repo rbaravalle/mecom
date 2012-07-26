@@ -2,6 +2,16 @@
 %
 \usepackage{graphicx}
 \usepackage{amsmath,amsfonts}
+\usepackage{fullpage}
+
+% Shortcuts (should be in a separate file)
+% Author comments 
+\newcommand{\rodrigo}[1]{\authnote{Rodrigo}{#1}}
+\newcommand{\gustavo}[1]{\authnote{Gustavo}{#1}}
+
+% TODO
+\newcommand{\todo}[1]{\textbf{[TODO: #1]}}
+
 
 \title{Bread Crumb classification using fractal and multifractal features}
 
@@ -72,12 +82,12 @@ Recently, the theory of fractal sets has shown to provide local image features t
 crumbs with very high accuracy.
 \end{abstract}
 
-\section{INTRODUCTION}
+\section{Introduction}
 Fractal and multifractal analysis of images have demonstrated to capture useful properties of the underlying material represented. Characterisation of images using these features have been successfully applied in different fields, for instance medicine \cite{Andjelkovic2008,Yu2011} and texture classification \cite{Wendt2009}. Through several procedures, it is possible to obtain differents Fractal Dimensions (FD), each of them capturing a different property of the material (e.g., void fraction, rugosity).
 
 For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, permitting to establish quality parameters to them.
 
-In this work we propose the application of fractal and multifractal descriptors to classify among different bread types. The results of this feature extraction procedure are shown to be both robust and simple. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 (**ir completando**).
+In this work we propose the application of fractal and multifractal descriptors to classify among different bread types. The results of this feature extraction procedure are shown to be both robust and simple. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 \todo{Finish it as you write}.
 
 \section{Features}
 \subsection{Box Dimension}
@@ -163,9 +173,9 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{emf}}}$
 \label{fig:emf}
 \end{figure*}
 
-\section{Materials and methodology}
+\section{Materials and Methodology}
 
-\subsection{Image acquisition}
+\subsection{Image Acquisition}
 Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible surface for the four types of bread) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). In those cases where the utilised procedure uses a binarisation of the original image, it was obtained using the White's algotithm \cite{White83}. This algorithm applies a local thresholding schema, which showed better results in comparison to those obtained using a global thresholding schema (particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}), making it more robust to changes in the acquisition conditions. Since the center of air bubbles with bigger areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold using Otsu's algorithm \cite{Otsu79} is obtained and multiplied with a scalar which is a parameter, setting as white the resulting pixels in the final binarisation. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it an hybrid algorithm.
 
 
@@ -192,12 +202,16 @@ In Fig. \ref{fig:panes} an image of each bread type used in this work is shown. 
 
 The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. The library TreeBagger was used to do a Random Forest classification. In the case of support vector machines, {\em libsvm} was used.
 
-\subsection{Feature vectors}
+\subsection{Feature Vectors}
 Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal characteristics were obtained for each image (using $20$ H\"older exponents, a $42$ characteristics vector was obtained). The classification techniques {\em random forests} (RF) \cite{Breiman2001} and {\em support vector machines} (SVM) \cite{Boser92} were utilised to perform the classification. The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples).
 
 In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean) and with other characteristics such as mean cell area in pixels, standard deviation of cell area in pixels and void fraction (space occupied by air bubbles over total space, in pixels) \cite{Gonzales2008}, computing a $6$ dimension characteristics vector. 
 
+
+
 \section{Results}
+
+\subsection{Classification}
 Table \ref{table:table1} shows classification results for both methods of classification. It can be seen that the use of support vector machines obtained better results than those of random forests. Also the utilisation of non-fractal characteristics in the images gives comparable results to that of using fractals characteristics.
 
 \begin{table}[htb]
@@ -215,6 +229,13 @@ Table \ref{table:table1} shows classification results for both methods of classi
 \label{table:table1}
 \end{table}
 
+\subsection{Clustering}
+\todo{Add SOM explanation and results} \\
+\todo{Add SOM float figure}
+
+\subsection{Variable Selection}
+\todo{Add PCA explanation and results} \\
+\todo{Add PCA float table in a minipage next to the table1}
 
 \section{Conclusions and Future Work}
 The utilisation of fractal and multifractal characteristics in the classification of different bread types presents good results. The multifractal spectrum is successfully applied in the classification. On the other hand, the use of non-fractal characteristics such as color, also showed comparable results.
