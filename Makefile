@@ -16,8 +16,8 @@ EPSFILES =
 
 # Non-refdbms bib files to be included
 # If you need a local .bib file, put that here.
-LOCALBIB = bibliografia.bib amcapaper.bib
-LOCALXTXBIB = bibliografia.xtx amcapaper.xtx
+LOCALBIB = bibliografia/bibliografia.bib bibliografia/amcapaper.bib
+LOCALXTXBIB = bibliografia/bibliografia.xtx bibliografia/amcapaper.xtx
 
 # default targets to make for make all
 TARGETS = $(PROJECT).pdf
