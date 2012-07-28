@@ -9,6 +9,9 @@
 \newcommand{\rodrigo}[1]{\authnote{Rodrigo}{#1}}
 \newcommand{\gustavo}[1]{\authnote{Gustavo}{#1}}
 
+%% A simple dot to overcome graphicx limitations
+\newcommand{\mydot}{.}
+
 % TODO
 \newcommand{\todo}[1]{\textbf{[TODO: #1]}}
 
@@ -204,10 +207,19 @@ In Fig. \ref{fig:panes} an image of each bread type used in this work is shown. 
 
 The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. The library TreeBagger was used to do a Random Forest classification. In the case of support vector machines, {\em libsvm} was used. \todo{Add citation libSVM}
 
+\begin{figure*}[]
+\centering
+\includegraphics[width=0.45\textwidth]{exps/som/som\mydot multifractal}
+\includegraphics[width=0.45\textwidth]{exps/som/som\mydot rgb}
+\caption{Self organizing maps ... \todo{Add caption and proper titles}}
+\label{fig:soms}
+\end{figure*}
+
+
 \subsection{Feature Vectors}
 Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal characteristics were obtained for each image (using $20$ H\"older exponents, a $42$ characteristics vector was obtained). The classification techniques {\em random forests} (RF) \cite{Breiman2001} and {\em support vector machines} (SVM) \cite{Boser92} were utilised to perform the classification. The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples).
 
-In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean) and with other characteristics such as mean cell area in pixels, standard deviation of cell area in pixels and void fraction (space occupied by air bubbles over total space, in pixels) \cite{Gonzales2008}, computing a $6$ dimension characteristics vector. \todo{Remove void fraction features}
+In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean) and with other characteristics such as mean cell area in pixels, standard deviation of cell area in pixels and void fraction (space occupied by air bubbles over total space, in pixels) \cite{Gonzales2008}, computing a $6$ dimension characteristics vector. \todo{Remove void fraction features} \todo{Add SOM explanation}
 
 
 \section{Results}
@@ -230,10 +242,6 @@ Table \ref{table:table1} shows classification results for both methods of classi
 \caption{Results obtained in classification. }
 \label{table:table1}
 \end{table}
-
-\subsection{Clustering}
-\todo{Add SOM explanation and results} \\
-\todo{Add SOM float figure}
 
 \subsection{Variable Selection}
 \todo{Add PCA explanation and results} \\
