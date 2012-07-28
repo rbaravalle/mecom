@@ -90,7 +90,7 @@ Fractal and multifractal analysis of images have demonstrated to capture useful 
 
 For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, permitting to establish quality parameters to them.
 
-In this work we propose the application of fractal and multifractal descriptors to classify among different bread types \todo{redefine the problem solved in this paper with the non-bread images}. The results of this feature extraction procedure are shown to be both robust and simple. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 \todo{Finish it as you write}.
+In this work we propose the application of fractal and multifractal descriptors to classify among different bread types and to discriminate between bread and non-bread images. The results of this feature extraction procedure are shown to be both robust and simple. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 \todo{Finish it as you write}.
 
 \section{Features}
 \subsection{Box Dimension}
@@ -179,10 +179,11 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{imagenes/emf}}}$
 \section{Materials and Methodology}
 
 \subsection{Image Acquisition}
-Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible surface for the four types of bread) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). In those cases where the utilised procedure uses a binarisation of the original image, it was obtained using the White's algotithm \cite{White83}. This algorithm applies a local thresholding schema, which showed better results in comparison to those obtained using a global thresholding schema (particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}), making it more robust to changes in the acquisition conditions. Since the center of air bubbles with bigger areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold using Otsu's algorithm \cite{Otsu79} is obtained and multiplied with a scalar which is a parameter, setting as white the resulting pixels in the final binarisation. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it an hybrid algorithm.
-\todo{Add the information and the citation (\cite{FeiFei04}) of the non-bread images }
+Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible surface for the four types of bread) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). Also $20$ images of each bread type were taken with a digital camera, using the same spatial resolution. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. We also utilised images from the dataset CalTech101~\cite{FeiFei04} in order to test the method's performance with non-bread images. 
 
-In Fig. \ref{fig:panes} an image of each bread type used in this work is shown. In Fig. \ref{fig:binarizacion} an image and its resulting binarisation using the proposed algorithm is shown.
+In those cases where the utilised procedure uses a binarisation of the original image, it was obtained using the White's algotithm \cite{White83}. This algorithm applies a local thresholding schema, which showed better results in comparison to those obtained using a global thresholding schema (particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}), making it more robust to changes in the acquisition conditions. Since the center of air bubbles with bigger areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold using Otsu's algorithm \cite{Otsu79} is obtained and multiplied with a scalar which is a parameter, setting as white the resulting pixels in the final binarisation. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it an hybrid algorithm.
+
+In Fig. \ref{fig:bread} an image of each bread type used in this work and its resulting binarisaton using the proposed algorithm is shown.
 
 
 \begin{figure*}[htb]
@@ -191,21 +192,27 @@ In Fig. \ref{fig:panes} an image of each bread type used in this work is shown. 
 \includegraphics[scale=1.3]{imagenes/lactal14}
 \includegraphics[scale=1.3]{imagenes/salvado43}
 \includegraphics[scale=1.3]{imagenes/sandwich43}
-\caption{Digitalised images of Baguette, Lactal, Salvado and Sandwich bread types}
-\label{fig:panes}
+\includegraphics[scale=0.265]{imagenes/baguette20bin}
+\includegraphics[scale=0.333]{imagenes/lactal14bin}
+\includegraphics[scale=0.333]{imagenes/salvado43bin}
+\includegraphics[scale=0.333]{imagenes/sandwich43bin}
+\caption{Digitalised images of Baguette, Lactal, Salvado and Sandwich bread types with its binarisations}
+\label{fig:bread}
 \end{figure*}
+
+In Fig. \ref{fig:nonbread} four examples of non-bread images from the dataset CalTech101 are shown. The classificator is expected to classify them as non-bread type.
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=1.3]{imagenes/baguette20}
-\includegraphics[scale=0.265]{imagenes/baguette20bin}
-\caption{Image and its binarisation}
-\label{fig:binarizacion}
+\includegraphics[scale=0.1]{exps/100sample/image_0002}
+\includegraphics[scale=0.1]{exps/100sample/image_0019}
+\includegraphics[scale=0.3]{exps/100sample/image_0027}
+\includegraphics[scale=0.3]{exps/100sample/image_0170}
+\caption{Images from the dataset CalTech101}
+\label{fig:nonbread}
 \end{figure*}
 
-\todo{Add Figure with some example non-bread images}
-
-The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. The library TreeBagger was used to do a Random Forest classification. In the case of support vector machines, {\em libsvm} was used. \todo{Add citation libSVM}
+The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. The library TreeBagger was used to do a Random Forest classification. In the case of support vector machines, {\em libsvm} was used~\cite{Chang2011}
 
 \begin{figure*}[]
 \centering
@@ -219,7 +226,7 @@ The code of the algorithms Box dimension, Morphological fractal dimension and th
 \subsection{Feature Vectors}
 Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal characteristics were obtained for each image (using $20$ H\"older exponents, a $42$ characteristics vector was obtained). The classification techniques {\em random forests} (RF) \cite{Breiman2001} and {\em support vector machines} (SVM) \cite{Boser92} were utilised to perform the classification. The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples).
 
-In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean) and with other characteristics such as mean cell area in pixels, standard deviation of cell area in pixels and void fraction (space occupied by air bubbles over total space, in pixels) \cite{Gonzales2008}, computing a $6$ dimension characteristics vector. \todo{Remove void fraction features} \todo{Add SOM explanation}
+In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean), computing a $3$ dimension characteristics vector.  \todo{Add SOM explanation}
 
 
 \section{Results}
