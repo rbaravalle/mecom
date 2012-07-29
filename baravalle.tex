@@ -3,11 +3,11 @@
 \usepackage{graphicx}
 \usepackage{amsmath,amsfonts}
 \usepackage{fullpage}
+\usepackage{subfig}
 
 % Shortcuts (should be in a separate file)
 % Author comments 
 \newcommand{\rodrigo}[1]{\authnote{Rodrigo}{#1}}
-\newcommand{\gustavo}[1]{\authnote{Gustavo}{#1}}
 
 %% A simple dot to overcome graphicx limitations
 \newcommand{\mydot}{.}
@@ -227,27 +227,47 @@ A self-organizing maps (SOM)~\cite{Kohonen2001} of the vectorized images are use
 
 An unsupervised SOM of the fractal and non fractal representation of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes and the RGB features SOM appears to be more overlapped. Also, in the latter, the non bread class seems to be spread over the rest of the classes, making it more difficult to distinguish between bread and non bread types. It seems that a classificator could potentialy obtain better classification results using the fractal features. %%Next sections will show that this hypothesis is true.
 
-\begin{figure*}[]
-\centering
-\includegraphics[width=0.55\textwidth]{exps/som/som\mydot multifractal}
-\caption{Self organizing maps for the Fractal features: $1 =$ baguette,$2 =$ lactal, $3 =$ salvado, $4 =$ sandwich, $5 =$ non bread }
+\begin{figure*}
+
+\begin{centering}
+\subfloat[Fractal features SOM]{\begin{centering}
+\includegraphics[width=0.6\textwidth]{exps/som/som\mydot multifractal}
 \label{fig:somfractal}
+\par\end{centering}
+}
+\par\end{centering}
+
+\begin{centering}
+\subfloat[SOM using fractal features]{\begin{centering}
+\includegraphics[width=0.6\textwidth]{exps/som/som\mydot rgb}
+\label{fig:somrgb}
+\par\end{centering}
+}
+\par\end{centering}
+
+\caption{SOM of the scanned bread images (classes $1$~--~$4$) and the non bread images (class $5$)}
+
 \end{figure*}
 
-\begin{figure*}[]
-\centering
-\includegraphics[width=0.55\textwidth]{exps/som/som\mydot rgb}
-\caption{Self organizing maps for the non Fractal features}
-\label{fig:somrgb}
-\end{figure*}
+%\begin{figure*}[]
+%\centering
+%\includegraphics[width=0.55\textwidth]{exps/som/som\mydot multifractal}
+%\caption{Self organizing maps for the Fractal features: $1 =$ baguette,$2 =$ lactal, $3 =$ salvado, $4 =$ sandwich, $5 =$ non bread }
+%\label{fig:somfractal}
+%\end{figure*}
+
+%\begin{figure*}[]
+%\centering
+%\includegraphics[width=0.55\textwidth]{exps/som/som\mydot rgb}
+%\caption{Self organizing maps for the non Fractal features}
+%\label{fig:somrgb}
+%\end{figure*}
 
 \section{Results}
 
 \subsection{Classification}
-{\em Support Vector Machines} (SVM)~\cite{Boser92} were utilised to perform the classification, using {\em libsvm}~\cite{Chang2011}.
-
-
-\subsection{Scanned Images}
+{\em Support Vector Machines} (SVM)~\cite{Boser92} were utilised to perform the classification, using {\em libsvm}~\cite{Chang2011} implementation.
+%\subsection{Scanned Images}
 The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can be seen that the utilisation of non-fractal features in the images gives comparable results to that of using fractals features.
 
 \begin{table}[htb]
