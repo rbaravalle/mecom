@@ -179,7 +179,7 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{imagenes/emf}}}$
 \section{Materials and Methodology}
 
 \subsection{Image Acquisition}
-Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible surface for the four types of bread) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). Also $20$ images of each bread type were taken with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig. \ref{fig:camera} four examples of bread images from the camera are shown. We also employed 20 \todo{Check} randomly selected images from the dataset CalTech101~\cite{FeiFei04} in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
+Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible surface for the four types of bread) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). Also $20$ images of each bread type were taken with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig. \ref{fig:camera} four examples of bread images from the camera are shown. We also employed 20 \todo{Check} randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
 
 In those cases where the utilised procedure uses a binarisation of the original image, it was obtained using the White's algotithm \cite{White83}. This algorithm applies a local thresholding schema, which showed better results in comparison to those obtained using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions varies. Since the center of air bubbles with bigger areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold using Otsu's algorithm \cite{Otsu79} is obtained and multiplied with a scalar which is a parameter, setting as white the resulting pixels in the final binarisation. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it an hybrid algorithm. In Fig.~\ref{fig:bread} an image of each bread type used in this work and its resulting binarisaton using the proposed algorithm is shown.  
 
@@ -210,13 +210,13 @@ In those cases where the utilised procedure uses a binarisation of the original 
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.3]{imagenes/camera/l19}
-\includegraphics[scale=0.3]{imagenes/camera/s7}
-\includegraphics[scale=0.3]{imagenes/camera/Sa14}
+\includegraphics[scale=0.28]{imagenes/camera/b}
+\includegraphics[scale=0.28]{imagenes/camera/l19}
+\includegraphics[scale=0.28]{imagenes/camera/s7}
+\includegraphics[scale=0.28]{imagenes/camera/Sa14}
 \caption{Digitalised images from a digital camera}
 \label{fig:camera}
 \end{figure*}
-\todo{Falta una imagen de baguette}
 
 \subsection{Feature Vectors}
 
@@ -248,8 +248,7 @@ An unsupervised SOM of the fractal and non fractal representation of scanned ima
 
 
 \subsection{Scanned Images}
-The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can be seen that the utilisation of non-fractal features in the images gives comparable results to that of using fractals featuresf
-.
+The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can be seen that the utilisation of non-fractal features in the images gives comparable results to that of using fractals features.
 
 \begin{table}[htb]
 \centering
@@ -260,12 +259,12 @@ The method {\em k-fold cross validation} was utilised in order to validate the r
     Accuracy  & $\textbf{88.4}\%$ & $86\%$\\
     \hline
 \end{tabular}
-\caption{Results obtained in classification. }
+\caption{Results obtained in classification}
 \label{table:tableFirstTest}
 \end{table}
 
 \subsection{Robustness Test}
-In order to test for the robustness of the method, the images from the camera, and non bread images were used as test. In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between images of breads and non breads, making it a good discriminator of non bread images.
+In order to test for the robustness of the method, $20$ scanned images from each class, and $20$ from the CalTech101 dataset, were used as train and all the images from the digital camera ($20$ per class), and $20$ non bread images were used as test (counting $100$ images). In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between images of breads and non breads, making it a good discriminator of non bread images.
 
 \begin{table}[htb]
 \centering
@@ -276,7 +275,7 @@ In order to test for the robustness of the method, the images from the camera, a
     Accuracy  & $\textbf{40}\%$ & $20\%$\\
     \hline
 \end{tabular}
-\caption{Results obtained in classification. }
+\caption{Results obtained in classification}
 \label{table:tableRobustness}
 \end{table}
 
@@ -323,8 +322,8 @@ In order to test for the robustness of the method, the images from the camera, a
 \label{table:ConfusionMatrixNonFractal}
 \end{table}
 
-\subsection{Cheating the classifier}
-It is possible to cheat the classifiers with fake images. Fig. \ref{fig:fakeRGB} shows an image that is classified as bread by its RGB features. Fig. \ref{fig:fakeMultifractal} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its multifractal features. It is easy to cheat the RGB classifier, using images with similar colors features as breads, but it is not clear how to do that with fractal features. 
+\subsection{Deceiving the classifier}
+It is possible to mislead the classifiers with false images. Fig. \ref{fig:fakeRGB} shows an image that is classified as bread by its RGB features. Fig. \ref{fig:fakeMultifractal} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its multifractal features. It is easy to deceive the RGB classifier, using images with similar color features as breads, but it is not clear how to do that with fractal features. We conclude that the fractal classifier is more accurate to discriminate these false images.
 
 \begin{figure*}[]
 \centering
