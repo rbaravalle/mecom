@@ -222,8 +222,6 @@ In Fig. \ref{fig:bread} an image of each bread type used in this work and its re
 
 \subsection{Feature Vectors}
 
-The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. The library TreeBagger was used to do a Random Forest classification. In the case of support vector machines, {\em libsvm} was used~\cite{Chang2011}
-
 \begin{figure*}[]
 \centering
 \includegraphics[width=0.45\textwidth]{exps/som/som\mydot multifractal}
@@ -233,7 +231,7 @@ The code of the algorithms Box dimension, Morphological fractal dimension and th
 \end{figure*}
 
 
-Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal characteristics were obtained for each image (using $20$ H\"older exponents, a $42$ characteristics vector was obtained). The classification techniques {\em random forests} (RF) \cite{Breiman2001} and {\em support vector machines} (SVM) \cite{Boser92} were utilised to perform the classification. The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples).
+Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal characteristics were obtained for each image (using $20$ H\"older exponents, a $42$ characteristics vector was obtained). The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. {\em Support Vector Machines} (SVM)~\cite{Boser92} were utilised to perform the classification, using {\em libsvm}~\cite{Chang2011}. The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples).
 
 In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean), computing a $3$ dimension characteristics vector.  \todo{Add SOM explanation}
 
@@ -243,8 +241,8 @@ In order to make a comparison, a vector with RGB color characteristics was used 
 \section{Results}
 
 \subsection{Classification}
-Table \ref{table:table1} shows classification results for both methods of classification. It can be seen that the use of support vector machines obtained better results than those of random forests. Also the utilisation of non-fractal characteristics in the images gives comparable results to that of using fractals characteristics.
-\todo{Add confusion matrix and explanation}
+\subsection{Scanned Images}
+Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can bee seen that the utilisation of non-fractal characteristics in the images gives comparable results to that of using fractals characteristics.
 
 \begin{table}[htb]
 \centering
@@ -252,14 +250,82 @@ Table \ref{table:table1} shows classification results for both methods of classi
     \hline
     Characteristics & Fractals & non Fractals\\
     \hline
-    Support Vector Machines  & $93.5\%$ & $\textbf{95\%}$\\
-    \hline
-    Random Forests & $\textbf{88.15\%}$  & $85.3\%$\\
+    Accuracy  & $\textbf{88.4}\%$ & $86\%$\\
     \hline
 \end{tabular}
 \caption{Results obtained in classification. }
-\label{table:table1}
+\label{table:tableFirstTest}
 \end{table}
+
+\subsection{Robustness Test}
+In order to test for the robustness of the method, the images from the camera, and non bread images were used as test. In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal characteristics are able to determine between images of breads and non breads, making it a good discriminator of non bread images.
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|}
+    \hline
+    Characteristics & Fractals & non Fractals\\
+    \hline
+    Accuracy  & $\textbf{40}\%$ & $20\%$\\
+    \hline
+\end{tabular}
+\caption{Results obtained in classification. }
+\label{table:tableRobustness}
+\end{table}
+
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Classes & Baguette & Lactal & Salvado & Sandwich & Non bread\\
+    \hline
+    Baguette    &   $0$  &   $9$  &   $0$  &  $11$ &   $0$\\
+    \hline
+    Lactal  & $0$ & $15$ & $0$ & $5$ & $0$\\
+    \hline
+    Salvado & $0$ & $6$ & $0$ & $12$ & $2$\\
+    \hline
+    Sandwich  & $0$ & $10$ & $0$ & $10$ & $0$\\
+    \hline
+    Non bread  & $3$ & $0$ & $2$ & $0$ & $15$\\
+    \hline
+\end{tabular}
+\caption{Confusion Matrix for the fractal characteristics}
+\label{table:ConfusionMatrixFractal}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Classes & Baguette & Lactal & Salvado & Sandwich & Non bread\\
+    \hline
+    Baguette  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    Lactal  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    Salvado & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    Sandwich  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    Non bread  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+\end{tabular}
+\caption{Confusion Matrix for the RGB characteristics}
+\label{table:ConfusionMatrixNonFractal}
+\end{table}
+
+\subsection{Cheating the classifier}
+It is possible to cheat the classifiers with fake images. Fig. \ref{fig:fakeRGB} shows an image that is classified as bread by its RGB characteristics. Fig. \ref{fig:fakeRGB} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its multifractal characteristics. It is easy to cheat the RGB classifier, using images with similar colors as breads, but it is not clear how to do that with fractal characteristics.
+
+\begin{figure*}[]
+\centering
+\includegraphics[width=0.45\textwidth]{exps/fake/320px-Sand_from_Kuta,_Bali,_Indonesia}
+\caption{An image of sand classified as bread by the RGB characteristics}
+\label{fig:fakeRGB}
+\end{figure*}
+
 
 \subsection{Variable Selection}
 \todo{Add PCA explanation and results} \\
