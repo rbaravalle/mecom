@@ -127,7 +127,7 @@ M_{d} = 2 + m.
 \end{equation}
 
 \subsection{Multifractal Analysis}
-Some elements in nature show fractal characteristics or autosimilarity. The fractal dimension is an exponent which relates the statistical autosimilarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneoulsy. In a previous work \cite{Baravalle2012}, it has been shown, using the Box Dimension and the Korcak Dimension \cite{Imre11}, that the object of study of this work presented multifractal characteristics. As a consequence, fractal and multifractal characteristics are taken into account.
+Some elements in nature show fractal features or autosimilarity. The fractal dimension is an exponent which relates the statistical autosimilarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneoulsy. In a previous work \cite{Baravalle2012}, it has been shown, using the Box Dimension and the Korcak Dimension \cite{Imre11}, that the object of study of this work presented multifractal features. As a consequence, fractal and multifractal features are taken into account.
 
 \subsubsection*{H\"older Exponent}
 Informally, the way to proceed with multifractal analysis is to examine, in the limit, the local behaviour of a measure $\mu$ at each point of the set in study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ is obtained applying this procedure to the entire set, in this case, an image.
@@ -166,7 +166,7 @@ To obtain the H\"older exponent at a given pixel, a linear regression adjustment
 
 From the $\alpha$ values a new image is generated in grey scale ($\alpha$ image), with the same dimensions of the original, where the value at each pixel is a mapping from the exponent to that scale. Since it is possible to obtain $M\times M$ values per image (where $M\times M$ is the dimension in pixels of the image), it is necessary to define a number $C$ of classes (the number could be a parameter), each of which establish $\alpha$ range values, and calculate the spectrum only for those values.
 
-Let $\alpha_{min}$ and  $\alpha_{max}$ be the minimum and maximum values of $\alpha$ computed in the image. $C$ values are defined $\alpha_{c} = \alpha_{min} + (c-1)(\alpha_{max}-\alpha_{min})/C$, where $c = 1,2,\dots,C$. Then, $\alpha \in \alpha_{c}$ if $\alpha_{c} \leq \alpha < \alpha_{c+1}$. If $\alpha = \alpha_{max}$, then $\alpha \in \alpha_{C}$. Finally, a linear regression adjustment is obtained for the values $N_{\epsilon}(\alpha)$ and $\epsilon$ in the $\log-\log$ space. The value of the slope is the FD $f(\alpha_{c})$ and must be calculated for $c = 1,2,\dots,C$. In this way $C$ $f(\alpha)$ values are obtained, representing $C$ FDs ($C$ $\alpha_{c}$ associated values are also obtained). In this work all these values are used as characteristics in order to do the classification (so $2\times C$ characteristics are obtained from the multifractal analysis). In Fig. \ref{fig:emf} an image of lactal bread and its multifractal analysis are shown (in this case, $C = 20$).
+Let $\alpha_{min}$ and  $\alpha_{max}$ be the minimum and maximum values of $\alpha$ computed in the image. $C$ values are defined $\alpha_{c} = \alpha_{min} + (c-1)(\alpha_{max}-\alpha_{min})/C$, where $c = 1,2,\dots,C$. Then, $\alpha \in \alpha_{c}$ if $\alpha_{c} \leq \alpha < \alpha_{c+1}$. If $\alpha = \alpha_{max}$, then $\alpha \in \alpha_{C}$. Finally, a linear regression adjustment is obtained for the values $N_{\epsilon}(\alpha)$ and $\epsilon$ in the $\log-\log$ space. The value of the slope is the FD $f(\alpha_{c})$ and must be calculated for $c = 1,2,\dots,C$. In this way $C$ $f(\alpha)$ values are obtained, representing $C$ FDs ($C$ $\alpha_{c}$ associated values are also obtained). In this work all these values are used as features in order to do the classification (so $2\times C$ features are obtained from the multifractal analysis). In Fig. \ref{fig:emf} an image of lactal bread and its multifractal analysis are shown (in this case, $C = 20$).
 
 \begin{figure*}[htb]
 \centering
@@ -223,22 +223,26 @@ In Fig. \ref{fig:bread} an image of each bread type used in this work and its re
 \subsection{Feature Vectors}
 
 
-Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal characteristics were obtained for each image (using $20$ H\"older exponents, a $42$ characteristics vector was obtained). The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. In order to make a comparison, a vector with RGB color characteristics was used (R mean, G mean, B mean), computing a $3$ dimension characteristics vector.
+Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal features were obtained for each image (using $20$ H\"older exponents, a $42$ features vector was obtained). The code of the algorithms Box dimension, Morphological fractal dimension and the multifractal spectrum was written and run in Matlab. In order to make a comparison, a vector with RGB color features was used (R mean, G mean, B mean), computing a $3$ dimension features vector.
 
 \subsection{Self-Organizing Maps (SOM)}
-\todo{Add SOM explanation}
+SOM\todo{ Add cite Kohonen} are non-supervised generated maps. A SOM maps high dimensional data into a (tipically) two-dimensional representation, using neighborhood information, so preserving topological information of the original data. They are useful to visualize the input data into a lower dimensional view, in order to better understand it, and analyse its spatial representation.
 
-In Fig. \ref{fig:soms} a SOM of the fractal and non fractal feature vectors calculated for the scanner images are shown. On the one hand, the fractal features SOM seems to show easily separable classes, on the other hand, the RGB features appears to be more overlapped.
+An unsupervised Self Organizing Map (SOM) of the fractal and non fractal representation of scanned images are shown in Fig. \ref{fig:somfractal} and \ref{fig:somrgb} respectively. On the one hand, the fractal features SOM seems to show easily separable classes, on the other hand, the RGB features appears to be more overlapped. Also, in the latter, the non bread class seems to be spread over the rest of the classes, making it more difficult to distinguish between bread and non bread types. It seems that a classificator could get better classification results using the fractal features. Next sections will show that this hypothesis is true.
 
 \begin{figure*}[]
 \centering
-\includegraphics[width=0.45\textwidth]{exps/som/som\mydot multifractal}
-\includegraphics[width=0.45\textwidth]{exps/som/som\mydot rgb}
-\caption{Self organizing maps for the Fractal and non Fractal features}
-\label{fig:soms}
+\includegraphics[width=0.55\textwidth]{exps/som/som\mydot multifractal}
+\caption{Self organizing maps for the Fractal features: $1 =$ baguette,$2 =$ lactal, $3 =$ salvado, $4 =$ sandwich, $5 =$ non bread }
+\label{fig:somfractal}
 \end{figure*}
 
-
+\begin{figure*}[]
+\centering
+\includegraphics[width=0.55\textwidth]{exps/som/som\mydot rgb}
+\caption{Self organizing maps for the non Fractal features}
+\label{fig:somrgb}
+\end{figure*}
 
 \section{Results}
 
@@ -247,13 +251,14 @@ In Fig. \ref{fig:soms} a SOM of the fractal and non fractal feature vectors calc
 
 
 \subsection{Scanned Images}
-The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can be seen that the utilisation of non-fractal characteristics in the images gives comparable results to that of using fractals characteristics.
+The method {\em k-fold cross validation} was utilised in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can be seen that the utilisation of non-fractal features in the images gives comparable results to that of using fractals featuresf
+.
 
 \begin{table}[htb]
 \centering
 \begin{tabular}{|c|c|c|}
     \hline
-    Characteristics & Fractals & non Fractals\\
+    Features & Fractals & non Fractals\\
     \hline
     Accuracy  & $\textbf{88.4}\%$ & $86\%$\\
     \hline
@@ -263,13 +268,13 @@ The method {\em k-fold cross validation} was utilised in order to validate the r
 \end{table}
 
 \subsection{Robustness Test}
-In order to test for the robustness of the method, the images from the camera, and non bread images were used as test. In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal characteristics are able to determine between images of breads and non breads, making it a good discriminator of non bread images.
+In order to test for the robustness of the method, the images from the camera, and non bread images were used as test. In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between images of breads and non breads, making it a good discriminator of non bread images.
 
 \begin{table}[htb]
 \centering
 \begin{tabular}{|c|c|c|}
     \hline
-    Characteristics & Fractals & non Fractals\\
+    Features & Fractals & non Fractals\\
     \hline
     Accuracy  & $\textbf{40}\%$ & $20\%$\\
     \hline
@@ -296,7 +301,7 @@ In order to test for the robustness of the method, the images from the camera, a
     Non bread  & $3$ & $0$ & $2$ & $0$ & $15$\\
     \hline
 \end{tabular}
-\caption{Confusion Matrix for the fractal characteristics}
+\caption{Confusion Matrix for the fractal features}
 \label{table:ConfusionMatrixFractal}
 \end{table}
 
@@ -317,12 +322,12 @@ In order to test for the robustness of the method, the images from the camera, a
     Non bread  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
 \end{tabular}
-\caption{Confusion Matrix for the RGB characteristics}
+\caption{Confusion Matrix for the RGB features}
 \label{table:ConfusionMatrixNonFractal}
 \end{table}
 
 \subsection{Cheating the classifier}
-It is possible to cheat the classifiers with fake images. Fig. \ref{fig:fakeRGB} shows an image that is classified as bread by its RGB characteristics. Fig. \ref{fig:fakeMultifractal} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its multifractal characteristics. It is easy to cheat the RGB classifier, using images with similar colors characteristics as breads, but it is not clear how to do that with fractal features. 
+It is possible to cheat the classifiers with fake images. Fig. \ref{fig:fakeRGB} shows an image that is classified as bread by its RGB features. Fig. \ref{fig:fakeMultifractal} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its multifractal features. It is easy to cheat the RGB classifier, using images with similar colors features as breads, but it is not clear how to do that with fractal features. 
 
 \begin{figure*}[]
 \centering
@@ -338,14 +343,14 @@ It is possible to cheat the classifiers with fake images. Fig. \ref{fig:fakeRGB}
 \label{fig:fakeMultifractal}
 \end{figure*}
 
-\subsection{Variable Selection}
-\todo{Add PCA explanation and results} \\
-\todo{Add PCA float table in a minipage next to the table1}
+%\subsection{Variable Selection}
+%\todo{Add PCA explanation and results} \\
+%\todo{Add PCA float table in a minipage next to the table1}
 
 \section{Conclusions and Future Work}
-The utilisation of fractal and multifractal characteristics in the classification of different bread types presents good results. The multifractal spectrum is successfully applied in the classification. On the other hand, the use of non-fractal characteristics such as color, also showed comparable results.
+The utilisation of fractal and multifractal features in the classification of different bread types presents good results. The multifractal spectrum is successfully applied in the classification. On the other hand, the use of non-fractal features such as color, also showed comparable results.
 
-The results found can be applied to validate synthetic samples, i.e., the latter should have similar characteristics to certain bread type that it is trying to simulate. The characteristics obtained will be used to determine particle system parameters \cite{Baravalle2011} (e.g., lifetime of particles, color). These results can be extended to be used as quality parameters that these products should have.
+The results found can be applied to validate synthetic samples, i.e., the latter should have similar features to certain bread type that it is trying to simulate. The features obtained will be used to determine particle system parameters \cite{Baravalle2011} (e.g., lifetime of particles, color). These results can be extended to be used as quality parameters that these products should have.
 
 %
 \bibliography{bibliografia/amcapaper}
