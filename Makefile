@@ -118,5 +118,5 @@ spell:	$(SRCFILES)
 	detex $^ | aspell | env LANG=C sort -u | env LANG=C comm -23 - ok-words
 
 release: all
-	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dEmbedAllFonts=true -dSubsetFonts=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$(PROJECT)-compressed.pdf $(PROJECT).pdf
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dEmbedAllFonts=true -dSubsetFonts=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$(PROJECT)-compressed.pdf $(PROJECT).pdf pdfmarks
 
