@@ -13,7 +13,7 @@ som.breads <- som(Xtraining, grid)
 
 
 png("som.multifractal.png")
-kohonen::plot.kohonen(som.breads, type = "mapping", label = breads[training,41], col = breads[training,41]+1)
+kohonen::plot.kohonen(som.breads, type = "mapping", label = breads[training,41], col = breads[training,41]+1, main = "")
 dev.off()
 
 breads <- read.csv("test_clasificadorNF.txt", sep=" ", h=F)
@@ -28,5 +28,5 @@ som.breads <- som(Xtraining, grid)
 
 
 png("som.rgb.png")
-kohonen::plot.kohonen(som.breads, type = "mapping", label = breads[training,4], col = breads[training,4]+1)
+kohonen::plot.kohonen(som.breads, type = "mapping", label = breads[training,4], col = breads[training,4]+1, main="")
 dev.off()
