@@ -129,7 +129,7 @@ M_{d} = 2 + m.
 \subsection{Multifractal Analysis}
 Some elements in nature show fractal features or auto similarity. The fractal dimension is an exponent which relates the statistical auto similarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneously. In a previous work \cite{Baravalle2012}, it has been shown, using the Box Dimension and the Korcak Dimension \cite{Imre11}, that the bread crumb texture presented multifractal features. As a consequence, fractal and multifractal features are taken into account.
 
-\subsubsection*{H\"older Exponent}
+\subsubsection{H\"older Exponent}
 Informally, the way to proceed with multifractal analysis is to examine, in the limit, the local behaviour of a measure $\mu$ at each point of the set in study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ is obtained applying this procedure to the entire set, in this case, an image.
 
 Let $E$ be an structure divided in substructures $E_{i}$ of size $\epsilon$ in such a way that $U_{i}E_{i} = E$. Each substructure $E_{i}$ is characterized by a measure $\mu(E_{i})$. From the point of view of multifractal analysis, it is useful to define this value as a function of $\epsilon$.
@@ -161,7 +161,7 @@ f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \label{eqn:eqn7}
 \end{equation}
 
-\subsubsection*{Procedure}
+\subsubsection{Procedure}
 To obtain the H\"older exponent at a given pixel, a linear regression adjustment is needed using the values ($log(\epsilon)$,$log(\mu(E_{i})$), for $\epsilon = 2i + 1, i \ge 0$, where $E_{i}$ are boxes of side $\epsilon$ centered at the pixel. The slope of the adjustment is the desired H\"older exponent.
 
 From the $\alpha$ values a new image is generated in grey scale ($\alpha$ image), with the same dimensions of the original, where the value at each pixel is a mapping from the exponent to that scale. Since it is possible to obtain $M\times M$ values per image (where $M\times M$ is the dimension in pixels of the image), it is necessary to define a number $C$ of classes (the number could be a parameter), each of which establish $\alpha$ range values, and calculate the spectrum only for those values.
