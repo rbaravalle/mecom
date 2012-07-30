@@ -88,7 +88,7 @@ crumbs with very high accuracy.
 \section{Introduction}
 Fractal and multifractal analysis of images have demonstrated to capture useful properties of the underlying material represented. Characterisation of images using these features have been successfully applied in different fields, for instance medicine \cite{Andjelkovic2008,Yu2011} and texture classification \cite{Wendt2009}. Through several procedures, it is possible to obtain differents Fractal Dimensions (FD), each of them capturing a different property of the material (e.g., void fraction, rugosity).
 
-For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, permitting to establish quality parameters to them. In~\cite{Fan2006}, a quality bread crumb test was performed, obtaining similar results. Nevertheless, a smaller database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, showing that a vector comprising them would be capable of represent its crumb texture.
+For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, permitting to establish quality parameters to them. In~\cite{Fan2006}, a quality bread crumb test was performed, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, showing that a vector comprising them would be capable of obtaining key features of its crumb texture.
 
 In this work we propose the application of fractal and multifractal descriptors to classify among different bread types and to discriminate between bread and non-bread images. The proposed method is compared to a classifier that uses only mean color information. The results of this feature extraction procedure are shown to be both robust and simple to discriminate bread images from non bread ones. In section $2$ we briefly introduce the theory underlying fractal sets. In section $3$ we describe the materials and methods employed in the classification. In section $4$ we show the results obtained in the classification and we perform a robustness analysis of the method. In section 5 we summarise the conclusions, and we pose some possible future works.
 
@@ -127,7 +127,7 @@ M_{d} = 2 + m.
 \end{equation}
 
 \subsection{Multifractal Analysis}
-Some elements in nature show fractal features or autosimilarity. The fractal dimension is an exponent which relates the statistical autosimilarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneoulsy. In a previous work \cite{Baravalle2012}, it has been shown, using the Box Dimension and the Korcak Dimension \cite{Imre11}, that the object of study of this work presented multifractal features. As a consequence, fractal and multifractal features are taken into account.
+Some elements in nature show fractal features or autosimilarity. The fractal dimension is an exponent which relates the statistical autosimilarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} \cite{Mandelbrot89} are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneoulsy. In a previous work \cite{Baravalle2012}, it has been shown, using the Box Dimension and the Korcak Dimension \cite{Imre11}, that the bread crumb texture presented multifractal features. As a consequence, fractal and multifractal features are taken into account.
 
 \subsubsection*{H\"older Exponent}
 Informally, the way to proceed with multifractal analysis is to examine, in the limit, the local behaviour of a measure $\mu$ at each point of the set in study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ is obtained applying this procedure to the entire set, in this case, an image.
@@ -162,11 +162,11 @@ f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
 \end{equation}
 
 \subsubsection*{Procedure}
-To obtain the H\"older exponent at a given pixel, a linear regression adjustment is needed using the values ($log(\epsilon)$,$log(\mu(E_{i})$), for $\epsilon = 2i + 1, i \ge 0$, where $E_{i}$ are boxes of length $\epsilon$ centered at the pixel. The slope of the adjustment is the desired H\"older exponent.
+To obtain the H\"older exponent at a given pixel, a linear regression adjustment is needed using the values ($log(\epsilon)$,$log(\mu(E_{i})$), for $\epsilon = 2i + 1, i \ge 0$, where $E_{i}$ are boxes of side $\epsilon$ centered at the pixel. The slope of the adjustment is the desired H\"older exponent.
 
 From the $\alpha$ values a new image is generated in grey scale ($\alpha$ image), with the same dimensions of the original, where the value at each pixel is a mapping from the exponent to that scale. Since it is possible to obtain $M\times M$ values per image (where $M\times M$ is the dimension in pixels of the image), it is necessary to define a number $C$ of classes (the number could be a parameter), each of which establish $\alpha$ range values, and calculate the spectrum only for those values.
 
-Let $\alpha_{min}$ and  $\alpha_{max}$ be the minimum and maximum values of $\alpha$ computed in the image. $C$ values are defined $\alpha_{c} = \alpha_{min} + (c-1)(\alpha_{max}-\alpha_{min})/C$, where $c = 1,2,\dots,C$. Then, $\alpha \in \alpha_{c}$ if $\alpha_{c} \leq \alpha < \alpha_{c+1}$. If $\alpha = \alpha_{max}$, then $\alpha \in \alpha_{C}$. Finally, a linear regression adjustment is obtained for the values $N_{\epsilon}(\alpha)$ and $\epsilon$ in the $\log-\log$ space. The value of the slope is the FD $f(\alpha_{c})$ and must be calculated for $c = 1,2,\dots,C$. In this way $C$ $f(\alpha)$ values are obtained, representing $C$ FDs ($C$ $\alpha_{c}$ associated values are also obtained). In this work all these values are used as features in order to do the classification (so $2\times C$ features are obtained from the multifractal analysis). In Fig. \ref{fig:emf} an image of lactal bread and its multifractal analysis are shown (in this case, $C = 20$).
+Let $\alpha_{min}$ and  $\alpha_{max}$ be the minimum and maximum values of $\alpha$ computed in the image. $C$ values are defined $\alpha_{c} = \alpha_{min} + (c-1)(\alpha_{max}-\alpha_{min})/C$, where $c = 1,2,\dots,C$. Then, $\alpha \in \alpha_{c}$ if $\alpha_{c} \leq \alpha < \alpha_{c+1}$. If $\alpha = \alpha_{max}$, then $\alpha \in \alpha_{C}$. Finally, a linear regression adjustment is obtained for the values $N_{\epsilon}(\alpha)$ and $\epsilon$ in the $\log-\log$ space. The value of the slope is the FD $f(\alpha_{c})$ and must be calculated for $c = 1,2,\dots,C$. In this way $C$ $f(\alpha)$ values are obtained, representing $C$ FDs ($C$ $\alpha_{c}$ associated values are also obtained). In this work, all these values are used as features in the classification (so $2\times C$ features are obtained from the multifractal analysis). In Fig. \ref{fig:emf} an image of {\em lactal} bread type and its multifractal spectrum are shown (in this case, $C = 20$).
 
 \begin{figure*}[htb]
 \centering
@@ -179,9 +179,9 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{imagenes/emf}}}$
 \section{Materials and Methodology}
 
 \subsection{Image Acquisition}
-Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible surface for the four types of bread) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). Also $20$ images of each bread type were taken with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig. \ref{fig:camera} four examples of bread images from the camera are shown. We also employed 20 \todo{Check} randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
+Fifty images of four different bread types (lactal, baguette, salvado and sandwich), counting two hundred ($200$) images, were obtained using an electric slicer (in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase). The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel - $0.00527 mm^{2}$). Then they were converted to grey scale ($8$ bits). Also $20$ images of each bread type were taken with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images from the camera are shown. We also employed randomly selected images from the CalTech101~\cite{FeiFei04} dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
 
-In those cases where the utilised procedure uses a binarisation of the original image, it was obtained using the White's algotithm \cite{White83}. This algorithm applies a local thresholding schema, which showed better results in comparison to those obtained using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions varies. Since the center of air bubbles with bigger areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold using Otsu's algorithm \cite{Otsu79} is obtained and multiplied with a scalar which is a parameter, setting as white the resulting pixels in the final binarisation. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it an hybrid algorithm. In Fig.~\ref{fig:bread} an image of each bread type used in this work and its resulting binarisaton using the proposed algorithm is shown.  
+For the FDs that uses a binarisation of the original image, the algotithm presented in \cite{White83} was utilised. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions varies. Also an adjustment needs to be made since the center of air bubbles with bigger areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold is obtained using Otsu's algorithm \cite{Otsu79}. Then this threshold is multiplied with a scalar which is a parameter, defining as white the pixels with grey values below the threshold. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it an hybrid algorithm. In Fig.~\ref{fig:bread} an image of each bread type used in this work and its resulting binarisaton using the proposed algorithm is shown.  
 
 
 \begin{figure*}[htb]
@@ -225,7 +225,7 @@ Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and 
 
 A self-organizing maps (SOM)~\cite{Kohonen2001} of the vectorized images are useful to visualize these different representation of bread images into a lower dimensional view, in order to understand them better. A SOM maps high dimensional data into a (tipically) two-dimensional representation, using neighborhood information. Topological information of the original data is preserved.  
 
-An unsupervised SOM of the fractal and non fractal representation of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes and the RGB features SOM appears to be more overlapped. Also, in the latter, the non bread class seems to be spread over the rest of the classes, making it more difficult to distinguish between bread and non bread types. It seems that a classificator could potentialy obtain better classification results using the fractal features. %%Next sections will show that this hypothesis is true.
+An unsupervised SOM of the fractal and non fractal representation of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes and the RGB features SOM appears to be more overlapped. Also, in the latter, the non bread class seems to be spread over the rest of the classes, making it more difficult to distinguish between bread and non bread types. It seems that a classificator could potentially obtain better classification results using the fractal features. %%Next sections will show that this hypothesis is true.
 
 \begin{figure*}
 
@@ -284,7 +284,7 @@ The method {\em k-fold cross validation} was utilised in order to validate the r
 \end{table}
 
 \subsection{Robustness Test}
-In order to test for the robustness of the method, $20$ scanned images from each class, and $20$ from the CalTech101 dataset, were used as train and all the images from the digital camera ($20$ per class), and $20$ non bread images were used as test (counting $100$ images). In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between images of breads and non breads, making it a good discriminator of non bread images.
+In order to test for the robustness of the method, $20$ scanned images from each class, and $20$ from the CalTech101 dataset, were used as train and all the images from the digital camera ($20$ per class), and $20$ non bread images were used as test ($100$ images for train and $100$ images for test). In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. Nevertheless, in Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between images of breads and non breads, making it a good discriminator of non bread images.
 
 \begin{table}[htb]
 \centering
@@ -343,20 +343,23 @@ In order to test for the robustness of the method, $20$ scanned images from each
 \end{table}
 
 \subsection{Deceiving the classifier}
-It is possible to mislead the classifiers with false images. Fig. \ref{fig:fakeRGB} shows an image that is classified as bread by its RGB features. Fig. \ref{fig:fakeMultifractal} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its multifractal features. It is easy to deceive the RGB classifier, using images with similar color features as breads, but it is not clear how to do that with fractal features. We conclude that the fractal classifier is more accurate to discriminate these false images.
+It is possible to mislead the classifiers with false images. Fig.~\ref{fig:fakeRGB} shows an image that is classified as bread by its RGB features. Fig.~\ref{fig:fakeMultifractal} shows an image generated by a particle system~\cite{Baravalle2011} which is classified as bread by its fractal and multifractal features. It is easy to deceive the RGB classifier, using images with similar color features as breads, but it is not clear how to do that with fractal features. We conclude that the fractal classifier is more accurate to discriminate these false images.
 
-\begin{figure*}[]
-\centering
+\begin{figure*}
+\begin{centering}
+\subfloat[RGB features]{\begin{centering}
 \includegraphics[width=0.45\textwidth]{exps/fake/320px-Sand_from_Kuta,_Bali,_Indonesia}
-\caption{A non bread image classified as bread by its RGB featues}
 \label{fig:fakeRGB}
-\end{figure*}
+\par\end{centering}
 
-\begin{figure*}[]
-\centering
-\includegraphics[width=0.25\textwidth]{exps/fake/6}
-\caption{A synthetic image is classified as bread by its fractal features}
+}\subfloat[Mutilfractal features]{\begin{centering}
+\includegraphics[width=0.325\textwidth]{exps/fake/6}
 \label{fig:fakeMultifractal}
+\par\end{centering}
+
+}
+\par\end{centering}
+\caption{Non bread images classified as bread by the evaluated classifiers}
 \end{figure*}
 
 %\subsection{Variable Selection}
@@ -364,9 +367,12 @@ It is possible to mislead the classifiers with false images. Fig. \ref{fig:fakeR
 %\todo{Add PCA float table in a minipage next to the table1}
 
 \section{Conclusions and Future Work}
-The utilisation of fractal and multifractal features in bread crumb texture classification showed good performance. The multifractal spectrum demonstrated to be accurate enough to perform a classification of differents bread types and also to discriminate non bread from bread images. The utilisation of non-fractal features such as color, also showed comparable results, but it fails to detect non bread images, and it is easy to deceive it with false images. Both methods showed to be sensitive to illumination changes, making the method still non robust. Preliminary tests on our particle system~\cite{Baravalle2011}  show that it could deceive the fractal classifier, so further analysis is required.
+The utilisation of fractal and multifractal features in bread crumb texture classification showed good performance. The multifractal spectrum demonstrated to be accurate enough to perform a classification of differents bread types and also to discriminate non bread from bread images. The utilisation of non-fractal features such as color, also showed comparable results, but it fails to detect non bread images, and it is easy to deceive it with false images. Both methods showed to be sensitive to illumination changes, making the method still non robust. Preliminary tests on our particle system~\cite{Baravalle2011} show that it could deceive the fractal classifier, so further analysis is required in order to find the parameters that produce textures with similar fractal and multifractal features to those of real breads.
 
-The results found can be applied to validate synthetic samples, i.e., the latter should have similar features to certain bread type that it is trying to simulate. The features obtained will be used to determine particle system parameters (e.g., lifetime of particles, color). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced, the utilisation of other types of DFs to accomplish it will be studied. The code of the multifractal spectrum algorithm is unoptimized, so an optimisation needs to be applied.
+The results found can be applied to validate synthetic samples, i.e., the latter should have similar features to certain bread type that it is trying to simulate. The features obtained will be used to determine particle system parameters (e.g., lifetime of particles, color). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced. Other FDs will be studied in order to accomplish this goal. Also, the code of the multifractal spectrum algorithm is unoptimized, so optimisations needs to be applied.
+
+\section{Acknowledgements}
+We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work.
 
 %
 \bibliography{bibliografia/amcapaper}
