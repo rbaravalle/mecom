@@ -109,9 +109,14 @@ pdf:
 
 clean:
 	rm -f *~  $(TARGETS) $(TARGETSPS) *.dvi *.log *.aux *.blg *.bbl $(OLDAUX)
+	rm -f $(PROJECT)-compressed.pdf
 
 veryclean: clean
 	rm -f $(EPSFIGFILES) $(EPSMFILES) $(EPSPLTFILES)
 
 spell:	$(SRCFILES)
-	detex $^ | spell | env LANG=C sort -u | env LANG=C comm -23 - ok-words
+	detex $^ | aspell | env LANG=C sort -u | env LANG=C comm -23 - ok-words
+
+release: all
+	gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dEmbedAllFonts=true -dSubsetFonts=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$(PROJECT)-compressed.pdf $(PROJECT).pdf
+
