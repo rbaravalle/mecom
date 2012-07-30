@@ -45,8 +45,24 @@ alliedC = [];
 shiptonsC = [];
 odlumsC = [];
 ranksC = [];
+ursulaC = [];
 
-if(1)
+
+%imagenes = [];
+direc = '/home/rodrigo/mecom2012/amcastyle/mecom2/mecom/exps/100sample/';
+archivos = dir(direc)
+
+    for i = 51:55,
+       namesIm{i} = strcat(direc,archivos(i).name);
+    end
+    
+    for i = 51:55,
+        if(size(imread(namesIm{i}),3) == 3) % if it is RGB
+            imagenes = [imagenes; morphFractal(namesIm{i}), Hausdorff(namesIm{i}), alpha2test(namesIm{i},20) ];
+        end
+    end
+
+if(0)
 
     for i = 1:N,
         namesB{i} = strcat('panScanner/corte/baguette',int2str(i+ult),'.tif');
@@ -56,6 +72,7 @@ if(1)
         namesOdlums{i} = strcat('dublin/odlum',int2str(i+ult),'.tif');
         namesRanks{i} = strcat('dublin/ranks',int2str(i+ult),'.tif');
         namesBC{i} = strcat('panMarco/baguette/b',int2str(i+ult),'.tif');
+        namesUC{i} = strcat('dublin/camera/allied/allied',int2str(i+ult),'c.tif');
         %namesSC{i} = strcat('panMarco/salvado/s',int2str(i+ult),'.tif');
         %namesLC{i} = strcat('panMarco/lactal/l',int2str(i+ult),'.tif');
     end
@@ -70,10 +87,11 @@ if(1)
         %shiptons = [shiptons; morphFractal(namesShiptons{i}), Hausdorff(namesShiptons{i}), alpha2test(namesShiptons{i},20)];
         %odlums = [odlums; morphFractal(namesOdlums{i}), Hausdorff(namesOdlums{i}), alpha2test(namesOdlums{i},20)];
         %ranks = [ranks; morphFractal(namesRanks{i}), Hausdorff(namesRanks{i}), alpha2test(namesRanks{i},20)];
-        baguetteC = [baguetteC; morphFractal(namesBC{i}), Hausdorff(namesBC{i}), alpha2test(namesBC{i},20)];
+        %baguetteC = [baguetteC; morphFractal(namesBC{i}), Hausdorff(namesBC{i}), alpha2test(namesBC{i},20)];
         %salvadoC = [C; morphFractal(namesBC{i}), Hausdorff(namesBC{i}), alpha2test(namesBC{i},20)];
         %salvadoC = [salvadoC; morphFractal(namesSC{i}), Hausdorff(namesSC{i}), alpha2test(namesSC{i},20)];
         %lactalC = [lactalC; morphFractal(namesLC{i}), Hausdorff(namesLC{i}), alpha2test(namesLC{i},20)];
+        ursulaC = [ursulaC; morphFractal(namesUC{i}), Hausdorff(namesUC{i}), alpha2test(namesUC{i},20)];
     end
 end
 
