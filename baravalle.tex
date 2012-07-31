@@ -286,7 +286,7 @@ The method of {\em k-fold cross validation} was employed in order to validate th
     Features & Fractals & non Fractals\\
     \hline
     \hline
-    Accuracy  & $\textbf{88.4}\%$ & $86\%$\\
+    Accuracy  & $\textbf{89.2}\%$ & $87.6\%$\\
     \hline
 \end{tabular}
 \caption{Results obtained in classification}
@@ -294,7 +294,27 @@ The method of {\em k-fold cross validation} was employed in order to validate th
 \end{table}
 
 \subsection{Robustness Test}
-In order to test for the robustness of the method, $20$ scanned images from each class, and $20$ from the CalTech101 dataset, were used for training and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustness} accuracy results of both methods are shown. Results shows poor performance of both classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between bread and non bread images, making it a good discriminator of non bread images.
+In order to test for the robustness of the method, two tests were analysed.\todo{check}
+
+\subsubsection{Test 1}
+Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). It can be seen that the robustness of the non fractal features descend more rapidly than those of fractal features.\todo{check}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|}
+    \hline
+    Features & Fractals & non Fractals\\
+    \hline
+    \hline
+    Accuracy  & $\textbf{83}\%$ & $72\%$\\
+    \hline
+\end{tabular}
+\caption{Results obtained in classification using training samples from the camera and from the scanner}
+\label{table:tableRobustnessTest1}
+\end{table}
+
+\subsubsection{Test 2}
+The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of both methods are shown. Results shows poor performance of both classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between bread and non bread images, making it a good discriminator of non bread images.
 
 \begin{table}[htb]
 \centering
@@ -307,7 +327,7 @@ In order to test for the robustness of the method, $20$ scanned images from each
     \hline
 \end{tabular}
 \caption{Results for the robustness test}
-\label{table:tableRobustness}
+\label{table:tableRobustnessTest2}
 \end{table}
 
 
