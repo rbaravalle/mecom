@@ -86,7 +86,7 @@ Recently, the theory of fractal sets has shown to provide local image features t
 \end{abstract}
 
 \section{Introduction}
-Fractal and multifractal analysis of images have proved to capture useful properties of the underlying material being represented. Characterisation of images using these features have been successfully applied in different areas, such as medicine (\cite{Andjelkovic2008,Yu2011}) and texture classification (\cite{Wendt2009}). Through several procedures, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material (e.g., void image fraction, rugosity).
+Fractal and multifractal analysis of images have proved to capture useful properties of the underlying material being represented. Characterisation of images using these features have been successfully applied in different areas, such as medicine (\cite{Andjelkovic2008,Yu2011}) and texture classification (\cite{Wendt2009}). Through several procedures, it is possible to obtain different Fractal Dimensions (FD), each of them capturing a different property of the material ({\em e.g.}, void image fraction, rugosity).
 
 For each material, the results obtained in the classification process are useful in quality measurements of real samples and also in the validation of synthetic representations of them. In other words, the classification is useful to determine if a given image presents the observed features in that material, allowing to associate quality measure parameters to the material. In~\cite{Fan2006}, a quality bread crumb test based on Gabor filters was performed in that paper, obtaining good results. Nevertheless, a small database was used ($30$ images). In \cite{Gonzales2008} several fractal features were obtained for one type of bread, showing that a vector comprising them would be capable of obtaining key features of its crumb texture.
 
@@ -140,7 +140,7 @@ Let $E$ be an structure divided in disjoint substructures $E_{i}$ of size $\epsi
 \displaystyle\bigcup_{i}E_{i} = E.
 \end{equation}
 
-Each substructure $E_{i}$ is characterized by a measure $\mu(E_{i})$. From the point of view of multifractal analysis, it is useful to define this value as a function of $\epsilon$
+Each substructure $E_{i}$ is characterized by a measure $\mu(E_{i})$. From the point of view of multifractal analysis, it is useful to define this value as a function of $\epsilon$, {\em i.e.}
 
 
 \begin{equation}
@@ -155,14 +155,14 @@ and to take the limit when $\epsilon$ tends to $0$. The limit represents the val
 \label{eqn:eqn5}
 \end{equation}
 
-The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of its regularity it is necessary to obtain the distribution of $\alpha$ in $E$. For this, a counting must be done for each $\alpha_{i}$, related to the value of $\epsilon$
+The exponent characterizes the local regularity of the structure at a point. To obtain a global characterization of its regularity it is necessary to obtain the distribution of $\alpha$ in $E$. For this, a counting $N_{\epsilon}$ must be done for each $\alpha_{i}$, related to the value of $\epsilon$, {\em i.e.}
 
 \begin{equation}
 f_{\epsilon}(\alpha_{i}) = - \frac{ln(N_{\epsilon}(\alpha_{i}))}{ln(\epsilon)}.
 \label{eqn:eqn6}
 \end{equation}
 
-When $\epsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterized by $\alpha$, the Hausdorff dimension of the $\alpha$ distribution, also known as the {\em multifractal spectrum} $f(\alpha)$ (\cite{Silvetti2010}), i.e.
+When $\epsilon$ tends to $0$, the limiting value is the FD of the structure $E$ characterized by $\alpha$, the Hausdorff dimension of the $\alpha$ distribution, also known as the {\em multifractal spectrum} $f(\alpha)$ (\cite{Silvetti2010}), {\em i.e.}
 
 \begin{equation}
 f(\alpha) = \lim_{\epsilon\to0}{f_{\epsilon}(\alpha)}.
@@ -203,7 +203,7 @@ For the FDs that uses a binarisation of the original image, the algorithm presen
 \includegraphics[scale=0.333]{imagenes/lactal14bin}
 \includegraphics[scale=0.333]{imagenes/salvado43bin}
 \includegraphics[scale=0.333]{imagenes/sandwich43bin}
-\caption{Digitalised images of Baguette, Lactal, Salvado and Sandwich bread types with its binarisations}
+\caption{Digitalised images of {\em baguette}, {\em lactal}, {\em salvado} and {\em sandwich} bread types with its binarisations}
 \label{fig:bread}
 \end{figure*}
 
@@ -277,7 +277,7 @@ An unsupervised SOM of the fractal and non fractal representation of scanned ima
 \subsection{Classification}
 {\em Support Vector Machines} (SVM)~(\cite{Boser92}) were used to perform the classification, using the {\em libsvm}~(\cite{Chang2011}) implementation.
 %\subsection{Scanned Images}
-The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, i.e., $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type (i.e. $250$ images, including $50$ of non bread images). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
+The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
 
 \begin{table}[htb]
 \centering
@@ -315,18 +315,18 @@ In order to test for the robustness of the method, $20$ scanned images from each
 \centering
 \begin{tabular}{|c|c|c|c|c|c|}
     \hline
-    Classes & Baguette & Lactal & Salvado & Sandwich & Non bread\\
+    Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
     \hline
     \hline
-    Baguette    &   $0$  &   $9$  &   $0$  &  $11$ &   $0$\\
+    {\em baguette} &   $0$  &   $9$  &   $0$  &  $11$ &   $0$\\
     \hline
-    Lactal  & $0$ & $15$ & $0$ & $5$ & $0$\\
+    {\em lactal}  & $0$ & $15$ & $0$ & $5$ & $0$\\
     \hline
-    Salvado & $0$ & $6$ & $0$ & $12$ & $2$\\
+    {\em salvado} & $0$ & $6$ & $0$ & $12$ & $2$\\
     \hline
-    Sandwich  & $0$ & $10$ & $0$ & $10$ & $0$\\
+    {\em sandwich}  & $0$ & $10$ & $0$ & $10$ & $0$\\
     \hline
-    Non bread  & $3$ & $0$ & $2$ & $0$ & $15$\\
+    non bread  & $3$ & $0$ & $2$ & $0$ & $15$\\
     \hline
 \end{tabular}
 \caption{Confusion Matrix for the fractal features}
@@ -337,18 +337,18 @@ In order to test for the robustness of the method, $20$ scanned images from each
 \centering
 \begin{tabular}{|c|c|c|c|c|c|}
     \hline
-    Classes & Baguette & Lactal & Salvado & Sandwich & Non bread\\
+    Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
     \hline
     \hline
-    Baguette  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    {\em baguette}  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    Lactal  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    {\em lactal}  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    Salvado & $0$ & $0$ & $0$ & $0$ & $20$\\
+    {\em salvado} & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    Sandwich  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    {\em sandwich}  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    Non bread  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    non bread  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
 \end{tabular}
 \caption{Confusion Matrix for the RGB features}
@@ -382,7 +382,7 @@ It is possible to mislead the classifiers with false images. Fig.~\ref{fig:fakeR
 \section{Conclusions and Future Work}
 The use of fractal and multifractal features in bread crumb texture classification showed good performance. The multifractal spectrum demonstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The use of non-fractal features such as colour, also showed comparable results, but it fails to detect non bread images, and it is easy to deceive it with false images. Both methods showed to be sensitive to illumination changes, making the methods still non robust. Preliminary tests on our particle system~(\cite{Baravalle2011}) show that it could deceive the fractal classifier, so further analysis is required in order to find the parameters that produce textures with similar fractal and multifractal features to those of real breads.
 
-The results found can be applied to validate synthetic samples, i.e., the latter should have similar features to the bread type that is trying to simulate. The features obtained will be used to determine particle system parameters (e.g., lifetime of particles, colour). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced. Other FDs will be studied in order to accomplish this goal. Also, the code of the multifractal spectrum algorithm needs to be optimized in order to obtain a faster algorithm for bread classification. It will be useful to apply a Principal Component Analysis in order to identify the key variables in the feature vectors. 
+The results found can be applied to validate synthetic samples, {\em i.e.}, the latter should have similar features to the bread type that is trying to simulate. The features obtained will be used to determine particle system parameters ({\em e.g.}, lifetime of particles, colour). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced. Other FDs will be studied in order to accomplish this goal. Also, the code of the multifractal spectrum algorithm needs to be optimized in order to obtain a faster algorithm for bread classification. It will be useful to apply a Principal Component Analysis in order to identify the key variables in the feature vectors. 
 
 \section{Acknowledgements}
 We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work.
