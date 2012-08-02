@@ -1,6 +1,6 @@
 function res = alpha2test(ss,cuantas)
     %t1 = clock;
-
+    tic;
     img = imread(ss);
     %img = img(:,:,1:3);
     %img = rgb2gray(img);
@@ -9,55 +9,32 @@ function res = alpha2test(ss,cuantas)
     Ny = size(img,2);
     img2 = zeros(Nx,Ny);
     
-    l = 4;%floor(log(Nx));
+    l = 4;
     
-    e = zeros(1,2,1);
-    measure = zeros(1,2,1);
-    
-    maxx = -1000;
-    minn = 1000;
+    measure = zeros(1,l,1);
     
     C = cuantas; % how many alphas
 
     for i = 1:Nx,
-        for j = 1:Ny, % texel
-            
+        for j = 1:Ny, % texel            
             for k = 1:l, % boxes centered at the pixel
                 x0 = i - k;
                 x1 = i + k;
                 y0 = j - k;
-                y1 = j + k;
-                
-                if( x0 < 1 ) x0 = 1;
-                end
-                if( y0 < 1 ) y0 = 1;
-                end
-                if( x1 > Nx ) x1 = Nx;
-                end
-                if( y1 > Ny ) y1 = Ny;
-                end
-                    
-                sum = 0.0; % measure (sum)
-                for u = x0:x1,
-                    for v = y0:y1, % texel
-                        %sum = sum + img(u,v);
-                        if(img(u,v) > sum) sum = img(u,v); end;
-                    end
-                end       
-                measure(k) = sum;
-                
-            end
-            
+                y1 = j + k;                
+                if( x0 < 1 ) x0 = 1; end
+                if( y0 < 1 ) y0 = 1; end
+                if( x1 > Nx ) x1 = Nx; end
+                if( y1 > Ny ) y1 = Ny; end
+                measure(k) = max(max(img(x0:x1,y0:y1))); %sum;
+            end            
             % calculo de alfa: pendiente de la recta de ajuste
             p2 = polyfit(log(1:2:(2*l)),log(measure),1); % 1: grado uno del polinomio
-            alpha = p2(:,1);
-            img2(i,j) = alpha;
-            
-            if(alpha > maxx) maxx = alpha; end
-            if(alpha < minn) minn = alpha; end
+            img2(i,j) = p2(:,1);
         end        
     end
-       
+    maxx = max(max(img2));
+    minn = min(min(img2));
     clases = zeros(C,1); % clases para calcular f(alpha)
     for c = 1:C,
         clases(c) = minn + (c-1)*(maxx-minn)/C; 
@@ -161,7 +138,7 @@ function res = alpha2test(ss,cuantas)
         
         res = [res, clases(c), falpha(c)];
     end
-    
+    toc;
     %res = etime(clock,t1);
     %plot(clases,falpha);
     %res = [clases;falpha];
