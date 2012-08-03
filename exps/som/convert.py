@@ -1,4 +1,10 @@
-f = open("../test_clasificadorNF.txt")
+import sys
+
+if (len(sys.argv) < 2):
+    print "Usage: " + sys.argv[0] + " matlab_data_file"
+    exit(1)
+
+f = open(sys.argv[1])
 
 for l in f.readlines():
     co = 0
