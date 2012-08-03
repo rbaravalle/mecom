@@ -1,6 +1,6 @@
 library("kohonen")
 
-breads <- read.csv("test_clasificador.txt", sep=" ", h=F)
+breads <- read.csv("som1.txt", sep=" ", h=F)
 breads <- breads[-3]
 
 set.seed(1)
@@ -16,7 +16,7 @@ png("som.multifractal.png")
 kohonen::plot.kohonen(som.breads, type = "mapping", label = breads[training,41], col = breads[training,41]+1, main = "")
 dev.off()
 
-breads <- read.csv("test_clasificadorNF.txt", sep=" ", h=F)
+breads <- read.csv("som2.txt", sep=" ", h=F)
 
 set.seed(2)
      
