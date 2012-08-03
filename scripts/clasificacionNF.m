@@ -45,9 +45,9 @@ shiptonsNF = [];
 ursulaNFC = [];
 end
 
-    if(0)
-        imagenesNF = [];
-direc = '/home/rodrigo/mecom2012/amcastyle/mecom2/mecom/exps/100sample/';
+    if(1)
+        imagenesNFsameSize = [];
+direc = '/home/rodrigo/mecom2012/mecom/exps/100sample/res/';
 archivos = dir(direc)
 
     for i = 3:size(archivos,1),
@@ -56,11 +56,11 @@ archivos = dir(direc)
     
     for i = 3:size(archivos,1),
         if(size(imread(namesIm{i}),3) == 3) % if it is RGB
-            imagenesNF = [imagenesNF; mca(namesIm{i}) ];
+            imagenesNFsameSize = [imagenesNFsameSize; mca(namesIm{i}) ];
         end
     end
 
-    imagenesNF = imagenesNF(:,4:6);
+    imagenesNFsameSize = imagenesNFsameSize(:,4:6);
     
     for i = 1:50,
         namesB{i} = strcat('panScanner/corte/baguette',int2str(i+ult),'.tif');
@@ -69,6 +69,9 @@ archivos = dir(direc)
         namesSa{i} = strcat('panScanner/corte/sandwich',int2str(i+ult),'.tif');
         %namesU{i} = strcat('dublin/ursula/u',int2str(i+ult),'.tif');        
     end
+    end
+    
+    if(0)
     
     for i = 1:20,
         namesBC{i} = strcat('panMarco/baguette/b',int2str(i+ult),'.tif');
@@ -253,7 +256,7 @@ libsvmwrite( 'test2_clasificadorNF.txt' , labeltestClasifNF, sparse(datatest) );
 end
 
 
-if(1) %prueba 1)
+if(0) %prueba 1)
 datatrain = [baguetteNF(1:50,:); lactalNF(1:50,:); salvadoNF(1:50,:); sandwichNF(1:50,:)];
 datatrain = [datatrain(:,4:6); imagenesNF(1:50,1:3)];
 
@@ -412,7 +415,7 @@ end
 %%
 %libsvmwrite( 'train_rodrigoFa.txt' , labeltrain, sparse(datatrain) );
 %libsvmwrite( 'test_rodrigoNF5.txt' , labeltest, sparse(datatest) );
-    
+archivos = {'1.jpg' '10.jpg' '11.jpg' '12.jpg' '2.jpg' '3.jpg' '320px-Sand_from_Kuta,_Bali,_Indonesia.jpg' '4.jpg' '5.jpg' '6.jpg' '7.jpg' '8.jpg' '9.jpg' 'freshwatersubstrate_instantaquarium_peaceriver_380x380.jpg' 'images (1).jpg' 'newSint.jpg' 'newSint2.jpg' 'res1.jpg' 'res2.jpg' 'res6.jpg' 'sint-pant24.jpg' 'sint-pant28.jpg' 'voronoi.jpg'};
     
 %b = TreeBagger(50,vS,names,'OOBPred','on','NVarToSample',10)
 %predict

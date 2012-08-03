@@ -28,6 +28,7 @@ SM = [];
 %name{i} = strcat('panScanner/corte/salvado',int2str(i),'.jpg');
 %SM(i) = morphFractal(name{i}); end
 
+if(0)
 baguette = [];
 salvado = [];
 lactal = [];
@@ -46,22 +47,24 @@ shiptonsC = [];
 odlumsC = [];
 ranksC = [];
 ursulaC = [];
+end
 
-
+if(1)
+    imagenes3 = [];
 %imagenes = [];
-direc = '/home/rodrigo/mecom2012/amcastyle/mecom2/mecom/exps/100sample/';
+direc = '/home/rodrigo/mecom2012/mecom/exps/100sample/res/';
 archivos = dir(direc)
 
-    for i = 51:55,
+    for i = 3:size(archivos,1)
        namesIm{i} = strcat(direc,archivos(i).name);
     end
     
-    for i = 51:55,
+    for i = 3:size(archivos,1),
         if(size(imread(namesIm{i}),3) == 3) % if it is RGB
-            imagenes = [imagenes; morphFractal(namesIm{i}), Hausdorff(namesIm{i}), alpha2test(namesIm{i},20) ];
+            imagenes3 = [imagenes3; morphFractal(namesIm{i}), Hausdorff(namesIm{i}), alpha2test(namesIm{i},20) ];
         end
     end
-
+end
 if(0)
 
     for i = 1:N,

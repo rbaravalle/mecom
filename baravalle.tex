@@ -286,7 +286,8 @@ The method of {\em k-fold cross validation} was employed in order to validate th
     Features & Fractals & non Fractals & combined\\
     \hline
     \hline
-    Accuracy  & $89.2\%$ & $87.6\%$ & $\textbf{92.4\%}$\\
+    Accuracy  & $93.2\%$ & $88.0\%$ & $\textbf{94.4\%}$\\
+%    Accuracy  & $89.2\%$ & $87.6\%$ & $\textbf{92.4\%}$\\
     \hline
 \end{tabular}
 \caption{Results obtained in classification}
@@ -306,7 +307,8 @@ Table \ref{table:tableRobustnessTest1} shows classification results for both met
     Features & Fractals & non Fractals & combined\\
     \hline
     \hline
-    Accuracy  & $83\%$ & $72\%$ & $\textbf{86\%}$\\
+    %Accuracy  & $83\%$ & $72\%$ & $\textbf{86\%}$\\
+    Accuracy  & $86.5\%$ & $72\%$ & $\textbf{89.5\%}$\\
     \hline
 \end{tabular}
 \caption{Results obtained in classification using training samples from the camera and from the scanner}
@@ -323,7 +325,8 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
     Features & Fractals & non Fractals & combined\\
     \hline
     \hline
-    Accuracy  & $\textbf{40}\%$ & $20\%$ & $39\%$\\
+    Accuracy  & $\textbf{50}\%$ & $20\%$ & $45\%$\\
+%    Accuracy  & $\textbf{40}\%$ & $20\%$ & $39\%$\\
     \hline
 \end{tabular}
 \caption{Results for the robustness test}
@@ -338,15 +341,15 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
     Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
     \hline
     \hline
-    {\em baguette} &   $0$  &   $9$  &   $0$  &  $11$ &   $0$\\
+    {\em baguette}  & $0$ & $11$ & $0$ & $9$  & $0$\\
     \hline
-    {\em lactal}  & $0$ & $15$ & $0$ & $5$ & $0$\\
+    {\em lactal}    & $0$ & $19$ & $0$ & $1$  & $0$\\
     \hline
-    {\em salvado} & $0$ & $6$ & $0$ & $12$ & $2$\\
+    {\em salvado}   & $1$ & $11$ & $0$ & $8$  & $0$\\
     \hline
-    {\em sandwich}  & $0$ & $10$ & $0$ & $10$ & $0$\\
+    {\em sandwich}  & $0$ & $9$ & $0$ & $11$  & $0$\\
     \hline
-    non bread  & $3$ & $0$ & $2$ & $0$ & $15$\\
+    non bread       & $0$ & $0$  & $0$ & $0$  & $20$\\
     \hline
 \end{tabular}
 \caption{Confusion Matrix for the fractal features}
@@ -382,15 +385,15 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
     Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
     \hline
     \hline
-    {\em baguette} &   $0$  &   $5$  &   $0$  &  $15$ &   $0$\\
+    {\em baguette} &   $0$  &   $6$  &   $0$  &  $14$ &   $0$\\
     \hline
-    {\em lactal}  & $0$ & $8$ & $0$ & $12$ & $0$\\
+    {\em lactal}  & $0$ & $7$ & $0$ & $13$ & $0$\\
     \hline
-    {\em salvado} & $0$ & $6$ & $0$ & $11$ & $3$\\
+    {\em salvado} & $1$ & $6$ & $0$ & $13$ & $0$\\
     \hline
-    {\em sandwich}  & $0$ & $6$ & $0$ & $14$ & $0$\\
+    {\em sandwich}  & $0$ & $1$ & $0$ & $19$ & $0$\\
     \hline
-    non bread  & $3$ & $0$ & $0$ & $0$ & $17$\\
+    non bread  & $1$ & $0$ & $0$ & $0$ & $19$\\
     \hline
 \end{tabular}
 \caption{Confusion Matrix for the combined features}
