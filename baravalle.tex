@@ -294,11 +294,21 @@ The method of {\em k-fold cross validation} was employed in order to validate th
 \label{table:tableFirstTest}
 \end{table}
 
+We also received bread images from the work \cite{Gonzales2008}. We added that class to . Images were in grey scale, so only the multifractal features could be tested. The performance of the classifier was mantained, with an accuracy of $94.3\%$. \todo{write}. In Fig. \ref{fig:gonzales}, \dots.
+
+\begin{figure*}[htb]
+\centering
+\includegraphics[scale=0.28]{imagenes/gonzales/allied1}
+\includegraphics[scale=0.28]{imagenes/gonzales/allied2c}
+\caption{\todo{caption}}
+\label{fig:gonzales}
+\end{figure*}
+
 \subsection{Robustness Test}
-In order to test for the robustness of the method, two tests were analysed.\todo{check}
+In order to test for the robustness of the method, two tests were performed.\todo{check}
 
 \subsubsection{Test 1}
-Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). It can be seen that the robustness of the non fractal features descend more rapidly than those of fractal features.\todo{check}. In Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves show ... FPR, TPR \todo{complete}. Curves show better performance for the fractal classifier \todo{complete}.
+Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). It can be seen that the robustness of the non fractal features descend more rapidly than those of fractal features.\todo{check}. In Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves show ... FPR, TPR \todo{complete}. Curves show better performance for the fractal classifier \todo{complete}. We also tested the images received.. \todo{complete}. , with an accuracy of $87.0833\%$
 
 \begin{table}[htb]
 \centering
@@ -460,7 +470,7 @@ The use of fractal and multifractal features in bread crumb texture classificati
 The results found can be applied to validate synthetic samples, {\em i.e.}, the latter should have similar features to the bread type that is trying to simulate. The features obtained will be used to determine particle system parameters ({\em e.g.}, lifetime of particles, colour). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced. Other FDs will be studied in order to accomplish this goal. Also, the code of the multifractal spectrum algorithm needs to be optimized in order to obtain a faster algorithm for bread classification. It will be useful to apply a Principal Component Analysis in order to identify the key variables in the feature vectors. 
 
 \section{Acknowledgements}
-We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work.
+We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work. We also would like to thank Dra. Gonzales-Barron for the images received.
 
 %
 \bibliography{bibliografia/amcapaper}
