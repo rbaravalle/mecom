@@ -209,10 +209,10 @@ For the FDs that uses a binarisation of the original image, the algorithm presen
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.5]{exps/100sample/image_0004}
-\includegraphics[scale=0.2]{exps/100sample/image_0019}
-\includegraphics[scale=0.5]{exps/100sample/image_0027}
-\includegraphics[scale=0.1]{exps/100sample/image_0309}
+\includegraphics[scale=0.28]{exps/100sample/res/image_0004}
+\includegraphics[scale=0.28]{exps/100sample/res/image_0019}
+\includegraphics[scale=0.28]{exps/100sample/res/image_0027}
+\includegraphics[scale=0.28]{exps/100sample/res/image_0309}
 \caption{Images from the dataset CalTech101}
 \label{fig:nonbread}
 \end{figure*}
@@ -298,7 +298,7 @@ The method of {\em k-fold cross validation} was employed in order to validate th
 In order to test for the robustness of the method, two tests were analysed.\todo{check}
 
 \subsubsection{Test 1}
-Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). It can be seen that the robustness of the non fractal features descend more rapidly than those of fractal features.\todo{check}
+Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). It can be seen that the robustness of the non fractal features descend more rapidly than those of fractal features.\todo{check}. In Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves show ... FPR, TPR \todo{complete}. Curves show better performance for the fractal classifier \todo{complete}.
 
 \begin{table}[htb]
 \centering
@@ -314,6 +314,36 @@ Table \ref{table:tableRobustnessTest1} shows classification results for both met
 \caption{Results obtained in classification using training samples from the camera and from the scanner}
 \label{table:tableRobustnessTest1}
 \end{table}
+
+\begin{figure*}
+
+\begin{centering}
+\subfloat[Fractal features ROC]{\begin{centering}
+\includegraphics[width=0.6\textwidth]{exps/ROC/fractalClassifier}
+\label{fig:roc}
+\par\end{centering}
+}
+\par\end{centering}
+
+\begin{centering}
+\subfloat[ROC using RGB features]{\begin{centering}
+\includegraphics[width=0.6\textwidth]{exps/ROC/rgbClassifier}
+\label{fig:rocNF}
+\par\end{centering}
+}
+\par\end{centering}
+
+\begin{centering}
+\subfloat[ROC using both features]{\begin{centering}
+\includegraphics[width=0.6\textwidth]{exps/ROC/combinedClassifier}
+\label{fig:rocCombined}
+\par\end{centering}
+}
+\par\end{centering}
+
+\caption{\todo{caption}}
+
+\end{figure*}
 
 \subsubsection{Test 2}
 The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of both methods are shown. Results shows poor performance of both classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between bread and non bread images, making it a good discriminator of non bread images.
@@ -347,7 +377,7 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
     \hline
     {\em salvado}   & $1$ & $11$ & $0$ & $8$  & $0$\\
     \hline
-    {\em sandwich}  & $0$ & $9$ & $0$ & $11$  & $0$\\
+    {\em sandwich}  & $0$ & $9$  & $0$ & $11$ & $0$\\
     \hline
     non bread       & $0$ & $0$  & $0$ & $0$  & $20$\\
     \hline
@@ -365,13 +395,13 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
     \hline
     {\em baguette}  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    {\em lactal}  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    {\em lactal}    & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    {\em salvado} & $0$ & $0$ & $0$ & $0$ & $20$\\
+    {\em salvado}   & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
     {\em sandwich}  & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
-    non bread  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    non bread       & $0$ & $0$ & $0$ & $0$ & $20$\\
     \hline
 \end{tabular}
 \caption{Confusion Matrix for the RGB features}
@@ -385,15 +415,15 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
     Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
     \hline
     \hline
-    {\em baguette} &   $0$  &   $6$  &   $0$  &  $14$ &   $0$\\
+    {\em baguette}   & $0$ & $6$ & $0$ & $14$ & $0$\\
     \hline
-    {\em lactal}  & $0$ & $7$ & $0$ & $13$ & $0$\\
+    {\em lactal}     & $0$ & $7$ & $0$ & $13$ & $0$\\
     \hline
-    {\em salvado} & $1$ & $6$ & $0$ & $13$ & $0$\\
+    {\em salvado}    & $1$ & $6$ & $0$ & $13$ & $0$\\
     \hline
-    {\em sandwich}  & $0$ & $1$ & $0$ & $19$ & $0$\\
+    {\em sandwich}   & $0$ & $1$ & $0$ & $19$ & $0$\\
     \hline
-    non bread  & $1$ & $0$ & $0$ & $0$ & $19$\\
+    non bread        & $1$ & $0$ & $0$ & $0$  & $19$\\
     \hline
 \end{tabular}
 \caption{Confusion Matrix for the combined features}
