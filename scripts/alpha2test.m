@@ -26,27 +26,28 @@ function res = alpha2test(ss,cuantas)
                 if( y0 < 1 ) y0 = 1; end
                 if( x1 > Nx ) x1 = Nx; end
                 if( y1 > Ny ) y1 = Ny; end
-                measure(k) = max(max(img(x0:x1,y0:y1))); %sum;
+                A = img(x0:x1,y0:y1);
+                measure(k) = max(A(:)); %sum;
             end            
             % calculo de alfa: pendiente de la recta de ajuste
             p2 = polyfit(log(1:2:(2*l)),log(measure),1); % 1: grado uno del polinomio
             img2(i,j) = p2(:,1);
         end        
     end
-    maxx = max(max(img2));
-    minn = min(min(img2));
-    clases = zeros(C,1); % clases para calcular f(alpha)
-    for c = 1:C,
-        clases(c) = minn + (c-1)*(maxx-minn)/C; 
-    end
-          
+    maxx = max(img2(:));
+    minn = min(img2(:));
     
+    paso = (maxx-minn)/cuantas;
+    clases = (minn:paso:maxx-paso);
+    toc;
+          
+    tic;
     % amount of texels between alpha and the next alpha
     function cant = contar(block,c) 
         cant = 0;
         alpha = clases(c);
         alpha1 = alpha;
-        if(c ~= C)
+        if(c ~= cuantas)
             alpha1 = clases(c+1);
         else
             alpha1 = alpha+1; % any number greater than alpha
@@ -57,7 +58,7 @@ function res = alpha2test(ss,cuantas)
         for w = 1:s1,
             for t = 1:s2,
                 b = block(w,t);
-                if(c ~= C)
+                if(c ~= cuantas)
                     if (b >= alpha && b < alpha1)
                         cant = 1;
                     end
@@ -72,13 +73,12 @@ function res = alpha2test(ss,cuantas)
         end
     end
 
-    falpha = zeros(C,1);
+    falpha = zeros(cuantas,1);
     cant = floor(log(Nx));
 
     res = [];
     
-    %n = 0;
-    for c = 1:C % one fractal dimension for each c
+    for c = 1:cuantas % one fractal dimension for each c
         delta = zeros(cant,1);
         N = zeros(cant,1);
         
@@ -139,8 +139,5 @@ function res = alpha2test(ss,cuantas)
         res = [res, clases(c), falpha(c)];
     end
     toc;
-    %res = etime(clock,t1);
-    %plot(clases,falpha);
-    %res = [clases;falpha];
 end
 
