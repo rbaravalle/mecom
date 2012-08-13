@@ -277,7 +277,7 @@ An unsupervised SOM of the fractal and non fractal representation of scanned ima
 \subsection{Classification}
 {\em Support Vector Machines} (SVM)~(\cite{Boser92}) were used to perform the classification, using the {\em libsvm}~(\cite{Chang2011}) implementation.
 %\subsection{Scanned Images}
-The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images, scaled to the size of the bread images, to avoid using images of different size). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
+The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification and also for the combined features classifier ({\em i.e.}, a feature vector comprising fractal and color features), using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images, scaled to the size of the bread images, to avoid using images of different size). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
 
 \begin{table}[htb]
 \centering
@@ -308,7 +308,7 @@ We also received bread images of a different bread type, from the database emplo
 In order to test for the robustness of the method, two tests were performed. 
 
 \subsubsection{Combined classifier}
-Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). Results show that the accuracy descends approximately $7\%$ for the fractal features. It can also be seen that the robustness of the non fractal features descends more rapidly.
+Table \ref{table:tableRobustnessTest1} shows classification results for the three methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). Results show that the accuracy descends approximately $7\%$ for the fractal features. It can also be seen that the robustness of the non fractal features descends more rapidly.
 
 Considering a binary classifier that discriminates between bread and non bread images, in Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves for the three classifiers show that the fractal features has a higher {\em Area Under Curve}, {\em i.e.}, it shows a better performance.
 
@@ -360,7 +360,7 @@ We also added the images received to the classifier, {\em i.e.}, $20$ images fro
 \end{figure*}
 
 \subsubsection{Changes in illumination conditions}
-The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of both methods are shown. Results shows poor performance of the classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using the three methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal and combined features are able to discriminate between bread and non bread images, making them a good discriminator of non bread images.
+The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of both methods are shown. Results shows poor performance of the classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using the three methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal and combined features methods are able to discriminate between bread and non bread images, making them good discriminators of non bread images.
 
 \begin{table}[htb]
 \centering
