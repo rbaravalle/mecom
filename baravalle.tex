@@ -277,7 +277,7 @@ An unsupervised SOM of the fractal and non fractal representation of scanned ima
 \subsection{Classification}
 {\em Support Vector Machines} (SVM)~(\cite{Boser92}) were used to perform the classification, using the {\em libsvm}~(\cite{Chang2011}) implementation.
 %\subsection{Scanned Images}
-The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
+The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as test (then switching the training and test samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification, using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images, scaled to the size of the bread images, to avoid using images of different size). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
 
 \begin{table}[htb]
 \centering
@@ -294,21 +294,25 @@ The method of {\em k-fold cross validation} was employed in order to validate th
 \label{table:tableFirstTest}
 \end{table}
 
-We also received bread images from the work \cite{Gonzales2008}. We added that class to . Images were in grey scale, so only the multifractal features could be tested. The performance of the classifier was mantained, with an accuracy of $94.3\%$. \todo{write}. In Fig. \ref{fig:gonzales}, \dots.
+We also received bread images of a different bread type, from the database employed in \cite{Gonzales2008}. They were digitalised both using a scanner and using a digital camera. From this database, we added one class to the classification in order to obtain $300$ images, employing $50$ images digitalised using the scanner. The images were received in grey scale, {\em i.e.}, only the fractal features could be considered. The performance of the classifier for the fractal features was mantained, with an accuracy of $94.3\%$. In Fig. \ref{fig:gonzales}, two images of this bread type digitalised using a scanner (left) and using a digital camera (right) are shown.
 
 \begin{figure*}[htb]
 \centering
 \includegraphics[scale=0.28]{imagenes/gonzales/allied1}
 \includegraphics[scale=0.28]{imagenes/gonzales/allied2c}
-\caption{\todo{caption}}
+\caption{Images from \cite{Gonzales2008} digitalised using a scanner (left) and using a digital camera (right)}
 \label{fig:gonzales}
 \end{figure*}
 
 \subsection{Robustness Test}
-In order to test for the robustness of the method, two tests were performed.\todo{check}
+In order to test for the robustness of the method, two tests were performed. 
 
-\subsubsection{Test 1}
-Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). It can be seen that the robustness of the non fractal features descend more rapidly than those of fractal features.\todo{check}. In Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves show ... FPR, TPR \todo{complete}. Curves show better performance for the fractal classifier \todo{complete}. We also tested the images received.. \todo{complete}. , with an accuracy of $87.0833\%$
+\subsubsection{Combined classifier}
+Table \ref{table:tableRobustnessTest1} shows classification results for both methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). Results show that the accuracy descends approximately $7\%$ for the fractal features. It can also be seen that the robustness of the non fractal features descends more rapidly.
+
+Considering a binary classifier that discriminates between bread and non bread images, in Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves for the three classifiers show that the fractal features has a higher {\em Area Under Curve}, {\em i.e.}, it shows a better performance.
+
+We also added the images received to the classifier, {\em i.e.}, $20$ images from the scanner and $20$ images from the camera. The obtained accuracy ($87.0833\%$) shows that the performance is mantained.
 
 \begin{table}[htb]
 \centering
@@ -351,12 +355,12 @@ Table \ref{table:tableRobustnessTest1} shows classification results for both met
 }
 \par\end{centering}
 
-\caption{\todo{caption}}
+\caption{ROC curves for the binary classifiers (bread - non bread)}
 
 \end{figure*}
 
-\subsubsection{Test 2}
-The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of both methods are shown. Results shows poor performance of both classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using both methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal features are able to discriminate between bread and non bread images, making it a good discriminator of non bread images.
+\subsubsection{Changes in illumination conditions}
+The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of both methods are shown. Results shows poor performance of the classifiers. In Tables \ref{table:ConfusionMatrixFractal} and \ref{table:ConfusionMatrixNonFractal}, the confusion matrix of the data using the three methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal and combined features are able to discriminate between bread and non bread images, making them a good discriminator of non bread images.
 
 \begin{table}[htb]
 \centering
@@ -470,7 +474,7 @@ The use of fractal and multifractal features in bread crumb texture classificati
 The results found can be applied to validate synthetic samples, {\em i.e.}, the latter should have similar features to the bread type that is trying to simulate. The features obtained will be used to determine particle system parameters ({\em e.g.}, lifetime of particles, colour). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced. Other FDs will be studied in order to accomplish this goal. Also, the code of the multifractal spectrum algorithm needs to be optimized in order to obtain a faster algorithm for bread classification. It will be useful to apply a Principal Component Analysis in order to identify the key variables in the feature vectors. 
 
 \section{Acknowledgements}
-We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work. We also would like to thank Dra. Gonzales-Barron for the images received.
+We would like to thank Gustavo Grieco and Pablo Speciale for technical discussions and for their support in the development of the present work. We would also like to thank Dra. Ursula Gonzales-Barron for the images received.
 
 %
 \bibliography{bibliografia/amcapaper}
