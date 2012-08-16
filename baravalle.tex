@@ -93,7 +93,7 @@ For each material, the results obtained in the classification process are useful
 In this work we propose the application of fractal and multifractal descriptors for the classification of different bread types and for the discrimination between bread and non-bread images. The proposed method is compared to a classifier that uses only mean colour information. The results of this feature extraction procedure show that the classifier is robust and presents good discrimination properties to distinguish between bread and non bread images. In section 2 we briefly introduce the theory underlying fractal sets. In section 3 we describe the materials and methods employed in the classification. In section 4 we show the results obtained in the classification and we perform a robustness analysis of the method. In section 5 we summarise the conclusions, and we pose some possible future works.
 
 \section{Features}
-\subsection{Box Dimension}
+\subsection{Box dimension}
 Box FD is a simplification of the Hausdorff (originally Minkowski - Bouligand) dimension for non strictly self-similar objects (\cite{Peitgen2004}). Given a binarised image, it is subdivided in a grid of size $M\times M$ where the side of each box formed is $\epsilon$. If $N_{\epsilon}$ represents the amount of boxes that contains at least one pixel in the binarisation of the set for that $\epsilon$, then the box dimension  $D_{b}$ is defined as
 
 \begin{equation}
@@ -111,7 +111,7 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{imagenes/fitbox}}}$
 \label{fig:fitbox}
 \end{figure*}
 
-\subsection{Morphological Fractal}
+\subsection{Morphological fractal}
 This FD is computed through dilation and erosion operations, using a structuring element (SE). The transformed image is a function of the distribution of that particular SE in the original image.  In \cite{Gonzales2008}, the SE selected was a rhombus $Y$ with scales that varies from $\epsilon = 1$ to $\epsilon = 7$ (and the areas of the SE between $5$ and $113$ pixels). The surface area $S(X,Y,\epsilon)$ can be calculated, for each $\epsilon$ as
 
 \begin{equation}
@@ -128,10 +128,10 @@ M_{d} = 2 + m,
 \noindent
 where $m$ is the slope of the straight line fit.
 
-\subsection{Multifractal Analysis}
+\subsection{Multifractal analysis}
 Some elements in nature show fractal features or auto similarity. The fractal dimension is an exponent which relates the statistical auto similarity of the object at different scales. On the one hand, deterministic fractals are characterized by the same FD at all scales. They are called {\em monofractals} (for instance, Koch Curve, Sierpinsky triangle). On the other hand, {\em multifractals} (\cite{Mandelbrot89}) are characterized by a set of FDs depending on the scale. It is assumed that these structures are composed by different fractals coexisting simultaneously. In a previous work (\cite{Baravalle2012}), it has been shown, using the Box Dimension and the Korcak Dimension (\cite{Imre11}), that the bread crumb texture presents multifractal features. As a consequence, fractal and multifractal features are considered in the present paper.
 
-\subsubsection{H\"older Exponent}
+\subsubsection{H\"older exponent}
 Informally, the way to proceed with multifractal analysis is to examine, in the limit, the local behaviour of a measure $\mu$ at each point of the set under study. This means, to find the H\"older exponent $\alpha$ in that point. The {\em multifractal spectrum} $f(\alpha)$ is obtained applying this procedure to the entire set, in this case, an image.
 
 Let $E$ be an structure divided in disjoint substructures $E_{i}$ of size $\epsilon$ in such a way that 
@@ -186,7 +186,7 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{imagenes/emf}}}$
 
 \section{Materials and Methodology}
 
-\subsection{Image Acquisition}
+\subsection{Image acquisition}
 %(in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase).
 Fifty images of four different bread types ({\em lactal}, {\em baguette}, {\em salvado} and {\em sandwich}), counting two hundred images, were obtained using an electric slicer. The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to grey scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images from the camera are shown. We also employed one hundred randomly selected images from the CalTech101~(\cite{FeiFei04}) dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
 
@@ -227,8 +227,7 @@ For the FDs that uses a binarisation of the original image, the algorithm presen
 \label{fig:camera}
 \end{figure*}
 
-\subsection{Feature Vectors}
-
+\subsection{Feature vectors}
 
 Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal features were obtained for each image (using $20$ H\"older exponents). For each image, a $42$-dimensional feature vector was computed. The code of the algorithms for the computation of the Box dimension, the Morphological fractal dimension and the multifractal spectrum were written and run in Matlab. In order to make a comparison, a $3$-dimensional feature vector, with RGB colour features was also computed (R mean, G mean, B mean).
 
@@ -305,10 +304,10 @@ In addition, bread images of a different bread type, from the database employed 
 \label{fig:gonzales}
 \end{figure*}
 
-\subsection{Robustness Tests}
+\subsection{Robustness tests}
 A robust bread crumb classifier could be used to make the classification process independent of the image capturing condition. In order to test for the robustness of the method, two tests were performed. The first test shows the accuracy of the classifiers when the training and the testing samples are images taken from a set formed with images captured in different conditions. The second test shows the performance of the classifiers when there is a capturing condition mismatch between training and testing samples.
 
-\subsubsection{Classification with Different Capturing Methods}
+\subsubsection{Classification with different capturing methods}
 Table \ref{table:tableRobustnessTest1} shows classification results for the three classifiers, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). 
 
 \begin{table}[ht!b]
@@ -360,7 +359,7 @@ Images facilitated by Dra. Gonzales Barron were also included in the classifier,
 
 \end{figure*}
 
-\subsubsection{Classification when Training with Only One Capturing Method}
+\subsubsection{Classification when training with only one capturing method}
 The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of the three classifiers are shown. As expected, due to the mismatch between the training and the testing sets, the results show poor performance of the classifiers. In Tables \ref{table:ConfusionMatrixFractal}, \ref{table:ConfusionMatrixNonFractal} and \ref{table:ConfusionMatrixCombined}, the confusion matrix of the data using the three classifiers is shown. It can be seen that the RGB classifier assigns all the data to the non bread class, while the fractal and the combined features classifiers are able to discriminate between bread and non bread images, making them good discriminators of non bread images.
 
 \begin{table}[htb]
@@ -445,7 +444,7 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
 \label{table:ConfusionMatrixCombined}
 \end{table}
 
-\subsection{Deceiving the Classifiers}
+\subsection{Deceiving the classifiers}
 It is possible to mislead the classifiers with false images. Fig.~\ref{fig:fakeRGB} shows an image obtained from Wikimedia\footnote{\url{https://secure.wikimedia.org/wikipedia/commons/wiki/Sand}} that is classified as bread by its RGB features. Fig.~\ref{fig:fakeMultifractal} shows an image generated by a particle system~(\cite{Baravalle2011}) which is classified as bread by its fractal and multifractal features. It is easy to deceive the RGB classifier, using images with similar colour features as bread, but it is not clear how to do that with fractal features. We conclude that the fractal classifier is more suitable for the discrimination of these false images.
 
 \begin{figure*}
