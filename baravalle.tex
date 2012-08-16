@@ -26,7 +26,7 @@
 \affil[a]{Laboratorio de Sistemas Din\'amicos y Procesamiento de Informaci\'on,
 FCEIA, Universidad Nacional de Rosario\\ - CIFASIS - CONICET,
 Riobamba 250 bis, 2000, Rosario, Argentina,
-\{baravalle,gomez\}@cifasis-conicet.gov.ar, \url{http://www.fceia.unr.edu.ar/lsd/}}
+\{baravalle,gomez\}@cifasis-conicet.gov.ar, \url{http://www.cifasis-conicet.gov.ar/index.php?grupo=4}}
 %
 \affil[b]{DIEC, Universidad Nacional del Sur - IIIE-CONICET,
 Avenida Col\'on 80 - Bah\'ia Blanca(8000FTN) - Provincia de Buenos Aires - Rep\'ublica Argentina,
@@ -188,7 +188,7 @@ $\vcenter{\hbox{\includegraphics[scale = 0.4]{imagenes/emf}}}$
 
 \subsection{Image Acquisition}
 %(in the case of baguette and salvado, since the two other types were already sliced in the moment of purchase).
-Fifty images of four different bread types ({\em lactal}, {\em baguette}, {\em salvado} and {\em sandwich}), counting two hundred ($200$) images, were obtained using an electric slicer. The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to grey scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images from the camera are shown. We also employed randomly selected images from the CalTech101~(\cite{FeiFei04}) dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
+Fifty images of four different bread types ({\em lactal}, {\em baguette}, {\em salvado} and {\em sandwich}), counting two hundred images, were obtained using an electric slicer. The images were digitalised using an HP PSC 1210 scanner and they were saved in TIFF format. Images showed a resolution of $380 \times 380$ pixels (the maximum possible area for the four bread types) and $350$ dpi ($1$ pixel $= 0.00527 mm^{2}$). Then the images were converted to grey scale ($8$ bits). In addition, $20$ images of each bread type were acquired with a digital camera, using the same spatial resolution, counting $80$ images. The illumination conditions of these images were different from that of the scanner in order to test for the robustness of the method. In Fig.~\ref{fig:camera} four examples of bread images from the camera are shown. We also employed one hundred randomly selected images from the CalTech101~(\cite{FeiFei04}) dataset in order to test the method's performance with non-bread images. In Fig.~\ref{fig:nonbread} four examples of non-bread images from this dataset are shown. 
 
 For the FDs that uses a binarisation of the original image, the algorithm presented in \cite{White83} was used. This algorithm applies a local thresholding schema, which showed better results than using a global thresholding schema. Particularly, the algorithm presented in \cite{Huang95} and used in \cite{Gonzales2008}, showed poor results when the illumination conditions vary. Also an adjustment needs to be made since the centre of air bubbles with large areas appeared as black pixels, instead of white (and since those areas are characterized as dark regions in the original image), a global grey threshold is obtained using Otsu's algorithm (\cite{Otsu79}). Then this threshold is multiplied by a scalar which is a user defined parameter, defining as white the pixels with grey values below the threshold. It was found that defining the scalar as $0.8$ showed acceptable results. So the combination of local and global thresholding makes it a hybrid algorithm. In Fig.~\ref{fig:bread} an image of each bread type used in this work (top row) and its resulting binarisation using the proposed algorithm (bottom row) is shown.  
 
@@ -209,7 +209,7 @@ For the FDs that uses a binarisation of the original image, the algorithm presen
 
 \begin{figure*}[htb]
 \centering
-\includegraphics[scale=0.28]{exps/100sample/res/image_0004}
+\includegraphics[scale=0.28]{exps/100sample/res/image_0351}
 \includegraphics[scale=0.28]{exps/100sample/res/image_0019}
 \includegraphics[scale=0.28]{exps/100sample/res/image_0027}
 \includegraphics[scale=0.28]{exps/100sample/res/image_0309}
@@ -232,9 +232,9 @@ For the FDs that uses a binarisation of the original image, the algorithm presen
 
 Following the ideas presented in \cite{Gonzales2008}, the mentioned fractal and multifractal features were obtained for each image (using $20$ H\"older exponents). For each image, a $42$-dimensional feature vector was computed. The code of the algorithms for the computation of the Box dimension, the Morphological fractal dimension and the multifractal spectrum were written and run in Matlab. In order to make a comparison, a $3$-dimensional feature vector, with RGB colour features was also computed (R mean, G mean, B mean).
 
-Self-organizing maps (SOM)~(\cite{Kohonen2001}) of the vectorized images are useful to visualize these different representation of bread images into a lower dimensional view, in order to understand them better. A SOM maps high dimensional data into a (topically) two-dimensional representation, using neighbourhood information. Topological information of the original data is preserved.  
+Self-organizing maps (SOM)~(\cite{Kohonen2001}) of the vectorized images are useful to visualize these different representation of bread images into a lower dimensional view, in order to understand them better. A SOM maps high dimensional data into a (tipically) two-dimensional representation, using neighbourhood information. Topological information of the original data is preserved.  
 
-An unsupervised SOM of the fractal and non fractal representation of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes while the RGB features SOM appears to be more overlapped. It seems that a classifier could potentially obtain better classification results using the fractal features. %%Next sections will show that this hypothesis is true.
+Unsupervised SOM of the fractal and non fractal representations of scanned images are shown in Fig.~\ref{fig:somfractal} and Fig.~\ref{fig:somrgb} respectively. The fractal features SOM seems to show easily separable classes while the RGB features SOM appears to be more overlapped. It seems that a classifier could potentially obtain better classification results using the fractal features. %%Next sections will show that this hypothesis is true.
 %Also, in the latter, the non bread class seems to be spread over the rest of the classes, making it more difficult to distinguish between bread and non bread images. 
 
 \begin{figure*}
@@ -278,7 +278,7 @@ An unsupervised SOM of the fractal and non fractal representation of scanned ima
 \subsection{Classification}
 {\em Support Vector Machines} (SVM)~(\cite{Boser92}) were used to perform the classification, using the {\em libsvm}~(\cite{Chang2011}) implementation.
 %\subsection{Scanned Images}
-The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as testing (then switching the training and testing samples). Table \ref{table:tableFirstTest} shows classification results for both methods of classification and also for the combined features classifier ({\em i.e.}, employing a feature vector comprising fractal and colour features), using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images, scaled to the size of bread images). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
+The method of {\em k-fold cross validation} was employed in order to validate the results with $k = 4$, {\em i.e.}, $75\%$ of samples are used as training and $25\%$ as testing (then switching the training and testing samples). Table \ref{table:tableFirstTest} shows classification results for both classifiers and also for the combined features classifier ({\em i.e.}, employing feature vectors comprising fractal and colour features), using $50$ scanned images of each type ({\em i.e.} $250$ images, including $50$ of non bread images, scaled to the size of bread images). It can be seen that the use of non-fractal features in the images gives comparable results to that of using fractal features.
 
 \begin{table}[htb]
 \centering
@@ -295,9 +295,9 @@ The method of {\em k-fold cross validation} was employed in order to validate th
 \label{table:tableFirstTest}
 \end{table}
 
-We also received bread images of a different bread type, from the database employed in \cite{Gonzales2008}. They were digitalised both using a scanner and using a digital camera. From this database, we added one class to the classification in order to obtain $300$ images, employing $50$ digitalised images from the scanner, with the same spatial resolution of the other bread images. The images were received in grey scale, {\em i.e.}, only the fractal features could be considered. The performance of the classifier for the fractal features was maintained, with an accuracy of $94.3\%$. In Fig. \ref{fig:gonzales}, two images of this bread type, digitalised using a scanner (left) and using a digital camera (right) are shown.
+In addition, bread images of a different bread type, from the database employed in \cite{Gonzales2008}, were facilitated by Dra. Gonzales Barron. They were digitalised both using a scanner and using a digital camera. From this database, we added one class to the classification in order to obtain $300$ images, employing $50$ digitalised images from the scanner, with the same spatial resolution of the other bread images. The images were received in grey scale, {\em i.e.}, only the fractal features could be considered. The performance of the classifier for the fractal features was maintained, with an accuracy of $94.3\%$. In Fig. \ref{fig:gonzales}, two images of this bread type, digitalised using a scanner (left) and using a digital camera (right) are shown.
 
-\begin{figure*}[htb]
+\begin{figure*}[ht!b]
 \centering
 \includegraphics[scale=0.28]{imagenes/gonzales/allied1}
 \includegraphics[scale=0.28]{imagenes/gonzales/allied2c}
@@ -306,16 +306,12 @@ We also received bread images of a different bread type, from the database emplo
 \end{figure*}
 
 \subsection{Robustness Tests}
-In order to test for the robustness of the method, two tests were performed. 
+A robust bread crumb classifier could be used to make the classification process independent of the image capturing condition. In order to test for the robustness of the method, two tests were performed. The first test shows the accuracy of the classifiers when the training and the testing samples are images taken from a set formed with images captured in different conditions. The second test shows the performance of the classifiers when there is a capturing condition mismatch between training and testing samples.
 
 \subsubsection{Classification with Different Capturing Methods}
-Table \ref{table:tableRobustnessTest1} shows classification results for the three methods of classification, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). Results show that the accuracy descends approximately $7\%$ for the fractal features. In addition, the accuracy of the non fractal features descends more than the fractal ones. The combined method shows the better performance of the three classifiers, and a similar accuracy decrease to the fractal features.
+Table \ref{table:tableRobustnessTest1} shows classification results for the three classifiers, training a classifier with $20$ scanned images and $20$ camera images of each bread type ({\em i.e.} $200$ images, including $40$ samples of non bread images). 
 
-In Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the {\em Receiver Operating Characteristic} (ROC) curves for the three classifiers (considering them as bread - non bread classifiers) show that the fractal features have the highest {\em Area Under Curve} (AUC), {\em i.e.}, it shows the best performance in the discrimination of bread images from non bread ones.
-
-We also included the received images in the classifier, {\em i.e.}, $20$ images from the scanner and $20$ images from the camera. The obtained accuracy for the fractal features ($87.0833\%$) shows that the performance is maintained.
-
-\begin{table}[htb]
+\begin{table}[ht!b]
 \centering
 \begin{tabular}{|c|c|c|c|}
     \hline
@@ -329,6 +325,10 @@ We also included the received images in the classifier, {\em i.e.}, $20$ images 
 \caption{Results obtained in classification using training samples from the camera and from the scanner}
 \label{table:tableRobustnessTest1}
 \end{table}
+
+Results show that the accuracy decreases approximately $7\%$ for the fractal features. In addition, the accuracy of the non fractal features decreases more than the fractal ones. The combined classifier shows the best performance of the three classifiers, and a similar accuracy decrease to the fractal features. In addition, training and testing labels were relabeled to {\em bread}-{\em non bread} in order to obtain {\em Receiver Operating Characteristic} (ROC) curves for the classifers. In Figs. \ref{fig:roc}, \ref{fig:rocNF}, \ref{fig:rocCombined} the ROC curves for the three classifiers show that the fractal features have the highest {\em Area Under Curve} (AUC), {\em i.e.}, it shows the best performance in the discrimination of bread images from non bread ones.
+
+Images facilitated by Dra. Gonzales Barron were also included in the classifier, {\em i.e.}, $20$ images from the scanner and $20$ images from the camera (counting $240$ images for the classification). The obtained accuracy for the fractal features ($87.0833\%$) shows that the performance is maintained.
 
 \begin{figure*}
 
@@ -361,7 +361,7 @@ We also included the received images in the classifier, {\em i.e.}, $20$ images 
 \end{figure*}
 
 \subsubsection{Classification when Training with Only One Capturing Method}
-The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of the three methods are shown. Results shows poor performance of the classifiers. In Tables \ref{table:ConfusionMatrixFractal}, \ref{table:ConfusionMatrixNonFractal} and \ref{table:ConfusionMatrixCombined}, the confusion matrix of the data using the three methods is shown. It can be seen that the RGB method assigns all the data to the non bread class, while the fractal and the combined features methods are able to discriminate between bread and non bread images, making them good discriminators of non bread images.
+The second test consists of $20$ scanned images from each class, and $20$ from the CalTech101 dataset, which were used for training, and all the images from the digital camera ($20$ per class), and $20$ non bread images were used for testing ($100$ images for training and $100$ images for testing). In Table \ref{table:tableRobustnessTest2} accuracy results of the three classifiers are shown. As expected, due to the mismatch between the training and the testing sets, the results show poor performance of the classifiers. In Tables \ref{table:ConfusionMatrixFractal}, \ref{table:ConfusionMatrixNonFractal} and \ref{table:ConfusionMatrixCombined}, the confusion matrix of the data using the three classifiers is shown. It can be seen that the RGB classifier assigns all the data to the non bread class, while the fractal and the combined features classifiers are able to discriminate between bread and non bread images, making them good discriminators of non bread images.
 
 \begin{table}[htb]
 \centering
@@ -445,7 +445,7 @@ The second test consists of $20$ scanned images from each class, and $20$ from t
 \label{table:ConfusionMatrixCombined}
 \end{table}
 
-\subsection{Deceiving the classifier}
+\subsection{Deceiving the Classifier}
 It is possible to mislead the classifiers with false images. Fig.~\ref{fig:fakeRGB} shows an image obtained from Wikimedia\footnote{\url{https://secure.wikimedia.org/wikipedia/commons/wiki/Sand}} that is classified as bread by its RGB features. Fig.~\ref{fig:fakeMultifractal} shows an image generated by a particle system~(\cite{Baravalle2011}) which is classified as bread by its fractal and multifractal features. It is easy to deceive the RGB classifier, using images with similar colour features as bread, but it is not clear how to do that with fractal features. We conclude that the fractal classifier is more suitable for the discrimination of these false images.
 
 \begin{figure*}
@@ -470,7 +470,7 @@ It is possible to mislead the classifiers with false images. Fig.~\ref{fig:fakeR
 %\todo{Add PCA float table in a minipage next to the table1}
 
 \section{Conclusions and Future Work}
-The use of fractal and multifractal features in bread crumb texture classification showed good performance. The multifractal spectrum demonstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The use of non-fractal features such as colour, also showed comparable results, but it fails to detect non bread images, and it is easy to deceive it with false images. The combination of both classifiers showed similar results to those obtained using the fractal features, so the use of the latter alone is preferred. The three methods showed to be sensitive to illumination changes, making the methods still non robust. Preliminary tests on our particle system~(\cite{Baravalle2011}) show that it could deceive the fractal classifier, so further analysis is required in order to find the parameters that produce textures with similar fractal and multifractal features to those of real breads.
+The use of fractal and multifractal features in bread crumb texture classification showed good performance. The multifractal spectrum demonstrated to be accurate enough to perform a classification of different bread types and also to discriminate non bread from bread images. The use of non-fractal features such as colour, also showed comparable results, but it fails to detect non bread images, and it is easy to deceive it with false images. The combination of both classifiers showed similar results to those obtained using the fractal features, so the use of the latter alone is preferred. The three classifiers showed to be sensitive to illumination changes, making them still non robust. Preliminary tests on our particle system~(\cite{Baravalle2011}) show that it could deceive the fractal classifier, so further analysis is required in order to find the parameters that produce textures with similar fractal and multifractal features to those of real breads.
 
 The results found can be applied to validate synthetic samples, {\em i.e.}, the latter should have similar features to the bread type that is trying to simulate. The features obtained will be used to determine particle system parameters ({\em e.g.}, lifetime of particles, colour). These results can be extended to be used as quality parameters for these products. The robustness of the method needs to be enhanced. Other FDs will be studied in order to accomplish this goal. Also, the code of the multifractal spectrum algorithm needs to be optimized in order to obtain a faster algorithm for bread classification. It will be useful to apply a Principal Component Analysis in order to identify the key variables in the feature vectors. 
 
