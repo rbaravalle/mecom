@@ -108,7 +108,7 @@ pdf:
 	$(PS2PDF) $(TARGETS)
 
 clean:
-	rm -f *~  $(TARGETS) $(TARGETSPS) *.dvi *.log *.aux *.blg *.bbl $(OLDAUX)
+	rm -f *~  $(TARGETS) $(TARGETSPS) *.out *.dvi *.log *.aux *.blg *.bbl $(OLDAUX)
 	rm -f $(PROJECT)-compressed.pdf
 
 veryclean: clean
