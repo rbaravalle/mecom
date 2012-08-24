@@ -2,8 +2,8 @@ function res = alpha2test(ss,cuantas)
     %t1 = clock;
     tic;
     img = imread(ss);
-    %img = img(:,:,1:3);
-    %img = rgb2gray(img);
+    img = img(:,:,1:3);
+    img = rgb2gray(img);
     
     Nx = size(img,1);
     Ny = size(img,2);
@@ -13,11 +13,12 @@ function res = alpha2test(ss,cuantas)
     
     measure = zeros(1,l,1);
     
-    C = cuantas; % how many alphas
+    %C = cuantas; % how many alphas
 
-    for i = 1:Nx,
-        for j = 1:Ny, % texel            
-            for k = 1:l, % boxes centered at the pixel
+
+    for i = 1:Nx
+        for j = 1:Ny % texel                            
+            for k = 1:l
                 x0 = i - k;
                 x1 = i + k;
                 y0 = j - k;
@@ -27,8 +28,9 @@ function res = alpha2test(ss,cuantas)
                 if( x1 > Nx ) x1 = Nx; end
                 if( y1 > Ny ) y1 = Ny; end
                 A = img(x0:x1,y0:y1);
-                measure(k) = max(A(:)); %sum;
-            end            
+                measure(k) = max(A(:));
+                if(measure(k) == 0) measure(k) == eps; end
+            end
             % calculo de alfa: pendiente de la recta de ajuste
             p2 = polyfit(log(1:2:(2*l)),log(measure),1); % 1: grado uno del polinomio
             img2(i,j) = p2(:,1);
@@ -130,11 +132,12 @@ function res = alpha2test(ss,cuantas)
 
             delta(k+1)    = sizeBlocks;
             N(k+1)    = boxCount;
+            if(N(k+1) == 0) N(k+1) = eps; end
         end
 
         p2 = polyfit(log(delta),log(N),1); % 1: degree 1 of the polynom
         falpha(c) = -p2(:,1);
-        if((isnan(falpha(c)) || isinf(falpha(c)))) falpha(c) = 0; end
+        %if((isnan(falpha(c)) || isinf(falpha(c)))) falpha(c) = 0; end
         
         res = [res, clases(c), falpha(c)];
     end

@@ -3,10 +3,13 @@ El .csv primero permite importar datos en matlab y R
 El .txt permite hacer pruebas con libsvm
 
 Archivos:
-fractal  :prueba 1 (50 imagenes de scanner de cada tipo con 50 de no pan) vector con features fractales
-rgb      :prueba 1 (50 imagenes de scanner de cada tipo con 50 de no pan) vector con features de color rgb
-combinado:prueba 1 (50 imagenes de scanner de cada tipo con 50 de no pan) vector con features combinados de los dos anteriores
+fractal    :prueba 1 (50 imagenes de scanner de cada tipo con 50 de no pan) vector con features fractales
+rgb        :prueba 1 (50 imagenes de scanner de cada tipo con 50 de no pan) vector con features de color rgb
+combinado  :prueba 1 (50 imagenes de scanner de cada tipo con 50 de no pan) vector con features combinados de los dos anteriores
 
-ursula   :prueba 1 (50 imagenes de scanner de cada tipo, 50 imagenes de panes proporcionados por Ursula Gonzales Barron, con 50 de no pan) vector con features fractales
+ursula     :prueba 1 (50 imagenes de scanner de cada tipo, 50 imagenes de panes proporcionados por Ursula Gonzales Barron, con 50 de no pan) vector con features fractales
 
+fractal2s  :prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features fractales
+rgb2s      :prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features de color rgb
+combinado2s:prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
 

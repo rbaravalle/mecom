@@ -7,8 +7,8 @@ function [hdf,x,y] = hausdorff(ss)
     
     e2 = white(ss); %segmentation
 
-    figure(2)
-    imshow(e2)
+    %figure(2)
+    %imshow(e2)
 
     function e = esta(x,a)
        s = size(a);

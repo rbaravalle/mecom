@@ -1,5 +1,7 @@
 
-N= 20;
+N= 50;
+
+
 
 %names = {};
 namesSa = {};
@@ -28,11 +30,15 @@ SM = [];
 %name{i} = strcat('panScanner/corte/salvado',int2str(i),'.jpg');
 %SM(i) = morphFractal(name{i}); end
 
-if(0)
+if(1)
 baguette = [];
 salvado = [];
 lactal = [];
 sandwich = [];
+baguetteNF = [];
+salvadoNF = [];
+lactalNF = [];
+sandwichNF = [];
 allied = [];
 shiptons = [];
 odlums = [];
@@ -49,7 +55,66 @@ ranksC = [];
 ursulaC = [];
 end
 
+
+if(0)
+
+    for i = 1:N,
+        %namesOdlums{i} = strcat('dublin/odlum',int2str(i+ult),'.tif');
+        %namesRanks{i} = strcat('dublin/ranks',int2str(i+ult),'.tif');
+        %namesBC{i} = strcat('panMarco/baguette/b',int2str(i+ult),'.tif');
+        %namesBCS{i} = strcat('/home/rodrigo/panMarco/baguette/corteSlicer/b',int2str(i+ult),'.tif');
+        %namesUC{i} = strcat('dublin/camera/allied/allied',int2str(i+ult),'c.tif');
+        %namesSC{i} = strcat('panMarco/salvado/s',int2str(i+ult),'.tif');
+        %namesLC{i} = strcat('panMarco/lactal/l',int2str(i+ult),'.tif');
+    end
+
+    %sandwich = [];
+    for i = 1:N
+        namesB{i} = strcat('imagenes/scanner/baguette/baguette',int2str(i+ult),'.tif');
+        namesL{i} = strcat('imagenes/scanner/lactal/lactal',int2str(i+ult),'.tif');
+        namesS{i} = strcat('imagenes/scanner/salvado/salvado',int2str(i+ult),'.tif');
+        namesSa{i} = strcat('imagenes/scanner/sandwich/sandwich',int2str(i+ult),'.tif');
+        
+        %baguette = [baguette; morphFractal(namesSa{i}), Hausdorff(namesB{i}), alpha2test(namesB{i},20)];
+        %lactal = [lactal; morphFractal(namesSa{i}), Hausdorff(namesL{i}), alpha2test(namesL{i},20)];
+        %sandwich = [sandwich; morphFractal(namesSa{i}), Hausdorff(namesSa{i}), alpha2test(namesSa{i},20)];
+        %salvado = [salvado; morphFractal(namesS{i}), Hausdorff(namesS{i}), alpha2test(namesS{i},20)];
+        %allied = [allied; morphFractal(namesAllied{i}), Hausdorff(namesAllied{i}), alpha2test(namesAllied{i},20)];
+        %shiptons = [shiptons; morphFractal(namesShiptons{i}), Hausdorff(namesShiptons{i}), alpha2test(namesShiptons{i},20)];
+        %odlums = [odlums; morphFractal(namesOdlums{i}), Hausdorff(namesOdlums{i}), alpha2test(namesOdlums{i},20)];
+        %ranks = [ranks; morphFractal(namesRanks{i}), Hausdorff(namesRanks{i}), alpha2test(namesRanks{i},20)];
+        %baguetteCS = [baguetteCS; morphFractal(namesBCS{i}), Hausdorff(namesBCS{i}), alpha2test(namesBCS{i},20)];
+        %salvadoC = [C; morphFractal(namesBC{i}), Hausdorff(namesBC{i}), alpha2test(namesBC{i},20)];
+        %salvadoC = [salvadoC; morphFractal(namesSC{i}), Hausdorff(namesSC{i}), alpha2test(namesSC{i},20)];
+        %lactalC = [lactalC; morphFractal(namesLC{i}), Hausdorff(namesLC{i}), alpha2test(namesLC{i},20)];
+        %ursulaC = [ursulaC; morphFractal(namesUC{i}), Hausdorff(namesUC{i}), alpha2test(namesUC{i},20)];
+        baguetteNF = [baguetteNF; mca(namesB{i}) ];
+        lactalNF = [lactalNF; mca(namesL{i}) ];
+        sandwichNF = [sandwichNF; mca(namesSa{i}) ];
+        salvadoNF = [salvadoNF; mca(namesS{i}) ];
+    end
+    csvwrite('panes.csv',[baguette; lactal; salvado; sandwich]);
+
+end
+
 if(1)
+    imagenes3 = [];
+    direc = '/home/rodrigo/mecom2012/mecom/exps/100sample/res/';
+    archivos = dir(direc)
+
+    for i = 3:size(archivos,1)
+       namesIm{i} = strcat(direc,archivos(i).name);
+    end
+    
+    for i = 3:size(archivos,1),
+        if(size(imread(namesIm{i}),3) == 3) % if it is RGB
+            imagenes3 = [imagenes3; mca(namesIm{i}) ];
+        end
+    end
+end
+
+
+if(0)
     imagenes3 = [];
 %imagenes = [];
 direc = '/home/rodrigo/mecom2012/mecom/exps/100sample/res/';
@@ -64,40 +129,17 @@ archivos = dir(direc)
             imagenes3 = [imagenes3; morphFractal(namesIm{i}), Hausdorff(namesIm{i}), alpha2test(namesIm{i},20) ];
         end
     end
-end
-if(0)
-
-    for i = 1:N,
-        namesB{i} = strcat('panScanner/corte/baguette',int2str(i+ult),'.tif');
-        namesL{i} = strcat('panScanner/corte/lactal',int2str(i+ult),'.tif');
-        namesS{i} = strcat('panScanner/corte/salvado',int2str(i+ult),'.tif');
-        namesSa{i} = strcat('panScanner/corte/sandwich',int2str(i+ult),'.tif');
-        namesOdlums{i} = strcat('dublin/odlum',int2str(i+ult),'.tif');
-        namesRanks{i} = strcat('dublin/ranks',int2str(i+ult),'.tif');
-        namesBC{i} = strcat('panMarco/baguette/b',int2str(i+ult),'.tif');
-        namesUC{i} = strcat('dublin/camera/allied/allied',int2str(i+ult),'c.tif');
-        %namesSC{i} = strcat('panMarco/salvado/s',int2str(i+ult),'.tif');
-        %namesLC{i} = strcat('panMarco/lactal/l',int2str(i+ult),'.tif');
-    end
-
-    %sandwich = [];
-    for i = 1:N
-        %baguette = [baguette; morphFractal(namesSa{i}), Hausdorff(namesB{i}), alpha2test(namesB{i},20)];
-        %lactal = [lactal; morphFractal(namesSa{i}), Hausdorff(namesL{i}), alpha2test(namesL{i},20)];
-        %sandwich = [sandwich; morphFractal(namesSa{i}), Hausdorff(namesSa{i}), alpha2test(namesSa{i},20)];
-        %salvado = [salvado; morphFractal(namesS{i}), Hausdorff(namesS{i}), alpha2test(namesS{i},20)];
-        %allied = [allied; morphFractal(namesAllied{i}), Hausdorff(namesAllied{i}), alpha2test(namesAllied{i},20)];
-        %shiptons = [shiptons; morphFractal(namesShiptons{i}), Hausdorff(namesShiptons{i}), alpha2test(namesShiptons{i},20)];
-        %odlums = [odlums; morphFractal(namesOdlums{i}), Hausdorff(namesOdlums{i}), alpha2test(namesOdlums{i},20)];
-        %ranks = [ranks; morphFractal(namesRanks{i}), Hausdorff(namesRanks{i}), alpha2test(namesRanks{i},20)];
-        %baguetteC = [baguetteC; morphFractal(namesBC{i}), Hausdorff(namesBC{i}), alpha2test(namesBC{i},20)];
-        %salvadoC = [C; morphFractal(namesBC{i}), Hausdorff(namesBC{i}), alpha2test(namesBC{i},20)];
-        %salvadoC = [salvadoC; morphFractal(namesSC{i}), Hausdorff(namesSC{i}), alpha2test(namesSC{i},20)];
-        %lactalC = [lactalC; morphFractal(namesLC{i}), Hausdorff(namesLC{i}), alpha2test(namesLC{i},20)];
-        ursulaC = [ursulaC; morphFractal(namesUC{i}), Hausdorff(namesUC{i}), alpha2test(namesUC{i},20)];
-    end
+    data = [baguette; lactal; salvado; sandwich; imagenes3(1:50,:)];
+    csvwrite('fractal.csv',[baguette; lactal; salvado; sandwich; imagenes3(1:50,:)]);
+    labels(1:50) = 1;
+    labels(51:100) = 2;
+    labels(101:150) = 3;
+    labels(151:200) = 4;
+    labels(201:250) = 5;
+    libsvmwrite('fractal.txt',labels,data);
 end
 
+%baguetteCS = [];
 %sandwichC = [];
 
 if(0)
