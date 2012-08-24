@@ -13,3 +13,13 @@ fractal2s  :prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vect
 rgb2s      :prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features de color rgb
 combinado2s:prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
 
+
+fractal2c  :prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features fractales
+rgb2c      :prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features de color rgb
+combinado2c:prueba 2 (20 imagenes de camara cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
+
+
+clasificadorFractal: imagenes de camara y scanner de la prueba 2 mezcladas, vector con features fractales
+clasificadorRGB : imagenes de camara y scanner de la prueba 2 mezcladas, vector con features de color rgb
+clasificadorCombinado: imagenes de camara y scanner de la prueba 2 mezcladas, vector con features combinados de los dos anteriores
+clasificadorUrsula: imagenes de camara y scanner de la prueba 2 mezcladas (mas 20 imagenes de scanner y 20 de camara proporcionados por Ursula Gonzales Barron) vector con features fractales
