@@ -13,11 +13,16 @@ fractal2s  :prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vect
 rgb2s      :prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features de color rgb
 combinado2s:prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
 
-
 fractal2c  :prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features fractales
 rgb2c      :prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features de color rgb
 combinado2c:prueba 2 (20 imagenes de camara cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
 
+utilizando espectro del archivo scripts/multifractal.m
+fractal2otoS: prueba2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features multifractales
+fractal2otroC: prueba2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features multifractales
+
+fractal2Es : prueba2 con ambos vectores fractales combinados (scanner)
+fractal2Ec : prueba2 con ambos vectores fractales combinados (camara)
 
 clasificadorFractal: imagenes de camara y scanner de la prueba 2 mezcladas, vector con features fractales
 clasificadorRGB : imagenes de camara y scanner de la prueba 2 mezcladas, vector con features de color rgb
