@@ -358,7 +358,7 @@ def main():
 		t=time()-t
 		writelog("      choosing c,g time: %.1f\n"%t, VERBOSE_GRID_TIME)
 
-		if acc == best_acc and random.randin(0,1) == 1:
+		if acc == best_acc and random.randint(0,1) == 1:
 			best_acc = acc
 			best_fts = fv
 			ftmp = f	
