@@ -17,7 +17,7 @@ else:
 
 is_win32 = (sys.platform == 'win32')
 if not is_win32:
-       svmtrain_exe = "../svm-train"
+       svmtrain_exe = "/usr/bin/svm-train"
        gnuplot_exe = "/usr/bin/gnuplot"
 else:
        # example for windows
@@ -98,7 +98,7 @@ Usage: grid.py [-log2c begin,end,step] [-log2g begin,end,step] [-v fold]
     assert os.path.exists(svmtrain_exe),"svm-train executable not found"    
     assert os.path.exists(gnuplot_exe),"gnuplot executable not found"
     assert os.path.exists(dataset_pathname),"dataset not found"
-    gnuplot = Popen(gnuplot_exe,stdin = PIPE).stdin
+    #gnuplot = Popen(gnuplot_exe,stdin = PIPE).stdin
 
 
 def range_f(begin,end,step):
@@ -139,33 +139,34 @@ def redraw(db,best_param,tofile=False):
     if all(x[1] == db[0][1]  for x in db): return
     if all(x[2] == db[0][2]  for x in db): return
 
-    if tofile:
-        gnuplot.write(b"set term png transparent small linewidth 2 medium enhanced\n")
-        gnuplot.write("set output \"{0}\"\n".format(png_filename.replace('\\','\\\\')).encode())
-        #gnuplot.write(b"set term postscript color solid\n")
-        #gnuplot.write("set output \"{0}.ps\"\n".format(dataset_title).encode().encode())
-    elif is_win32:
-        gnuplot.write(b"set term windows\n")
-    else:
-        gnuplot.write( b"set term x11\n")
-    gnuplot.write(b"set xlabel \"log2(C)\"\n")
-    gnuplot.write(b"set ylabel \"log2(gamma)\"\n")
-    gnuplot.write("set xrange [{0}:{1}]\n".format(c_begin,c_end).encode())
-    gnuplot.write("set yrange [{0}:{1}]\n".format(g_begin,g_end).encode())
-    gnuplot.write(b"set contour\n")
-    gnuplot.write("set cntrparam levels incremental {0},{1},100\n".format(begin_level,step_size).encode())
-    gnuplot.write(b"unset surface\n")
-    gnuplot.write(b"unset ztics\n")
-    gnuplot.write(b"set view 0,0\n")
-    gnuplot.write("set title \"{0}\"\n".format(dataset_title).encode())
-    gnuplot.write(b"unset label\n")
-    gnuplot.write("set label \"Best log2(C) = {0}  log2(gamma) = {1}  accuracy = {2}%\" \
-                  at screen 0.5,0.85 center\n". \
-                  format(best_log2c, best_log2g, best_rate).encode())
-    gnuplot.write("set label \"C = {0}  gamma = {1}\""
-                  " at screen 0.5,0.8 center\n".format(2**best_log2c, 2**best_log2g).encode())
-    gnuplot.write(b"set key at screen 0.9,0.9\n")
-    gnuplot.write(b"splot \"-\" with lines\n")
+    # if tofile:
+    # 	pass
+    #     #gnuplot.write(b"set term png transparent small linewidth 2 medium enhanced\n")
+    #     #gnuplot.write("set output \"{0}\"\n".format(png_filename.replace('\\','\\\\')).encode())
+    #     #gnuplot.write(b"set term postscript color solid\n")
+    #     #gnuplot.write("set output \"{0}.ps\"\n".format(dataset_title).encode().encode())
+    # elif is_win32:
+    #     gnuplot.write(b"set term windows\n")
+    # else:
+    #     gnuplot.write( b"set term x11\n")
+    # gnuplot.write(b"set xlabel \"log2(C)\"\n")
+    # gnuplot.write(b"set ylabel \"log2(gamma)\"\n")
+    # gnuplot.write("set xrange [{0}:{1}]\n".format(c_begin,c_end).encode())
+    # gnuplot.write("set yrange [{0}:{1}]\n".format(g_begin,g_end).encode())
+    # gnuplot.write(b"set contour\n")
+    # gnuplot.write("set cntrparam levels incremental {0},{1},100\n".format(begin_level,step_size).encode())
+    # gnuplot.write(b"unset surface\n")
+    # gnuplot.write(b"unset ztics\n")
+    # gnuplot.write(b"set view 0,0\n")
+    # gnuplot.write("set title \"{0}\"\n".format(dataset_title).encode())
+    # gnuplot.write(b"unset label\n")
+    # gnuplot.write("set label \"Best log2(C) = {0}  log2(gamma) = {1}  accuracy = {2}%\" \
+    #               at screen 0.5,0.85 center\n". \
+    #               format(best_log2c, best_log2g, best_rate).encode())
+    # gnuplot.write("set label \"C = {0}  gamma = {1}\""
+    #               " at screen 0.5,0.8 center\n".format(2**best_log2c, 2**best_log2g).encode())
+    # gnuplot.write(b"set key at screen 0.9,0.9\n")
+    # gnuplot.write(b"splot \"-\" with lines\n")
     
 
 
@@ -366,8 +367,8 @@ def main():
                 print("[{0}] {1} {2} {3} (best c={4}, g={5}, rate={6})".format \
 		    (worker,c1,g1,rate, best_c, best_g, best_rate))
             db.append((c,g,done_jobs[(c,g)]))
-        redraw(db,[best_c1, best_g1, best_rate])
-        redraw(db,[best_c1, best_g1, best_rate],True)
+        #redraw(db,[best_c1, best_g1, best_rate])
+        #redraw(db,[best_c1, best_g1, best_rate],True)
 
     job_queue.put((WorkerStopToken,None))
     print("{0} {1} {2}".format(best_c, best_g, best_rate))
