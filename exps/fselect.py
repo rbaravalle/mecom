@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 
 import random
@@ -299,7 +300,7 @@ def main():
 	#for each possible feature subset
 	#for j in range(len(fnum_v)):
 	
-	deleted = [0,1]
+	deleted = []
 	best_acc = 0
 	best_fts = []
 	
@@ -312,7 +313,6 @@ def main():
           return filter(lambda x: not (x in ds), xs)
 	
 	for i in range(len(fnum_v)):
-	   
 	   
 	   best_acc = 0
 	   best_fts = []
@@ -358,6 +358,11 @@ def main():
 		t=time()-t
 		writelog("      choosing c,g time: %.1f\n"%t, VERBOSE_GRID_TIME)
 
+		if acc == best_acc and random.randin(0,1) == 1:
+			best_acc = acc
+			best_fts = fv
+			ftmp = f	
+		
 		if (acc > best_acc):
 			best_acc = acc
 			best_fts = fv
@@ -377,6 +382,12 @@ def main():
 
 	#print(fnum_v)
 	#print(est_acc)
+	
+	print "best fts:"
+	print best_acc_ever
+	print best_fts_ever
+	
+	exit(0)
 
 	#fnum=fnum_v[est_acc.index(max(est_acc))]
 #	print(est_acc.index(max(est_acc)))
