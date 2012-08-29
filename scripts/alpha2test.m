@@ -2,8 +2,13 @@ function res = alpha2test(ss,cuantas)
     %t1 = clock;
     tic;
     img = imread(ss);
-    img = img(:,:,1:3);
-    img = rgb2gray(img);
+    
+    layers = size(img,3) - 1; % how many layers should have the image in the analysis (issue with tiff images)
+    
+    img = img(:,:,1:layers);
+    if(layers == 3)
+        img = rgb2gray(img);
+    end
     
     Nx = size(img,1);
     Ny = size(img,2);

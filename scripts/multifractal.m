@@ -14,7 +14,13 @@ function res = multifractal(ss)
     %indata=inputdlg({'input filename'});
 
     a = imread(ss);
-    a = a(:,:,1:3);
+    layers = size(a,3) - 1; % how many layers the image should have for the analysis (issue with tiff images)
+    
+    a = a(:,:,1:layers);
+    if(layers == 3)
+        a = rgb2gray(a);
+    end
+    
     [rows, cols] = size(a);
     %figure;imshow(a);
     npix = sum(sum(a));

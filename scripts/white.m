@@ -8,12 +8,18 @@ function ret = white(ss)
     % parameters
     bias = 1;
     thresh = 0.8;
-    vent = 5;
+    vent = 7;
     
     Nx = size(img,1);
     Ny = size(img,2);
     
-    %img = rgb2gray(img);
+    layers = size(img,3) - 1; % how many layers should have the image in the analysis (issue with tiff images)
+    
+    img = img(:,:,1:layers);
+    if layers==3
+        img = rgb2gray(img);
+    end
+    img = histeq(img);
     im = zeros(Nx,Ny);
     
     intImg = zeros(Nx,Ny);
