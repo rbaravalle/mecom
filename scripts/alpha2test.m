@@ -24,13 +24,16 @@ function res = alpha2test(ss,cuantas)
     
     for i = 1:Nx
         for j = 1:Ny % texel                            
-            for k = 1:l
-                measure(k) = min(min(img(max(i-k,1):min(i+k,Nx),max(j-k,1):min(j+k,Ny))));
                 %if(measure(k) == 0) measure(k) == eps; end
-            end
+            measure(1) = min(min(img(max(i-1,1):min(i+1,Nx),max(j-1,1):min(j+1,Ny))));
+            measure(2) = min(min(img(max(i-2,1):min(i+2,Nx),max(j-2,1):min(j+2,Ny))));
+            measure(3) = min(min(img(max(i-3,1):min(i+3,Nx),max(j-3,1):min(j+3,Ny))));
+            measure(4) = min(min(img(max(i-4,1):min(i+4,Nx),max(j-4,1):min(j+4,Ny))));
+            
             % calculo de alfa: pendiente de la recta de ajuste
-            p2 = polyfit(temp,log(measure),1); % 1: grado uno del polinomio
-            img2(i,j) = p2(:,1);
+            p2=[temp;ones(1,l)]'\log(measure)';
+            %p2 = polyfit(temp,log(measure),1); % 1: grado uno del polinomio
+            img2(i,j) = p2(1,:);
         end        
     end
     maxx = max(img2(:));
