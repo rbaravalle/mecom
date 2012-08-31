@@ -328,7 +328,11 @@ def main():
 		#print fn
 		print "removed:", f
 		print fv
-		
+		print "best fts:"
+		print best_acc_ever
+		print best_fts_ever		
+
+
 		t=time()
 		#pick features
 		tr_sel_samp = select(train_sample, fv)
