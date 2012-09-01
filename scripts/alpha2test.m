@@ -25,10 +25,10 @@ function res = alpha2test(ss,cuantas)
     for i = 1:Nx
         for j = 1:Ny % texel                            
                 %if(measure(k) == 0) measure(k) == eps; end
-            measure(1) = min(min(img(max(i-1,1):min(i+1,Nx),max(j-1,1):min(j+1,Ny))));
-            measure(2) = min(min(img(max(i-2,1):min(i+2,Nx),max(j-2,1):min(j+2,Ny))));
-            measure(3) = min(min(img(max(i-3,1):min(i+3,Nx),max(j-3,1):min(j+3,Ny))));
-            measure(4) = min(min(img(max(i-4,1):min(i+4,Nx),max(j-4,1):min(j+4,Ny))));
+            measure(1) = max(max(img(max(i-1,1):min(i+1,Nx),max(j-1,1):min(j+1,Ny))));
+            measure(2) = max(max(img(max(i-2,1):min(i+2,Nx),max(j-2,1):min(j+2,Ny))));
+            measure(3) = max(max(img(max(i-3,1):min(i+3,Nx),max(j-3,1):min(j+3,Ny))));
+            measure(4) = max(max(img(max(i-4,1):min(i+4,Nx),max(j-4,1):min(j+4,Ny))));
             
             % calculo de alfa: pendiente de la recta de ajuste
             p2=[temp;ones(1,l)]'\log(measure)';
@@ -57,21 +57,31 @@ function res = alpha2test(ss,cuantas)
         
         s1 = size(block,1);
         s2 = size(block,2);
-        for w = 1:s1,
-            for t = 1:s2,
-                b = block(w,t);
-                if(c ~= cuantas)
+        
+        if(c ~= cuantas)
+            for w = 1:s1,
+                for t = 1:s2,
+                    b = block(w,t);
                     if (b >= alpha && b < alpha1)
                         cant = 1;
                     end
-                else
-                    if(b == alpha1)
-                        cant = 1;
-                    end
+                    if(cant == 1) break; end
                 end
                 if(cant == 1) break; end
             end
+            %c1 = block >= alpha;
+            %c2 = block < alpha1;
+            %c = (c1+c2) == 2;
+        else
+            for w = 1:s1,
+                for t = 1:s2,
+                    if(block(w,t) == alpha1)
+                        cant = 1;
+                    end
+                    if(cant == 1) break; end
+                end
             if(cant == 1) break; end
+            end
         end
     end
 
@@ -81,8 +91,9 @@ function res = alpha2test(ss,cuantas)
     res = [];
     
     for c = 1:cuantas % one fractal dimension for each c
-        delta = zeros(cant,1);
-        N = zeros(cant,1);
+        tic;
+        delta = zeros(1,cant+1,1);
+        N = zeros(1,cant+1,1);
         
         for k = 0:cant
             sizeBlocks = 2*k+1;
@@ -128,19 +139,19 @@ function res = alpha2test(ss,cuantas)
 
                 end
             end
-            boxCount = nnz(flag);
 
             delta(k+1)    = sizeBlocks;
-            N(k+1)    = boxCount;
+            N(k+1)    = nnz(flag);
             if(N(k+1) == 0) N(k+1) = eps; end
         end
 
-        p2 = polyfit(log(delta),log(N),1); % 1: degree 1 of the polynom
-        falpha(c) = -p2(:,1);
+        p2=[log(delta);ones(1,cant+1,1)]'\log(N)';
+        %p2 = polyfit(log(delta),log(N),1); % 1: degree 1 of the polynom
+        falpha(c) = -p2(1,:);
         %if((isnan(falpha(c)) || isinf(falpha(c)))) falpha(c) = 0; end
-        
         res = [res, clases(c), falpha(c)];
+        toc;
     end
-    toc;
+    %res = [clases falpha];
 end
 
