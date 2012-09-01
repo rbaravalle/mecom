@@ -90,8 +90,9 @@ function res = alpha2test(ss,cuantas)
 
     res = [];
     
+    tic;
     for c = 1:cuantas % one fractal dimension for each c
-        tic;
+        
         delta = zeros(1,cant+1,1);
         N = zeros(1,cant+1,1);
         
@@ -112,29 +113,13 @@ function res = alpha2test(ss,cuantas)
                     dx = xEnd - Nx; % leftovers pixels in x
                     dy = yEnd - Ny; % leftovers en pixeles en y
                     if dx > 0 && dy <= 0,
-                        block1 = img2(xStart:Nx, yStart:yEnd);
-                        block2 = img2(1:dx, yStart:yEnd);
-                        flag(i,j) = contar(block1,c) || contar(block2,c);
-                    end
-
-                    if dx <= 0 && dy > 0,
-                        block1 = img2(xStart:xEnd, yStart:Ny);
-                        block2 = img2(xStart:xEnd, 1:dy);
-                        flag(i,j) = contar(block1,c) || contar(block2,c);
-                    end
-
-                    if dx > 0 && dy > 0,
-                        block1 = img2(xStart:Nx, yStart:Ny);
-                        block2 = img2(1:dx, yStart:Ny);
-                        block3 = img2(xStart:Nx, 1:dy);
-                        block4 = img2(1:dx, 1:dy);
-
-                        flag(i,j) = contar(block1,c) || contar(block2,c) || contar(block3,c) || contar(block4,c);
-                    end
-
-                    if dx <= 0 && dy <= 0, % todo el bloque esta en la grilla
-                        block = img2(xStart:xEnd, yStart:yEnd);
-                        flag(i,j) = contar(block,c); %mark this if ANY part of block is true
+                        flag(i,j) = contar(img2(xStart:Nx, yStart:yEnd),c) || contar(img2(1:dx, yStart:yEnd),c);
+                    elseif dx <= 0 && dy > 0,
+                        flag(i,j) = contar(img2(xStart:xEnd, yStart:Ny),c) || contar(img2(xStart:xEnd, 1:dy),c);
+                    elseif dx > 0 && dy > 0,
+                        flag(i,j) = contar(img2(xStart:Nx, yStart:Ny),c)  || contar(img2(1:dx, yStart:Ny),c) || contar(img2(xStart:Nx, 1:dy),c) || contar(img2(1:dx, 1:dy),c);
+                    elseif dx <= 0 && dy <= 0, % todo el bloque esta en la grilla
+                        flag(i,j) = contar(img2(xStart:xEnd, yStart:yEnd),c); %mark this if ANY part of block is true
                     end
 
                 end
@@ -150,8 +135,8 @@ function res = alpha2test(ss,cuantas)
         falpha(c) = -p2(1,:);
         %if((isnan(falpha(c)) || isinf(falpha(c)))) falpha(c) = 0; end
         res = [res, clases(c), falpha(c)];
-        toc;
     end
+    toc;
     %res = [clases falpha];
 end
 
