@@ -15,11 +15,14 @@ combinado2s:prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vect
 
 fractal2c  :prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features fractales
 rgb2c      :prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features de color rgb
-combinado2c:prueba 2 (20 imagenes de camara cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
+combinado2c:prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features combinados de los dos anteriores
 
 utilizando la medida "min" en lugar de "max"
 fractal2MinS:prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features fractales, medida min
 fractal2MinC:prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features fractales, medida min
+
+fractal2MaxMinS: prueba 2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features min-max
+fractal2MaxMinC: prueba 2 (20 imagenes de camara de cada tipo con 20 de no pan) vector con features min-max
 
 utilizando espectro del archivo scripts/multifractal.m
 fractal2otoS: prueba2 (20 imagenes de scanner de cada tipo con 20 de no pan) vector con features multifractales
