@@ -1,6 +1,6 @@
 function res = alpha2test(ss,cuantas)
     %t1 = clock;
-    tic;
+    %tic;
     img = imread(ss);
     
     layers = size(img,3) - 1; % how many layers should have the image in the analysis (issue with tiff images)
@@ -22,28 +22,39 @@ function res = alpha2test(ss,cuantas)
 
     temp = log(1:2:(2*l));
     
+   
     for i = 1:Nx
         for j = 1:Ny % texel                            
                 %if(measure(k) == 0) measure(k) == eps; end
+                v = img(i,j);
             measure(1) = max(max(img(max(i-1,1):min(i+1,Nx),max(j-1,1):min(j+1,Ny))));
             measure(2) = max(max(img(max(i-2,1):min(i+2,Nx),max(j-2,1):min(j+2,Ny))));
             measure(3) = max(max(img(max(i-3,1):min(i+3,Nx),max(j-3,1):min(j+3,Ny))));
             measure(4) = max(max(img(max(i-4,1):min(i+4,Nx),max(j-4,1):min(j+4,Ny))));
+            %measure(5) = max(max(img(max(i-5,1):min(i+5,Nx),max(j-5,1):min(j+5,Ny))));
+            
+            %if(measure(1) == 0) measure(1) = eps; end
+            %if(measure(2) == 0) measure(2) = eps; end
+            %if(measure(3) == 0) measure(3) = eps; end
+            %if(measure(4) == 0) measure(4) = eps; end
             
             % calculo de alfa: pendiente de la recta de ajuste
-            p2=[temp;ones(1,l)]'\log(measure)';
+            p2=[temp;ones(1,l)]'\log(measure+1)';
             %p2 = polyfit(temp,log(measure),1); % 1: grado uno del polinomio
             img2(i,j) = p2(1,:);
         end        
     end
+    %figure,imtool(img2);
+    
+    %%
     maxx = max(img2(:));
     minn = min(img2(:));
     
     paso = (maxx-minn)/cuantas;
     clases = (minn:paso:maxx-paso);
-    toc;
+    %toc;
           
-    tic;
+    %tic;
     % amount of texels between alpha and the next alpha
     function cant = contar(block,c) 
         cant = 0;
@@ -85,18 +96,21 @@ function res = alpha2test(ss,cuantas)
         end
     end
 
-    falpha = zeros(cuantas,1);
-    cant = floor(log(Nx));
+    falpha = zeros(1,cuantas);
+    cant = 2 ;%floor(log(Nx));
 
-    res = [];
+    %res = [];
     
-    tic;
-    for c = 1:cuantas % one fractal dimension for each c
+    %tic;
         
-        delta = zeros(1,cant+1,1);
+    img2 = [img2 img2; img2 img2];
+    for c = 1:cuantas % one fractal dimension for each c
+        %tic;
         N = zeros(1,cant+1,1);
         
         for k = 0:cant
+            tic;
+            warning "una";
             sizeBlocks = 2*k+1;
             numBlocks_x = ceil(Nx/sizeBlocks);
             numBlocks_y = ceil(Ny/sizeBlocks);
@@ -105,38 +119,21 @@ function res = alpha2test(ss,cuantas)
 
             for i = 1:numBlocks_x
                 for j = 1:numBlocks_y
-                    xStart = (i-1)*sizeBlocks + 1;
-                    xEnd   = i*sizeBlocks;
-                    yStart = (j-1)*sizeBlocks + 1;
-                    yEnd   = j*sizeBlocks;
-                    
-                    dx = xEnd - Nx; % leftovers pixels in x
-                    dy = yEnd - Ny; % leftovers en pixeles en y
-                    if dx > 0 && dy <= 0,
-                        flag(i,j) = contar(img2(xStart:Nx, yStart:yEnd),c) || contar(img2(1:dx, yStart:yEnd),c);
-                    elseif dx <= 0 && dy > 0,
-                        flag(i,j) = contar(img2(xStart:xEnd, yStart:Ny),c) || contar(img2(xStart:xEnd, 1:dy),c);
-                    elseif dx > 0 && dy > 0,
-                        flag(i,j) = contar(img2(xStart:Nx, yStart:Ny),c)  || contar(img2(1:dx, yStart:Ny),c) || contar(img2(xStart:Nx, 1:dy),c) || contar(img2(1:dx, 1:dy),c);
-                    elseif dx <= 0 && dy <= 0, % todo el bloque esta en la grilla
-                        flag(i,j) = contar(img2(xStart:xEnd, yStart:yEnd),c); %mark this if ANY part of block is true
-                    end
-
+                    flag(i,j) = contar(img2((i-1)*sizeBlocks + 1:i*sizeBlocks, (j-1)*sizeBlocks + 1:j*sizeBlocks),c); %mark this if ANY part of block is true
                 end
             end
-
-            delta(k+1)    = sizeBlocks;
             N(k+1)    = nnz(flag);
-            if(N(k+1) == 0) N(k+1) = eps; end
+            toc;
         end
 
-        p2=[log(delta);ones(1,cant+1,1)]'\log(N)';
-        %p2 = polyfit(log(delta),log(N),1); % 1: degree 1 of the polynom
+        p2=[log((0:cant)*2+1);ones(1,cant+1,1)]'\log(N+1)';
         falpha(c) = -p2(1,:);
-        %if((isnan(falpha(c)) || isinf(falpha(c)))) falpha(c) = 0; end
-        res = [res, clases(c), falpha(c)];
+        %res = [res, clases(c), falpha(c)];
+        %toc;
     end
-    toc;
-    %res = [clases falpha];
+    %res = [clases/(]
+    %toc;
+    res = [clases falpha];
+    %toc;
 end
 
