@@ -1,6 +1,6 @@
 function res = alpha2test(ss,cuantas)
     %t1 = clock;
-    %tic;
+    tic;
     img = imread(ss);
     
     layers = size(img,3) - 1; % how many layers should have the image in the analysis (issue with tiff images)
@@ -26,7 +26,7 @@ function res = alpha2test(ss,cuantas)
     for i = 1:Nx
         for j = 1:Ny % texel                            
                 %if(measure(k) == 0) measure(k) == eps; end
-                v = img(i,j);
+                %v = img(i,j);
             measure(1) = max(max(img(max(i-1,1):min(i+1,Nx),max(j-1,1):min(j+1,Ny))));
             measure(2) = max(max(img(max(i-2,1):min(i+2,Nx),max(j-2,1):min(j+2,Ny))));
             measure(3) = max(max(img(max(i-3,1):min(i+3,Nx),max(j-3,1):min(j+3,Ny))));
@@ -52,56 +52,55 @@ function res = alpha2test(ss,cuantas)
     
     paso = (maxx-minn)/cuantas;
     clases = (minn:paso:maxx-paso);
-    %toc;
+    toc;
           
     %tic;
     % amount of texels between alpha and the next alpha
-    function cant = contar(block,c) 
-        cant = 0;
-        alpha = clases(c);
-        alpha1 = alpha;
-        if(c ~= cuantas)
-            alpha1 = clases(c+1);
-        else
-            alpha1 = alpha+1; % any number greater than alpha
-        end
+    %function cant = contar(block,c) 
+        %cant = 0;
+        %alpha = clases(c);
+        %alpha1 = alpha;
+        %if(c ~= cuantas)
+        %    alpha1 = clases(c+1);
+        %else
+        %    alpha1 = alpha+1; % any number greater than alpha
+        %end
         
-        s1 = size(block,1);
-        s2 = size(block,2);
+        %s1 = size(block,1);
+        %s2 = size(block,2);
         
-        if(c ~= cuantas)
-            for w = 1:s1,
-                for t = 1:s2,
-                    b = block(w,t);
-                    if (b >= alpha && b < alpha1)
-                        cant = 1;
-                    end
-                    if(cant == 1) break; end
-                end
-                if(cant == 1) break; end
-            end
-            %c1 = block >= alpha;
-            %c2 = block < alpha1;
-            %c = (c1+c2) == 2;
-        else
-            for w = 1:s1,
-                for t = 1:s2,
-                    if(block(w,t) == alpha1)
-                        cant = 1;
-                    end
-                    if(cant == 1) break; end
-                end
-            if(cant == 1) break; end
-            end
-        end
-    end
+       %cant = ((c == cuantas) && (sum(sum(block == clases(c+1))) > 0)) || (sum(sum((block >=  clases(c))))+sum(sum((block <  clases(c)+1))) == 2);
+        
+        %if(c ~= cuantas)
+            %for w = 1:s1,
+            %    for t = 1:s2,
+            %        b = block(w,t);
+            %        if (b >= alpha && b < alpha1)
+            %            cant = 1;
+            %        end
+            %        if(cant == 1) break; end
+            %    end
+            %    if(cant == 1) break; end
+            %end
+        %else
+            %for w = 1:s1,
+            %    for t = 1:s2,
+            %        if(block(w,t) == alpha1)
+            %            cant = 1;
+            %        end
+            %        if(cant == 1) break; end
+            %    end
+            %if(cant == 1) break; end
+            %end
+        %end
+    %end
 
     falpha = zeros(1,cuantas);
-    cant = 2 ;%floor(log(Nx));
+    cant = floor(log(Nx));
 
     %res = [];
     
-    %tic;
+    tic;
         
     img2 = [img2 img2; img2 img2];
     for c = 1:cuantas % one fractal dimension for each c
@@ -109,8 +108,6 @@ function res = alpha2test(ss,cuantas)
         N = zeros(1,cant+1,1);
         
         for k = 0:cant
-            tic;
-            warning "una";
             sizeBlocks = 2*k+1;
             numBlocks_x = ceil(Nx/sizeBlocks);
             numBlocks_y = ceil(Ny/sizeBlocks);
@@ -119,11 +116,55 @@ function res = alpha2test(ss,cuantas)
 
             for i = 1:numBlocks_x
                 for j = 1:numBlocks_y
-                    flag(i,j) = contar(img2((i-1)*sizeBlocks + 1:i*sizeBlocks, (j-1)*sizeBlocks + 1:j*sizeBlocks),c); %mark this if ANY part of block is true
+                    
+                    block = img2((i-1)*sizeBlocks + 1:i*sizeBlocks, (j-1)*sizeBlocks + 1:j*sizeBlocks);
+                    
+                    f = 0;
+                    %alpha = clases(c);
+                    %alpha1 = alpha;
+                    %if(c ~= cuantas)
+                    %    alpha1 = clases(c+1);
+                    %else
+                    %    alpha1 = alpha+1; % any number greater than alpha
+                    %end
+                    s1 = size(block,1);
+                    s2 = size(block,2);
+
+                    %cant = ((c == cuantas) && (sum(sum(block == clases(c+1))) > 0)) || (sum(sum((block >=  clases(c))))+sum(sum((block <  clases(c)+1))) == 2);
+                    if(c ~= cuantas)
+                        for w = 1:s1,
+                            for t = 1:s2,
+                                b = block(w,t);
+                                if (b >= clases(c) && b < clases(c+1))
+                                   f = 1;
+                                end
+                                if(f == 1) break; end
+                            end
+                            if(f == 1) break; end
+                        end
+                    else
+                        for w = 1:s1,
+                            for t = 1:s2,
+                                if(block(w,t) == clases(c)+1)
+                                    f = 1;
+                                end
+                                if(f == 1) break; end
+                            end
+                        if(f == 1) break; end
+                        end
+                    end
+                    flag(i,j) = f;
+                                       
+                    %if(c == cuantas)
+                    %    flag(i,j) = (sum(sum(block == clases(c)+1)) > 0);
+                    %else
+                    %    flag(i,j) = (sum(sum((block >=  clases(c))))+sum(sum((block <  clases(c+1)))) == 2);
+                    %end
+                    %flag(i,j) = contar(img2((i-1)*sizeBlocks + 1:i*sizeBlocks, (j-1)*sizeBlocks + 1:j*sizeBlocks),c); %mark this if ANY part of block is true
                 end
             end
             N(k+1)    = nnz(flag);
-            toc;
+            %toc;
         end
 
         p2=[log((0:cant)*2+1);ones(1,cant+1,1)]'\log(N+1)';
@@ -134,6 +175,6 @@ function res = alpha2test(ss,cuantas)
     %res = [clases/(]
     %toc;
     res = [clases falpha];
-    %toc;
+    toc;
 end
 
