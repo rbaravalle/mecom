@@ -30,7 +30,7 @@ function res = alpha2test(ss,cuantas)
             measure(j,4,i) = max(max(img(max(i-4,1):min(i+4,Nx),max(j-4,1):min(j+4,Ny))));
         end        
     end
-    toc;tic;
+    %toc;
     for i = 1:Nx       
         AA=kron(speye(Ny), [temp;ones(1,l)]');
         yvalues = log(measure(:,:,i)+1)';
@@ -40,8 +40,8 @@ function res = alpha2test(ss,cuantas)
         z=reshape(z,2,[]);
         img2(i,:)=z(1,:)'; 
     end
-    toc;
-    tic;
+    %toc;
+    %tic;
     
     %%
     maxx = max(img2(:));
@@ -58,7 +58,7 @@ function res = alpha2test(ss,cuantas)
     img2 = [img2 img2; img2 img2];
     for c = 1:cuantas % one fractal dimension for each c
         %tic;
-        N = zeros(1,cant+1,1);
+        N = zeros(1,cant+1);
         
         for k = 0:cant
             sizeBlocks = 2*k+1;
@@ -106,19 +106,15 @@ function res = alpha2test(ss,cuantas)
                     %    flag(i,j) = (sum(sum((block >=  clases(c)))) > 0) && (sum(sum((block <  clases(c+1)))) > 0);
                     %end
                     N(k+1) = N(k+1) + f; %flag(i,j);
-                    %flag(i,j) = contar(img2((i-1)*sizeBlocks + 1:i*sizeBlocks, (j-1)*sizeBlocks + 1:j*sizeBlocks),c); %mark this if ANY part of block is true
                 end
             end
-            %N(k+1)    = nnz(flag);
             %toc;
         end
 
         p2=[log((0:cant)*2+1);ones(1,cant+1,1)]'\log(N+1)';
         falpha(c) = -p2(1,:);
-        %res = [res, clases(c), falpha(c)];
         %toc;
     end
-    %res = [clases/(]
     %toc;
     res = [clases falpha];
     toc;
