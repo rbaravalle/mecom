@@ -199,25 +199,9 @@ def easy_call(train_file,test_file,test_sample,test_label):
 	# calc_acc
 	acc = cal_acc(pred_y,test_label);
 
-    # test to train
-	cmd = "%s %s %s" % (easypy_exe,te_file,tr_file)
-	std_out = Popen(cmd, shell = True, stdout = PIPE).communicate()
-	print cmd
-
-	# fill in pred_y
-	pred_y=[]
-	fp = open(tr_file + '.predict')
-	line = fp.readline()
-	while line:
-		pred_y.append( float(line) )
-		line = fp.readline()
-
-	# calc_acc
-	acc2 = cal_acc(pred_y,test_label);
-
 	#rem_file(te_file)
 	#rem_file(train_file+'.predict')
-	return acc,acc2;
+	return acc;
 
 ### balanced accuracy
 def cal_bacc(pred_y, real_y):
@@ -384,9 +368,9 @@ def main():
 		test_sel_samp = select(test_sample, fv)
 
 		# choose best c, gamma from splitted training sample
-		acc1,acc2 = easy_call(train_file,test_file,test_sel_samp,test_label)
-		print "Easy actual accuracies: "
-		print acc1,acc2
+		acc1 = easy_call(train_file,test_file,test_sel_samp,test_label)
+		print "Easy actual accuracy: "
+		print acc1
 		#exit(0);
 		### predict
 		#pred_y = predict(train_label, tr_sel_samp, c, g, test_label, test_sel_samp, 0, "%s.model"%tr_sel_name)
@@ -406,10 +390,12 @@ def main():
 			best_fts = fv
 			ftmp = f
 		
-		if (acc1 > best_acc_ever1 and acc2 > best_acc_ever2 ):
-			best_acc_ever1 = acc1
-			best_acc_ever2 = acc2
-			best_fts_ever = fv
+		if (acc1 > best_acc_ever1):
+			acc2 = easy_call(test_file,train_file,tr_sel_samp,train_label)
+			if( acc2 > best_acc_ever2 ):
+				best_acc_ever1 = acc1
+				best_acc_ever2 = acc2
+				best_fts_ever = fv
 		
 		#est_acc.append(acc)
 		#est_acc.append(cv_acc)
