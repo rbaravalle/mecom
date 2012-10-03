@@ -17,29 +17,12 @@ from subprocess import *
 import Image
 import numpy
 a = numpy.asarray( Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif') )
+a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif')
 
-r = a[:, :, 0] # slices are not full copies, they cost little memory
-g = a[:, :, 1]
-b = a[:, :, 2]
+gray = a.convert('L') # rgb 2 gray
+gray = gray.point(lambda i: 255*(i<100)) # threshold (white's algorithm IMPLEMENT!)
 
-r = r.astype(float)
-g = g.astype(float)
-b = b.astype(float)
-
-r = r/255;
-g = g/255;
-b = b/255;
-
-gray = 0.2989 * r + 0.5870 * g + 0.1140 * b  # from MATLAB rgb2gray
-
-gray = gray  < 0.4 # white's algorithm IMPLEMENT!
-
-gray = (gray*255).astype(numpy.uint8)
-
-b = Image.fromstring('L', (gray.shape[1], gray.shape[0]), gray.tostring())
-b.show()
-
-#gray = gray  > 0.5 # white's algorithm IMPLEMENT!
+gray.show()
 
 total = 75      # number of pixels for averaging
 occupied = []   # number of elements in the structure
@@ -64,7 +47,7 @@ def main():
     for r in l:
         print "P: ", r
 
-
+    
 main()
 
 
