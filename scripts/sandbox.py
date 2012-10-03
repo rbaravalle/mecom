@@ -16,12 +16,12 @@ from subprocess import *
 
 import Image
 import numpy
-a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette2.tif')
+a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif')
 
 gray = a.convert('L') # rgb 2 gray
-gray = gray.point(lambda i: 255*(i<50)) # threshold (white's algorithm IMPLEMENT!)
+gray = gray.point(lambda i: 255*(i<100)) # threshold (white's algorithm IMPLEMENT!)
 
-total = 75      # number of pixels for averaging
+total = 1000      # number of pixels for averaging
 points = []     # number of elements in the structure
 Nx = 380
 Ny = 380
@@ -60,19 +60,21 @@ def main():
     print l
     l = map(lambda i: i+1,l)
     print l
-    c = [ [ 0 for i in range(P) ] for j in range(total) ]
+    c = [ [ 0 for i in range(P) ] for j in range(total+1) ]
     tot = range(total)
     for i in tot: # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
         for h in l:
             # how many points in the box. M(R) in the literature
-            c[i][h-1] = count(gray.crop((max(0,x-h),max(0,y-h),min(Nx-1,x+h),min(Ny-1,y+h))))
+            c[i+1][h-1] = count(gray.crop((max(0,x-h),max(0,y-h),min(Nx-1,x+h),min(Ny-1,y+h))))
+            c[0][h-1] = c[0][h-1] + c[i+1][h-1]
         
         
-    # mean of all points
-
-    print c
+    mean = range(P)
+    # mean of all points       
+    mean = map(lambda i: float(i)/total,c[0])
+    print mean
 
     
 
