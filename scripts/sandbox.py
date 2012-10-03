@@ -16,36 +16,65 @@ from subprocess import *
 
 import Image
 import numpy
-a = numpy.asarray( Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif') )
-a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif')
+a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette2.tif')
 
 gray = a.convert('L') # rgb 2 gray
-gray = gray.point(lambda i: 255*(i<100)) # threshold (white's algorithm IMPLEMENT!)
-
-gray.show()
+gray = gray.point(lambda i: 255*(i<50)) # threshold (white's algorithm IMPLEMENT!)
 
 total = 75      # number of pixels for averaging
-occupied = []   # number of elements in the structure
+points = []     # number of elements in the structure
+Nx = 380
+Ny = 380
 
+def count(a):   # counts the number of white pixels in the region a
+    xsize, ysize = a.size
+    sum = 0
+    for i in range(xsize):
+        for j in range(ysize):
+            sum = sum + (a.getpixel((i,j)) > 0)
+
+    return sum
+            
 
 def main():
     x = 0
     y = 0
     cantSelected = 0
-    # list with selected points
+
+    while(gray.getpixel((x,y)) == 0):
+        x = int(random.random()*Nx)
+        y = int(random.random()*Ny)
+
+    # list with selected points (the points should be in the "structure")
     while cantSelected < total:
-        while([x,y] in occupied or gray[x][y] == False):
-            x = int(random.random()*380)
-            y = int(random.random()*380)
+        while(([x,y] in points) or (gray.getpixel((x,y)) == 0)):
+            x = int(random.random()*Nx)
+            y = int(random.random()*Ny)
         # new point, add to list
-        occupied.append([x,y])
+        points.append([x,y])
         cantSelected = cantSelected+1
     #print "Occupied: ", occupied
 
     P = 4 # parameter
     l = range(P)
-    for r in l:
-        print "P: ", r
+    print l
+    l = map(lambda i: i+1,l)
+    print l
+    c = [ [ 0 for i in range(P) ] for j in range(total) ]
+    tot = range(total)
+    for i in tot: # for each point randomly selected
+        x = points[i][0]
+        y = points[i][1]
+        for h in l:
+            # how many points in the box. M(R) in the literature
+            c[i][h-1] = count(gray.crop((max(0,x-h),max(0,y-h),min(Nx-1,x+h),min(Ny-1,y+h))))
+        
+        
+    # mean of all points
+
+    print c
+
+    
 
     
 main()
