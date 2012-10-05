@@ -6,13 +6,6 @@
 
 import random
 from random import randrange
-import sys
-from time import time
-from datetime import datetime
-import os
-from os import system
-from os import unlink
-from subprocess import *
 from math import log
 from scipy import linspace, polyval, polyfit, sqrt, stats, randn
 from pylab import plot, title, show , legend
@@ -27,6 +20,58 @@ gray.show()
 total = 1000      # number of pixels for averaging
 points = []     # number of elements in the structure
 Nx, Ny = a.size
+
+
+def mww(x1,y1,x2,y2):
+    sum = intImg.getpixel((x2,y2))-intImg.getpixel((x1,y2))-intImg.getpixel((x2,y1))+intImg.getpixel((x1,y1))
+    return sum/((x2-x1+1)*(y2-y1+1));
+
+#def white(img):
+
+    # parameters
+#    bias = 1;
+#    thresh = 0.8;
+#    vent = 7;
+           
+    #img = histeq(img); ??
+    #im = zeros(Nx,Ny);
+    
+#    intImg = [ [ 0 for i in Nx ] for j in Ny ]
+    
+    # summed area table, useful for speed up the computation by adding image pixels 
+#    intImg(0,0) = img.getpixel((0,0))
+    
+#    arrNx = map(lambda i: i+1, range(Nx-2))
+#    arrNy = map(lambda i: i+1, range(Ny-2))
+#    for h in arrNx:
+#        intImg(h,1) = intImg(h-1,1) + img.getpixel((h,1))
+#    
+#    for w in arrNy:
+#        intImg(1,w) = intImg(1,w-1) + img.getpixel((1,w))
+    
+#    for f in arrNx:
+#        for g in arrNy:
+#           intImg(f,g) = img.getpixel((f,g))+intImg.getpixel((f-1,g))+intImg.getpixel((f,g-1))-intImg,getpixel((f-1,g-1))
+    
+    # returns the sum of image pixels in the box between
+    # (x1,y1) and (x2,y2)
+
+    #% otsu's algorithm
+    #gt = graythresh(img);
+
+#    arrNx = map(lambda i: i+1, range(Nx-1))
+#    arrNy = map(lambda i: i+1, range(Ny-1))
+
+#    for i in arrNx:
+#        for j in arrNy:
+#            if(mww((max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent))) >= img.getpixel((i,j))*bias or img.getpixel((i,j)) < gt*100),
+#                im(i,j) = 255;
+
+    
+    # open operation to eliminate small entities in the image
+#    element = strel('square',2);
+#   return imdilate(imerode(im,element),element);
+
 
 def count(a):   # counts the number of white pixels in the region a
     xsize, ysize = a.size
@@ -59,7 +104,6 @@ def main():
         # new point, add to list
         points.append([x,y])
         cantSelected = cantSelected+1
-    #print "Occupied: ", occupied
 
     l = range(P)
     l = map(lambda i: i+1,l)
@@ -74,8 +118,8 @@ def main():
             if(c[i+1][h-1] == 0):
                 print "error ", i, h
         
-    # mean of all points       
-    print "Dimentions: ", Dq(c,-4), Dq(c,-2), Dq(c,2), Dq(c,4)
+    # Generalized Multifractal Dimentions 
+    print "Dimentions: ", Dq(c,-3), Dq(c,-2), Dq(c,-1), Dq(c,1), Dq(c,2), Dq(c,3)
 
 def Dq(c,q):
 
