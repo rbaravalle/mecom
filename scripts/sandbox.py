@@ -19,7 +19,7 @@ from pylab import plot, title, show , legend
 
 import Image
 import numpy
-a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette10.tif')
+a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif')
 
 gray = a.convert('L') # rgb 2 gray
 gray = gray.point(lambda i: 255*(i<100)) # threshold (white's algorithm IMPLEMENT!)
@@ -70,10 +70,9 @@ def main():
         y = points[i][1]
         for h in l:
             # how many points in the box. M(R) in the literature
-            c[i+1][h-1] = count(gray.crop((max(0,x-h),max(0,y-h),min(Nx-1,x+h),min(Ny-1,y+h))))
+            c[i+1][h-1] = count(gray.crop((max(0,x-h),max(0,y-h),min(Nx-1,x+h),min(Ny-1,y+h))))/float(m0)
             if(c[i+1][h-1] == 0):
                 print "error ", i, h
-            #/float(m0)
         
     # mean of all points       
     print "Dimentions: ", Dq(c,-4), Dq(c,-2), Dq(c,2), Dq(c,4)
