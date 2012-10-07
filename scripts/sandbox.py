@@ -9,10 +9,11 @@ from random import randrange
 from math import log
 from scipy import linspace, polyval, polyfit, sqrt, stats, randn
 from pylab import plot, title, show , legend
+import time
 
 import Image
 import numpy
-a = Image.open('/home/rodrigo/mecom2012/mecom/imagenes/scanner/baguette/baguette1.tif')
+a = Image.open('/home/rodrigo/mecom/imagenes/scanner/baguette/baguette1.tif')
 
 gray = a.convert('L') # rgb 2 gray
 gray = gray.point(lambda i: 255*(i<100)) # threshold (white's algorithm IMPLEMENT!)
@@ -88,6 +89,9 @@ L = Nx
 P = 8
 
 def main():
+    t = time.clock()
+    import psyco # magical speed up
+    psyco.full()
     x = 0
     y = 0
     cantSelected = 0
@@ -120,6 +124,8 @@ def main():
         
     # Generalized Multifractal Dimentions 
     print "Dimentions: ", Dq(c,-3), Dq(c,-2), Dq(c,-1), Dq(c,1), Dq(c,2), Dq(c,3)
+    t = time.clock() - t
+    print t
 
 def Dq(c,q):
 
