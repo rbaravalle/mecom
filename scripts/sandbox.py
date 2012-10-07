@@ -1,8 +1,10 @@
-
 #!/usr/bin/env python
 
 # sandbox multifractal implementation
 # Rodrigo Baravalle - October 2012
+
+import psyco # magical speed up
+psyco.full()
 
 import random
 from random import randrange
@@ -90,8 +92,6 @@ P = 8
 
 def main():
     t = time.clock()
-    import psyco # magical speed up
-    psyco.full()
     x = 0
     y = 0
     cantSelected = 0
