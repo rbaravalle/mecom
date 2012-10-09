@@ -17,11 +17,9 @@ import time
 import Image
 import numpy as np
 
-#gray = gray.point(lambda i: 255*(i<100)) # threshold (white's algorithm IMPLEMENT!)
-
 total = 75*75      # number of pixels for averaging
 P = 8
-a = Image.open('/media/5f4f962d-ed66-4166-bfb2-da773f9a77cb/rodrigo/mecom2012/mecom/imagenes/scanner/salvado/salvado15.tif')
+a = Image.open('baguette20.tif')
 Nx, Ny = a.size
 L = Nx*Ny
 
@@ -59,27 +57,22 @@ def white(img,Nx,Ny):
     
     #% otsu's algorithm
     #gt = graythresh(img);
-    gt = 100;
+    #gt = 100;
 
     arrNx = range(Nx)
     arrNy = range(Ny)
 
+    im2 = ndimage.gaussian_filter(img, sigma=256/(4.*16))
+    im2 = (im2 < im2.mean()/2)
+
     for i in arrNx:
         for j in arrNy:
-            if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias): #or img.getpixel((i,j)) < gt*100):
+            if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias or (im2[j][i] > 0)):
                 im[j,i] = 1
 
     # do an opening operation to remove small elements
     return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int),intImg
 
-
-#def count(a):   # counts the number of white pixels in the region a
-#    xsize, ysize = a.size
-#    sum = 0
-#    for i in range(xsize):
-#        for j in range(ysize):
-#            sum = sum + (a.getpixel((i,j)) > 0)
-#    return sum
 
 def count(x1,y1,x2,y2,intImg):
     sum = intImg[x2][y2]-intImg[x1][y2]-intImg[x2][y1]+intImg[x1][y1]
