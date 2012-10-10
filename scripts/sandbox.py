@@ -16,12 +16,11 @@ from matplotlib import pyplot as plt
 import time
 import Image
 import numpy as np
+import sys
+import os
 
 total = 75*75      # number of pixels for averaging
 P = 8
-a = Image.open('baguette20.tif')
-Nx, Ny = a.size
-L = Nx*Ny
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -29,14 +28,12 @@ def mww(x1,y1,x2,y2,intImg):
     sum = intImg[x2][y2]-intImg[x1][y2]-intImg[x2][y1]+intImg[x1][y1]
     return sum/((x2-x1+1)*(y2-y1+1));
 
-def white(img,Nx,Ny):
+def white(img,Nx,Ny,vent):
 
     # parameters
     bias = 1;
-    #thresh = 0.4;
-    vent = 7;
            
-    im = np.zeros((Nx,Ny)) #[ [ 0 for i in range(Nx) ] for j in range(Ny) ]
+    im = np.zeros((Nx,Ny))
     
     intImg = [ [ 0 for i in range(Nx) ] for j in range(Ny) ]
     
@@ -55,10 +52,6 @@ def white(img,Nx,Ny):
         for g in arrNy:
            intImg[f][g] = img.getpixel((f,g))+intImg[f-1][g]+intImg[f][g-1]-intImg[f-1][g-1]
     
-    #% otsu's algorithm
-    #gt = graythresh(img);
-    #gt = 100;
-
     arrNx = range(Nx)
     arrNy = range(Ny)
 
@@ -79,18 +72,23 @@ def count(x1,y1,x2,y2,intImg):
     return sum;
             
 
-def main():
+# v: window size
+def spec(filename,v):
     t = time.clock()
     x = 0
     y = 0
     cantSelected = 0
 
+    a = Image.open(filename)
+    Nx, Ny = a.size
+    L = Nx*Ny
+
     points = []     # number of elements in the structure
     gray = a.convert('L') # rgb 2 gray
 
-    gray, intImg = white(gray,Nx,Ny) # local (+global) thresholding algorithm
-    plt.imshow(gray, cmap=matplotlib.cm.gray)
-    plt.show()
+    gray, intImg = white(gray,Nx,Ny,v) # local (+global) thresholding algorithm
+    #plt.imshow(gray, cmap=matplotlib.cm.gray)
+    #plt.show()
 
     m0 = count(0,0,Nx-1,Ny-1,intImg)
 
@@ -121,11 +119,14 @@ def main():
              #   print "error ", i, h
         
     # Generalized Multifractal Dimentions 
-    print "Dimentions: ", Dq(c,-8), Dq(c,-7), Dq(c,-6),Dq(c,-5), Dq(c,-4), Dq(c,-3),Dq(c,-2), Dq(c,-1), Dq(c,1), Dq(c,2), Dq(c,3),Dq(c,4), Dq(c,5), Dq(c,6),Dq(c,7), Dq(c,8)
-    t = time.clock() - t
-    print t
+    s = map(lambda i: Dq(c,i,L), range(-8,-1) + range(1,8))
 
-def Dq(c,q):
+    t =  time.clock()-t
+    print "Time: ", t
+    print "Dims: ", s
+    return s
+
+def Dq(c,q,L):
 
     tot = range(total)
     l = range(P)
@@ -149,7 +150,5 @@ def Dq(c,q):
     (ar,br)=polyfit(range(P),res,1)
     return ar
     
-    
-main()
 
 
