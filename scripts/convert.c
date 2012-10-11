@@ -36,8 +36,8 @@ int main(int argc, char **argv)
 		    printf("+1 ");
 	    */
 	    //		printf("%f ", feature[1]);
-	    printf("%d ", (int) feature[0]+(l / 20)+1);
-	    for(j=1;j<i;j++)
+	    printf("%d ", (int) (l / 20)+1);
+	    for(j=0;j<i;j++)
 		    printf(" %d:%f",j,feature[j]);
 
 

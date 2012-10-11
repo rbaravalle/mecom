@@ -20,7 +20,7 @@ import sys
 import os
 
 total = 75*75      # number of pixels for averaging
-P = 8
+P = 7              # window
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -68,6 +68,7 @@ def white(img,Nx,Ny,vent):
 
 
 def count(x1,y1,x2,y2,intImg):
+    #print x1, y1, x2, y2
     sum = intImg[x2][y2]-intImg[x1][y2]-intImg[x2][y1]+intImg[x1][y1]
     return sum;
             
@@ -75,8 +76,9 @@ def count(x1,y1,x2,y2,intImg):
 # v: window size
 def spec(filename,v):
     t = time.clock()
-    x = 0
-    y = 0
+    tP = (2**P)   # tP : two raised to P
+    x = tP+1
+    y = tP+1
     cantSelected = 0
 
     a = Image.open(filename)
@@ -93,28 +95,29 @@ def spec(filename,v):
     m0 = count(0,0,Nx-1,Ny-1,intImg)
 
     while(gray[x][y] == 0):
-        x = int(random.random()*Nx)
-        y = int(random.random()*Ny)
+        x = int(random.random()*(Nx-2*tP))+tP
+        y = int(random.random()*(Ny-2*tP))+tP
 
     # list with selected points (the points should be in the "structure")
+    # points shouldn't be close to the borders, in order for the windows to have the same size
     while cantSelected < total:
-        while(([x,y] in points) or count(max(0,x-1),max(0,y-1),min(Nx-1,x+1),min(Ny-1,y+1),intImg) == 0):
-            x = int(random.random()*Nx)
-            y = int(random.random()*Ny)
+        while(([x,y] in points) or count(x-1,y-1,x+1,y+1,intImg) == 0):
+            x = int(random.random()*(Nx-2*tP))+tP
+            y = int(random.random()*(Ny-2*tP))+tP
         # new point, add to list
         points.append([x,y])
         cantSelected = cantSelected+1
 
+
     l = range(P)
-    l = map(lambda i: i+1,l)
     c = [ [ 0 for i in range(P) ] for j in range(total+1) ]
     tot = range(total)
     for i in tot: # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
-        for h in l:
+        for h in range(1,P+1):
             # how many points in the box. M(R) in the literature
-            c[i+1][h-1] = count(max(0,x-h),max(0,y-h),min(Nx-1,x+h),min(Ny-1,y+h),intImg)/float(m0)
+            c[i+1][h-1] = count(x-2**(h-1),y-2**(h-1),x+2**(h-1),y+2**(h-1),intImg)/float(m0)
             #if(c[i+1][h-1] == 0):
              #   print "error ", i, h
         
@@ -138,7 +141,7 @@ def Dq(c,q,L):
     mean = map(lambda i: float(i)/total,c[0])
 
     up = mean
-    down = map(lambda i: float(i)/L,map(lambda i: i+1,range(P)))
+    down = map(lambda i: (float(2*(2**i)+1)**2)/L,map(lambda i: i+1,range(P)))
 
     res = range(2*P)
     r = map(lambda i: i-P,res)

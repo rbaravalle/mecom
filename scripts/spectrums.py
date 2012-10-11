@@ -3,7 +3,7 @@ import csv
 import os
 
 def main():
-    cant = 21
+    cant = 20+1
     DFs  = 8
     baguette = [['Df' for j in range(2*DFs)] for i in range(cant)]
     lactal   = [['Df' for j in range(2*DFs)] for i in range(cant)]
@@ -22,7 +22,7 @@ def main():
 
 
     for i in range(len(dirList)):
-        v = 7
+        v = 17
         filename = path+dirList[i]
         print filename
         nonbread[i] = sandbox.spec(filename,v)
@@ -57,38 +57,11 @@ def main():
         sandwichC[i] = sandbox.spec(filename,v)
 
 
-    with open('baguette.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(baguette)
-    with open('lactal.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(lactal)
-    with open('salvado.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(salvado)
-    with open('sandwich.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(sandwich)
-
-    with open('sandboxS.csv', 'wb') as f:
+    with open('../exps/sandboxS.csv', 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(baguette[1:]+lactal[1:]+salvado[1:]+sandwich[1:]+nonbread[0:20])
 
-
-    with open('baguetteC.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(baguetteC)
-    with open('lactalC.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(lactalC)
-    with open('salvadoC.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(salvadoC)
-    with open('sandwichC.csv', 'wb') as f:
-        writer = csv.writer(f)
-        writer.writerows(sandwichC)
-
-    with open('sandboxC.csv', 'wb') as f:
+    with open('../exps/sandboxC.csv', 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(baguetteC[1:]+lactalC[1:]+salvadoC[1:]+sandwichC[1:]+nonbread[20:40])
 
