@@ -23,7 +23,7 @@ def main():
 
     for i in range(len(dirList)):
         v = 40
-        b = 1.2
+        b = 1.15
         filename = path+dirList[i]
         print filename
         nonbread[i] = sandbox.spec(filename,v,b)
