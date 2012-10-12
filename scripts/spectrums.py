@@ -1,27 +1,29 @@
 import sandbox
 import csv
+import sys
 import os
+from subprocess import *
 
 def main():
     cant = 20+1
-    DFs  = 5
-    baguette = [['Df' for j in range(2*DFs)] for i in range(cant)]
-    lactal   = [['Df' for j in range(2*DFs)] for i in range(cant)]
-    salvado  = [['Df' for j in range(2*DFs)] for i in range(cant)]
-    sandwich = [['Df' for j in range(2*DFs)] for i in range(cant)]
+    dDFs  = 2*20
+    baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
+    lactal   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    salvado  = [['Df' for j in range(dDFs)] for i in range(cant)]
+    sandwich = [['Df' for j in range(dDFs)] for i in range(cant)]
 
-    baguetteC = [['Df' for j in range(2*DFs)] for i in range(cant)]
-    lactalC   = [['Df' for j in range(2*DFs)] for i in range(cant)]
-    salvadoC  = [['Df' for j in range(2*DFs)] for i in range(cant)]
-    sandwichC = [['Df' for j in range(2*DFs)] for i in range(cant)]
+    baguetteC = [['Df' for j in range(dDFs)] for i in range(cant)]
+    lactalC   = [['Df' for j in range(dDFs)] for i in range(cant)]
+    salvadoC  = [['Df' for j in range(dDFs)] for i in range(cant)]
+    sandwichC = [['Df' for j in range(dDFs)] for i in range(cant)]
 
     path = '../exps/100sample/res/'
     dirList=os.listdir(path)
     
-    nonbread = [['Df' for j in range(2*DFs)] for i in range(len(dirList))]
+    nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
 
 
-    for i in range(len(dirList)):
+    for i in range(21):
         v = 40
         b = 1.15
         filename = path+dirList[i]
@@ -66,5 +68,16 @@ def main():
     with open('../exps/sandboxC.csv', 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(baguetteC[1:]+lactalC[1:]+salvadoC[1:]+sandwichC[1:]+nonbread[20:40])
+
+    prog = './a.out' # convert.c
+    csvS = '../exps/sandboxS.csv'
+    csvC = '../exps/sandboxC.csv'
+    txtS = '../exps/sandboxS.txt'
+    txtC = '../exps/sandboxC.txt'
+    cmd = '{0} "{1}" > "{2}"'.format(prog, csvS, txtS)
+    Popen(cmd, shell = True, stdout = PIPE).communicate()	
+    cmd = '{0} "{1}" > "{2}"'.format(prog, csvC, txtC)
+    Popen(cmd, shell = True, stdout = PIPE).communicate()
+
 
 main()
