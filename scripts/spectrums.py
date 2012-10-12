@@ -4,7 +4,7 @@ import os
 
 def main():
     cant = 20+1
-    DFs  = 8
+    DFs  = 5
     baguette = [['Df' for j in range(2*DFs)] for i in range(cant)]
     lactal   = [['Df' for j in range(2*DFs)] for i in range(cant)]
     salvado  = [['Df' for j in range(2*DFs)] for i in range(cant)]
@@ -22,40 +22,42 @@ def main():
 
 
     for i in range(len(dirList)):
-        v = 17
+        v = 40
+        b = 1.2
         filename = path+dirList[i]
         print filename
-        nonbread[i] = sandbox.spec(filename,v)
+        nonbread[i] = sandbox.spec(filename,v,b)
 
     for i in range(1,cant):
-        v = 7
+        v = 40  # window
+        b = 1.2 # bias
         filename = '../imagenes/scanner/baguette/baguette{}.tif'.format(i)
         print filename
-        baguette[i] = sandbox.spec(filename,v)
+        baguette[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/scanner/lactal/lactal{}.tif'.format(i)
         print filename
-        lactal[i] = sandbox.spec(filename,v)
+        lactal[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/scanner/salvado/salvado{}.tif'.format(i)
         print filename
-        salvado[i] = sandbox.spec(filename,v)
+        salvado[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/scanner/sandwich/sandwich{}.tif'.format(i)
         print filename
-        sandwich[i] = sandbox.spec(filename,v)
+        sandwich[i] = sandbox.spec(filename,v,b)
 
-        v = 17
+        v = 50
+        b = 1.05
         filename = '../imagenes/camera/baguette/b{}.tif'.format(i)
         print filename
-        baguetteC[i] = sandbox.spec(filename,v)
+        baguetteC[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/camera/lactal/l{}.tif'.format(i)
         print filename
-        lactalC[i] = sandbox.spec(filename,v)
+        lactalC[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/camera/salvado/s{}.tif'.format(i)
         print filename
-        salvadoC[i] = sandbox.spec(filename,v)
+        salvadoC[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/camera/sandwich/s{}.tif'.format(i)
         print filename
-        sandwichC[i] = sandbox.spec(filename,v)
-
+        sandwichC[i] = sandbox.spec(filename,v,b)
 
     with open('../exps/sandboxS.csv', 'wb') as f:
         writer = csv.writer(f)

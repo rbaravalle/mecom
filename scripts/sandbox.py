@@ -7,7 +7,7 @@
 #psyco.full()
 
 import random
-from random import randrange
+from random import randrange,randint
 from math import log
 from scipy import linspace, polyval, polyfit, sqrt, stats, randn, ndimage
 from pylab import plot, title, show , legend
@@ -19,19 +19,23 @@ import numpy as np
 import sys
 import os
 
-total = 75*75      # number of pixels for averaging
+total = 20*20      # number of pixels for averaging
 P = 7              # window
+cant = 5
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
 def mww(x1,y1,x2,y2,intImg):
-    sum = intImg[x2][y2]-intImg[x1][y2]-intImg[x2][y1]+intImg[x1][y1]
+    sum = intImg[x2][y2]
+    if (x1>= 1 and y1 >= 1):
+        sum = sum + intImg[x1-1][y1-1]
+    if (x1 >= 1):
+        sum = sum - intImg[x1-1][y2];
+    if (y1 >= 1):
+        sum = sum - intImg[x2][y1-1]
     return sum/((x2-x1+1)*(y2-y1+1));
 
-def white(img,Nx,Ny,vent):
-
-    # parameters
-    bias = 1;
+def white(img,Nx,Ny,vent,bias):
            
     im = np.zeros((Nx,Ny))
     
@@ -60,7 +64,7 @@ def white(img,Nx,Ny,vent):
 
     for i in arrNx:
         for j in arrNy:
-            if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias or (im2[j][i] > 0)):
+            if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias ): #or (im2[j][i] > 0)):
                 im[j,i] = 1
 
     # do an opening operation to remove small elements
@@ -69,12 +73,18 @@ def white(img,Nx,Ny,vent):
 
 def count(x1,y1,x2,y2,intImg):
     #print x1, y1, x2, y2
-    sum = intImg[x2][y2]-intImg[x1][y2]-intImg[x2][y1]+intImg[x1][y1]
+    sum = intImg[x2][y2]
+    if (x1>= 1 and y1 >= 1):
+        sum = sum + intImg[x1-1][y1-1]
+    if (x1 >= 1):
+        sum = sum - intImg[x1-1][y2];
+    if (y1 >= 1):
+        sum = sum - intImg[x2][y1-1]
     return sum;
             
 
 # v: window size
-def spec(filename,v):
+def spec(filename,v,b):
     t = time.clock()
     tP = (2**P)   # tP : two raised to P
     x = tP+1
@@ -88,69 +98,64 @@ def spec(filename,v):
     points = []     # number of elements in the structure
     gray = a.convert('L') # rgb 2 gray
 
-    gray, intImg = white(gray,Nx,Ny,v) # local (+global) thresholding algorithm
-    #plt.imshow(gray, cmap=matplotlib.cm.gray)
-    #plt.show()
+    gray, intImg = white(gray,Nx,Ny,v,b) # local (+global) thresholding algorithm
+    plt.imshow(gray, cmap=matplotlib.cm.gray)
+    plt.show()
 
-    m0 = count(0,0,Nx-1,Ny-1,intImg)
+    m0 = intImg[Nx-1][Ny-1]
+    #print "M0 da: ", m0
 
     while(gray[x][y] == 0):
-        x = int(random.random()*(Nx-2*tP))+tP
-        y = int(random.random()*(Ny-2*tP))+tP
+        x = randint(tP,Nx-tP-1)
+        y = randint(tP,Ny-tP-1)
 
     # list with selected points (the points should be in the "structure")
     # points shouldn't be close to the borders, in order for the windows to have the same size
     while cantSelected < total:
         while(([x,y] in points) or count(x-1,y-1,x+1,y+1,intImg) == 0):
-            x = int(random.random()*(Nx-2*tP))+tP
-            y = int(random.random()*(Ny-2*tP))+tP
+            x = randint(tP,Nx-tP-1)
+            y = randint(tP,Ny-tP-1)
         # new point, add to list
         points.append([x,y])
         cantSelected = cantSelected+1
 
 
-    l = range(P)
     c = [ [ 0 for i in range(P) ] for j in range(total+1) ]
-    tot = range(total)
-    for i in tot: # for each point randomly selected
+    for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
         for h in range(1,P+1):
             # how many points in the box. M(R) in the literature
-            c[i+1][h-1] = count(x-2**(h-1),y-2**(h-1),x+2**(h-1),y+2**(h-1),intImg)/float(m0)
-            #if(c[i+1][h-1] == 0):
-             #   print "error ", i, h
+            c[i+1][h-1] = count(x-(2**(h-1)),y-(2**(h-1)),x+(2**(h-1)),y+(2**(h-1)),intImg)
+            if(c[i+1][h-1] == 0):
+                print "error ", i, h
         
+    down = map(lambda i: log(L/(float(2*(2**i)+1)**2)+1),range(1,P+1))
     # Generalized Multifractal Dimentions 
-    s = map(lambda i: Dq(c,i,L), range(-8,-1) + range(1,8))
+    s = map(lambda i: Dq(c,i,L,m0,down), range(-cant,-1) + range(1,cant))
 
     t =  time.clock()-t
     print "Time: ", t
     print "Dims: ", s
     return s
 
-def Dq(c,q,L):
+def Dq(c,q,L,m0,down):
 
-    tot = range(total)
-    l = range(P)
-    l = map(lambda i: i+1,l)
-    for i in tot:
-        for h in l:        
-            c[0][h-1] = c[0][h-1] + c[i+1][h-1]**q
+    #l   = range(1,P+1)#map(lambda i: i+1,range(P))
+    for i in range(total):
+        for h in range(1,P+1):        
+            c[0][h-1] = c[0][h-1] + (m0/c[i+1][h-1])**q # [M0 / M(R)] ** q-1
 
-    mean = map(lambda i: float(i)/total,c[0])
+    print "C[0]: ", c[0], q
+    mean = map(lambda i: (float(i)/total)/q,c[0])   # mean of ([M0 / M(R)] ** q-1 ) / q-1
 
-    up = mean
-    down = map(lambda i: (float(2*(2**i)+1)**2)/L,map(lambda i: i+1,range(P)))
+    up = map(lambda i: log(i+1), mean)
+    print "up: ", up
+    print "down: ", down
 
-    res = range(2*P)
-    r = map(lambda i: i-P,res)
+    #res = [a / (b*q) for a, b in zip(t, u)]
 
-    t = map(lambda i: log(i), up)
-    u = map(lambda i: log(i), down)
-    res = [a / (b*q) for a, b in zip(t, u)]
-
-    (ar,br)=polyfit(range(P),res,1)
+    (ar,br)=polyfit(down,up,1)
     return ar
     
 
