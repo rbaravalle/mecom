@@ -19,9 +19,9 @@ import numpy as np
 import sys
 import os
 
-total = 40*40      # number of pixels for averaging
-P = 7              # window
-cant = 20           # number of fractal dimensions (x2)
+total = 50*50      # number of pixels for averaging
+P = 18              # window
+cant = 5           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -81,14 +81,13 @@ def white(img,Nx,Ny,vent,bias):
     for i in arrNx:
         for j in arrNy:
             if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias ): 
-                im[j,i] = 1
+                im[j,i] = img.getpixel((i,j))
 
     # do an opening operation to remove small elements
     return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int)
 
 
 def count(x1,y1,x2,y2,intImg):
-    #print x1, y1, x2, y2
     sum = intImg[x2][y2]
     if (x1>= 1 and y1 >= 1):
         sum = sum + intImg[x1-1][y1-1]
@@ -96,13 +95,13 @@ def count(x1,y1,x2,y2,intImg):
         sum = sum - intImg[x1-1][y2];
     if (y1 >= 1):
         sum = sum - intImg[x2][y1-1]
-    return sum/float(380*380);
+    return sum
             
 
 # v: window size
 def spec(filename,v,b):
     t = time.clock()
-    tP = (2**P)   # tP : two raised to P
+    tP = (P)   # tP : two raised to P
     x = tP+1
     y = tP+1
     cantSelected = 0
@@ -120,7 +119,7 @@ def spec(filename,v,b):
 
     intImg = sat(gray,Nx,Ny,'array')
 
-    m0 = intImg[Nx-1][Ny-1]/float(L)
+    m0 = intImg[Nx-1][Ny-1]#/float(L)
 
     while(gray[x][y] == 0):
         x = randint(tP,Nx-tP-1)
@@ -137,19 +136,20 @@ def spec(filename,v,b):
         cantSelected = cantSelected+1
 
 
-    c = [ [ 0 for i in range(P) ] for j in range(total+1) ]
+    c = [ [ 0 for i in range(P) ] for j in range(total+1) ] # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
-        for h in range(P):
+        for h in range(1,P+1):
             # how many points in the box. M(R) in the literature
-            c[i+1][h] = count(x-(2**(h)),y-(2**(h)),x+(2**(h)),y+(2**(h)),intImg)
-            #if(c[i+1][h] < 0):
-            #   print "error ", i, h
-        
-    down = map(lambda i: log(L/(float((2*(2**(i))+1))**2)),range(P))
+            c[i+1][h-1] = count(x-(h),y-(h),x+(h),y+(h),intImg)
+
+    down = range(1,P+1)
     # Generalized Multifractal Dimentions 
     s = map(lambda i: Dq(c,i,L,m0,down),  range(-cant,-1) + range(1,cant))
+
+    plot(s)
+    show()
 
     t =  time.clock()-t
     print "Time: ", t
@@ -158,17 +158,18 @@ def spec(filename,v,b):
 
 def Dq(c,q,L,m0,down):
 
-    for i in range(total):
-        for h in range(P):        
-            c[0][h] = c[0][h] + (1/(c[i+1][h]**q)) # [M0 / M(R)] ** q-1
+    #aux = 1
+    # sum in each radius, all the points
+    for h in range(1,P+1):        
+        for i in range(total):
+            c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/(float(total))) # mean of "total" points
 
-    #print "C[0]: ", c[0]
-    mean = map(lambda i: ((float(i)/(total*q))*(m0**q)),c[0])   # mean of ([M0 / M(R)] ** q-1 ) / q-1
+    #print "C", c[0]
+    up = map(lambda i: log(i)-q*log(m0), c[0])
+    up = map(lambda i: up[i]/(q*down[i]), range(len(up)))
+    sizes = range(1,P+1)
 
-    #print "Mean: ", mean
-    up = map(lambda i: log(i+1), mean)
-
-    (ar,br)=polyfit(down,up,1)
+    (ar,br)=polyfit(sizes,up,1)
     return ar
     
 
