@@ -6,7 +6,7 @@ from subprocess import *
 
 def main():
     cant = 20+1
-    dDFs  = 2*20
+    dDFs  = 2*4
     baguette = [['Df' for j in range(dDFs)] for i in range(cant)]
     lactal   = [['Df' for j in range(dDFs)] for i in range(cant)]
     salvado  = [['Df' for j in range(dDFs)] for i in range(cant)]
@@ -19,11 +19,12 @@ def main():
 
     path = '../exps/100sample/res/'
     dirList=os.listdir(path)
+    print len(dirList)
     
     nonbread = [['Df' for j in range(dDFs)] for i in range(len(dirList))]
 
 
-    for i in range(21):
+    for i in range(41):
         v = 40
         b = 1.15
         filename = path+dirList[i]
@@ -48,7 +49,7 @@ def main():
 
         v = 50
         b = 1.05
-        filename = '../imagenes/camera/baguette/b{}.tif'.format(i)
+        filename = '../imagenes/camera/baguette/slicer/b{}.tif'.format(i)
         print filename
         baguetteC[i] = sandbox.spec(filename,v,b)
         filename = '../imagenes/camera/lactal/l{}.tif'.format(i)
@@ -78,6 +79,10 @@ def main():
     Popen(cmd, shell = True, stdout = PIPE).communicate()	
     cmd = '{0} "{1}" > "{2}"'.format(prog, csvC, txtC)
     Popen(cmd, shell = True, stdout = PIPE).communicate()
+
+    # confusion matrix
+    import conf
+    conf.test() # test results and show confusion matrix
 
 
 main()
