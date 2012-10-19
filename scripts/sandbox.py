@@ -3,14 +3,13 @@
 # sandbox multifractal implementation
 # Rodrigo Baravalle - October 2012
 
-
-import random
+#import random
 from random import randrange,randint
 from math import log
-from scipy import linspace, polyval, polyfit, sqrt, stats, randn, ndimage
-from pylab import plot, title, show , legend
-import matplotlib
-from matplotlib import pyplot as plt
+from scipy import ndimage
+#from pylab import plot, title, show , legend
+#import matplotlib
+#from matplotlib import pyplot as plt
 import time
 import Image
 import numpy as np
@@ -18,8 +17,8 @@ import sys
 import os
 
 total = 30*50      # number of pixels for averaging
-P = 18              # window
-cant = 42           # number of fractal dimensions (-1 x2)
+P = 40             # window
+cant = 7+1           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -136,7 +135,7 @@ def spec(filename,v,b):
         cantSelected = cantSelected+1
 
 
-    c = np.zeros((total+1,P), dtype=np.double ) #[ [ 0 for i in range(P) ] for j in range(total+1) ] # total+1 rows x P columns
+    c = np.zeros((total+1,P), dtype=np.double ) # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
@@ -183,7 +182,7 @@ def Dq(c,q,L,m0,down):
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
     sizes = range(1,P+1)
 
-    (ar,br)=polyfit(sizes,up2,1)
+    (ar,br)=np.polyfit(sizes,up2,1)
     return ar
     
 
