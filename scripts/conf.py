@@ -12,7 +12,7 @@ def test():
     a = map(lambda i: i/20+1, a)
     print "A:", a
 
-    file = '../exps/sandboxC.txt.predict'
+    arch = './sandboxC.txt.predict'
 
     easy = '../exps/easy.py'
     scanner = '../exps/sandboxS.txt'
@@ -22,7 +22,7 @@ def test():
     print cmd
     f = Popen(cmd, shell = True).communicate()
 
-    cmd = 'cat "{0}"'.format(camera+'.predict')
+    cmd = 'cat "{0}"'.format(arch)
     print cmd
     f = Popen(cmd, shell = True, stdout = PIPE).stdout
 
@@ -41,5 +41,3 @@ def test():
     b = conf_mat(test,a)
     for row in b:
         print row
-
-test()

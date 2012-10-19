@@ -3,8 +3,6 @@
 # sandbox multifractal implementation
 # Rodrigo Baravalle - October 2012
 
-#import psyco # magical speed up
-#psyco.full()
 
 import random
 from random import randrange,randint
@@ -19,9 +17,9 @@ import numpy as np
 import sys
 import os
 
-total = 50*50      # number of pixels for averaging
+total = 30*50      # number of pixels for averaging
 P = 18              # window
-cant = 5           # number of fractal dimensions (-1 x2)
+cant = 6           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -100,6 +98,8 @@ def count(x1,y1,x2,y2,intImg):
 
 # v: window size
 def spec(filename,v,b):
+    #import psyco # magical speed up
+    #psyco.full()
     t = time.clock()
     tP = (P)   # tP : two raised to P
     x = tP+1
@@ -114,8 +114,8 @@ def spec(filename,v,b):
     gray = a.convert('L') # rgb 2 gray
 
     gray = white(gray,Nx,Ny,v,b) # local thresholding algorithm
-    #plt.imshow(gray, cmap=matplotlib.cm.gray)
-    #plt.show()
+    plt.imshow(gray, cmap=matplotlib.cm.gray)
+    plt.show()
 
     intImg = sat(gray,Nx,Ny,'array')
 
@@ -146,10 +146,16 @@ def spec(filename,v,b):
 
     down = range(1,P+1)
     # Generalized Multifractal Dimentions 
-    s = map(lambda i: Dq(c,i,L,m0,down),  range(-cant,-1) + range(1,cant))
+    s = [0 for i in range(2*cant-2)]
+    l = range(-cant+1,0)+  range(1,cant)
+    print l
+    j = 0
+    for i in l:
+        s[j] = Dq(c,i,L,m0,down)
+        j = j+1
 
-    plot(s)
-    show()
+    #plot(s)
+    #show()
 
     t =  time.clock()-t
     print "Time: ", t
