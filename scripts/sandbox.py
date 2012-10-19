@@ -19,7 +19,7 @@ import os
 
 total = 30*50      # number of pixels for averaging
 P = 18              # window
-cant = 6           # number of fractal dimensions (-1 x2)
+cant = 42           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -114,8 +114,8 @@ def spec(filename,v,b):
     gray = a.convert('L') # rgb 2 gray
 
     gray = white(gray,Nx,Ny,v,b) # local thresholding algorithm
-    plt.imshow(gray, cmap=matplotlib.cm.gray)
-    plt.show()
+    #plt.imshow(gray, cmap=matplotlib.cm.gray)
+    #plt.show()
 
     intImg = sat(gray,Nx,Ny,'array')
 
@@ -136,7 +136,7 @@ def spec(filename,v,b):
         cantSelected = cantSelected+1
 
 
-    c = [ [ 0 for i in range(P) ] for j in range(total+1) ] # total+1 rows x P columns
+    c = np.zeros((total+1,P), dtype=np.double ) #[ [ 0 for i in range(P) ] for j in range(total+1) ] # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
@@ -148,10 +148,10 @@ def spec(filename,v,b):
     # Generalized Multifractal Dimentions 
     s = [0 for i in range(2*cant-2)]
     l = range(-cant+1,0)+  range(1,cant)
-    print l
     j = 0
     for i in l:
         s[j] = Dq(c,i,L,m0,down)
+
         j = j+1
 
     #plot(s)
@@ -166,16 +166,24 @@ def Dq(c,q,L,m0,down):
 
     #aux = 1
     # sum in each radius, all the points
+    if q>0: # math representation issue
+        aux1 = float(total)
+        aux2 = 0
+    else:
+        aux1 = 1
+        aux2 = log(float(total))
+
     for h in range(1,P+1):        
         for i in range(total):
-            c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/(float(total))) # mean of "total" points
+            c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/aux1) # mean of "total" points
 
-    #print "C", c[0]
-    up = map(lambda i: log(i)-q*log(m0), c[0])
-    up = map(lambda i: up[i]/(q*down[i]), range(len(up)))
+    #print "C[0]:", c[0]
+    up = map(lambda i: log(i)-aux2-q*log(m0), c[0])
+    #print up
+    up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
     sizes = range(1,P+1)
 
-    (ar,br)=polyfit(sizes,up,1)
+    (ar,br)=polyfit(sizes,up2,1)
     return ar
     
 
