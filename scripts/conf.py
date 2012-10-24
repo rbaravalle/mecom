@@ -7,11 +7,27 @@ def conf_mat(test, classes):
             m[test[i]-1][classes[i]-1] = m[test[i]-1][classes[i]-1] + 1
         return m
 
-def test():
-    a = [i for i in range(100)]
-    a = map(lambda i: i/20+1, a)
-    print "A:", a
+# get cross validation of executing ../exps/easy.py ../exps/sandboxS.txt
+def getCross():
 
+    easy = '../exps/easy.py'
+    scanner = '../exps/sandboxS.txt'
+
+    cmd = '{0} {1}'.format(easy, scanner)
+    print cmd
+    f = Popen(cmd, shell = True, stdout = PIPE).stdout
+
+    line = 1
+    while True:
+        last_line = line
+        line = f.readline()
+        if str(line).find("rate") != -1:        
+            cross = float(line.split()[-1][5:8])
+            break
+        if not line: break
+    return cross
+
+def test():
     arch = './sandboxC.txt.predict'
 
     easy = '../exps/easy.py'
@@ -21,23 +37,40 @@ def test():
     cmd = '{0} {1} {2}'.format(easy, scanner, camera)
     print cmd
     f = Popen(cmd, shell = True).communicate()
-
+   
     cmd = 'cat "{0}"'.format(arch)
     print cmd
     f = Popen(cmd, shell = True, stdout = PIPE).stdout
+    g = f
 
-    test = [0 for i in range(101)]
-    i = 0
+    c = 0
     line = 1
     while True:
         last_line = line
         line = f.readline()
-        test[i] = int(last_line)
-        i = i+1
+        c = c+1
+        if not line: break
+    testL = [0 for i in range(c)]
+
+    cmd = 'cat "{0}"'.format(arch)
+    print cmd
+    f = Popen(cmd, shell = True, stdout = PIPE).stdout
+    c = 0
+    line = 1
+    while True:
+        last_line = line
+        line = f.readline()
+        testL[c] = int(last_line)
+        c = c+1
         if not line: break
 
-    print "Test: ", test
+    a = [i for i in range(len(testL)-1)]
+    a = map(lambda i: i/20+1, a)
 
-    b = conf_mat(test,a)
+    print "Test: ", testL
+
+    b = conf_mat(testL,a)
     for row in b:
         print row
+
+    return testL

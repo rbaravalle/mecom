@@ -16,9 +16,9 @@ import numpy as np
 import sys
 import os
 
-total = 30*50      # number of pixels for averaging
-P = 40             # window
-cant = 7+1           # number of fractal dimensions (-1 x2)
+total = 30*30      # number of pixels for averaging
+P = 20             # window
+cant = 4+1           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -158,7 +158,7 @@ def spec(filename,v,b):
 
     t =  time.clock()-t
     print "Time: ", t
-    print "Dims: ", s
+    #print "Dims: ", s
     return s
 
 def Dq(c,q,L,m0,down):

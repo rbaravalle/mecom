@@ -185,9 +185,9 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \begin{frame}
 {\huge Base de Datos de im\'agenes de Pan}
 \begin{itemize}
-\item $50$ im\'agenes de cuatro tipos de pan diferente fueron digitalizadas ($200$ im\'agenes en total)
+\item $50$ im\'agenes de cuatro tipos diferentes de pan fueron digitalizadas ($200$ im\'agenes en total)
 \item Se descargaron $100$ im\'agenes aleatorias de la base de datos CalTech101 (im\'agenes de objetos que no son pan)
-\item $20$ im\'agenes de pan obtenidas con una c\'amara digital ($80$ im\'agenes en total)
+\item $20$ im\'agenes de cada tipo de pan fueron obtenidas con una c\'amara digital ($80$ im\'agenes en total)
 \begin{figure}
 \centering
 \includegraphics[scale=0.97]{../imagenes/baguette20}
@@ -205,8 +205,14 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \begin{itemize}
 \item Dimensi\'on Box
 \item Dimensi\'on fractal Morfol\'ogica
-\item Espectro multifractal
+\item Espectro multifractal ($40$ Features)
+    \begin{itemize}
+        \item $\alpha$ imagen (caracteriza la regularidad {\em local} de la imagen)
+        \item distribuci\'on de valores $\alpha$ en la imagen (caracterizaci\'on {\em global} de la regularidad)
+    \end{itemize}
+\item Para establecer una comparaci\'on, caracter\'isticas RGB fueron extra\'idas (promedio R, promedio G, promedio B)
 \end{itemize}
+
 \end{frame}
 
 
