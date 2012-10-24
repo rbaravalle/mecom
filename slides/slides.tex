@@ -68,7 +68,7 @@ DIEC, Universidad Nacional del Sur - IIIE-CONICET. cad@uns.edu.ar
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
 
-\date[Agosto 2011] % (optional, should be abbreviation of conference name)
+\date[Noviembre 2012] % (optional, should be abbreviation of conference name)
 % - Either use conference name or its abbreviation.
 % - Not really informative to the audience, more for people (including
 %   yourself) who are reading the slides online
@@ -109,7 +109,7 @@ DIEC, Universidad Nacional del Sur - IIIE-CONICET. cad@uns.edu.ar
 \begin{frame}
   \titlepage
     \begin{center}
-    \includegraphics[scale=0.20]{cifasislogo}
+    \includegraphics[scale=0.08]{cifasislogo}
     \end{center}
 \end{frame}
 
@@ -223,25 +223,45 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 
 \section{Resultados}
 
-\subsection{First}
 \begin{frame}
+{\huge Resultados}
 \begin{center}
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|}
+    Features & Fractals & non Fractals & combined\\
+    \hline
+    Accuracy  & $93.2\%$ & $88.0\%$ & $\textbf{94.4\%}$\\
+\end{tabular}
+\caption{Results obtained in classification using training and testing samples from the scanner}
+\label{table:tableFirstTest}
+
+\begin{table}[ht!b]
+\centering
+\begin{tabular}{|c|c|c|c|}
+    Features & Fractals & non Fractals & combined\\
+    \hline
+    Accuracy  & $86.5\%$ & $72\%$ & $\textbf{89.5\%}$\\
+\end{tabular}
+\caption{Results obtained in classification using training and testing samples from the camera and from the scanner}
+\label{table:tableRobustnessTest1}
+\end{table}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|}
+    Features & Fractals & non Fractals & combined\\
+    \hline
+    Accuracy  & $\textbf{50}\%$ & $20\%$ & $45\%$\\
+\end{tabular}
+\caption{Results obtained when training with a capturing condition and testing with a different one}
+\label{table:tableRobustnessTest2}
+\end{table}
 \end{center}
 \end{frame}
 
-\subsection{Second}
-\begin{frame}
-\begin{center}
-\end{center}
-\end{frame}
-
-\subsection{Robustez}
-\begin{frame}
-\begin{center}
-\end{center}
-\end{frame}
-
-\section{Conclusiones y Trabajos Futuros}
+\section{Conclusiones}
 
 \begin{frame}{Conclusiones}
 
@@ -250,6 +270,7 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \item La iluminaci\'on afecta las features multifractales de los distintos tipos de pan
 \item Es posible extender el clasificador con m\'as tipos de pan manteniendo una buena clasificaci\'on
 \item Las features son buenos discriminadores de imagenes de pan respecto de otros tipos de im\'agenes
+\item Caracter\'isticas de color muestran resultados comparables, pero fallan a la hora de detectar im\'agenes de pan respecto de im\'agenes de otras clases
 \end{itemize}
 
 \end{frame}
@@ -257,7 +278,9 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \begin{frame}{Trabajos a Futuro}
 
 \begin{itemize}
-\item Mejorar la robustez
+\item Aumento de la robustez del m\'etodo
+\item Utilizaci\'on de las caracter\'isticas extra\'idas para setear par\'ametros en sistemas de part\'iculas, buscando obtener im\'agenes sint\'eticas con caracter\'isticas similares
+\item Utilizaci\'on de Principal Component Analysis (PCA) y Feature Selection, buscando reducir la dimensionalidad de los datos.
 \end{itemize}
 
 \end{frame}
