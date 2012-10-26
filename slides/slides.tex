@@ -48,7 +48,7 @@
 % does not look nice, try deleting the line with the fontenc.
 
 
-\title[Bread Crumb Classification Using Fractal and Multifractal Features] % (optional, use only with long paper titles)
+\title[Bread Crumb Classification Using Fractal and Multifr. Features] % (optional, use only with long paper titles)
 {Bread Crumb Classification Using Fractal and Multifractal Features}
 
 \author
@@ -149,11 +149,12 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 
 \begin{frame}
 \begin{center}
-{\huge Clasificaci\'on de muestras de pan }\\
+{\huge Idea: clasificaci\'on de muestras de pan }\\
 \vspace{10px}
 {\large \'Util para distinguir im\'agenes de pan sint\'eticas de aquellas que no lo son, es decir, validar im\'agenes de pan como tales}\\
 \vspace{10px}
 {\large Medida de la calidad de im\'agenes digitalizadas de muestras reales}\\
+{\large Obtener caracter\'isticas para la generaci\'on de im\'agenes sint\'eticas de pan (modelado de la estructura {\em 3D} del pan)}\\
 \end{center}
 \end{frame}
 
@@ -174,7 +175,7 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \begin{itemize}
 \item T\'ermino acu\~nado por el matem\'atico Mandelbrot hacia fines del siglo pasado, para describir elementos naturales o abstractos, que presentan caracter\'isticas de {\em autosimilaridad}.
 \item Dimensi\'on Fractal: generalizaci\'on de dimensi\'on euclideana. Usualmente representa la capacidad de un objeto de llenar el espacio en el que est\'a contenido.
-\item Multifractal: aquellos elementos cuyas propiedades fractales son diferentes a diferentes escalas
+\item Multifractal: aquellos elementos cuyas propiedades fractales son diferentes a diferentes escalas. M\'as de un fractal presente en la misma estructura.
 \end{itemize}
 \end{frame}
 
@@ -203,8 +204,8 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \begin{frame}
 {\huge Caracter\'isticas Utilizadas}
 \begin{itemize}
-\item Dimensi\'on Box
-\item Dimensi\'on fractal Morfol\'ogica
+\item Dimensi\'on Box: simplificaci\'on del c\'alculo de la dimensi\'on de Hausdorff. Medida de c\'omo una estructura ocupa el espacio que la contiene. De esta forma, una imagen blanca tiene dimensi\'on box $2$. Una imagen con huecos posee dimensi\'on box $< 2$ y $>= 1$.
+\item Dimensi\'on fractal Morfol\'ogica: impacto de una determinada {\em forma} (Ej. rombo, c\'irculo) en una estructura.
 \item Espectro multifractal ($40$ Features)
     \begin{itemize}
         \item $\alpha$ imagen (caracteriza la regularidad {\em local} de la imagen)
@@ -220,6 +221,8 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \begin{center}
 \begin{itemize}
 \item k-fold cross validation ($k = 4$ {\em i.e.} $75\%$ train, $25\%$ test)
+\item Test de robustez: combinaci\'on de im\'agenes de scanner y c\'amara en el entrenamiento
+\item Test de robustez: im\'agenes de scanner para entrenamiento, im\'agenes de c\'amara como testing
 \end{itemize}
 \end{center}
 \end{frame}
@@ -233,11 +236,13 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \item Proponen un m\'etodo de clasificaci\'on {\em supervisado} (las etiquetas est\'an presentes en la etapa de entrenamiento)
 \item la librer\'ia {\em libsvm} fue utilizada para llevar a cabo la clasificaci\'on
 \end{itemize}
+\includegraphics[scale=0.28]{svm}
 \end{center}
 \end{frame}
 
 \section{Resultados}
 
+\subsection{Clasificaci\'on}
 \begin{frame}
 {\huge Resultados}
 \begin{center}
@@ -248,7 +253,7 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
     \hline
     Accuracy  & $93.2\%$ & $88.0\%$ & $\textbf{94.4\%}$\\
 \end{tabular}
-\caption{Results obtained in classification using training and testing samples from the scanner}
+\caption{Train: scanner, Test: scanner}
 \label{table:tableFirstTest}
 
 \begin{table}[ht!b]
@@ -258,7 +263,7 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
     \hline
     Accuracy  & $86.5\%$ & $72\%$ & $\textbf{89.5\%}$\\
 \end{tabular}
-\caption{Results obtained in classification using training and testing samples from the camera and from the scanner}
+\caption{Train: scanner, camara, Test: scanner, camara}
 \label{table:tableRobustnessTest1}
 \end{table}
 \end{table}
@@ -270,10 +275,59 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
     \hline
     Accuracy  & $\textbf{50}\%$ & $20\%$ & $45\%$\\
 \end{tabular}
-\caption{Results obtained when training with a capturing condition and testing with a different one}
+\caption{Train: scanner, Test: camara}
 \label{table:tableRobustnessTest2}
 \end{table}
 \end{center}
+\end{frame}
+
+\subsection{Matrices de Confusi\'on}
+\begin{frame}
+\begin{small}
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
+    \hline
+    \hline
+    {\em baguette}  & $0$ & $11$ & $0$ & $9$  & $0$\\
+    \hline
+    {\em lactal}    & $0$ & $19$ & $0$ & $1$  & $0$\\
+    \hline
+    {\em salvado}   & $1$ & $11$ & $0$ & $8$  & $0$\\
+    \hline
+    {\em sandwich}  & $0$ & $9$  & $0$ & $11$ & $0$\\
+    \hline
+    non bread       & $0$ & $0$  & $0$ & $0$  & $20$\\
+    \hline
+\end{tabular}
+\caption{Matriz de confusi\'on para las caracter\'isticas fractales}
+\label{table:ConfusionMatrixFractal}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Classes & {\em baguette} & {\em lactal} & {\em salvado} & {\em sandwich} & non bread\\
+    \hline
+    \hline
+    {\em baguette}  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    {\em lactal}    & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    {\em salvado}   & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    {\em sandwich}  & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+    non bread       & $0$ & $0$ & $0$ & $0$ & $20$\\
+    \hline
+\end{tabular}
+\caption{Matriz de confusi\'on para las caracter\'isticas RGB}
+\label{table:ConfusionMatrixNonFractal}
+\end{table}
+\end{small}
 \end{frame}
 
 \section{Conclusiones}
