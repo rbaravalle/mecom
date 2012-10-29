@@ -108,8 +108,10 @@ DIEC, Universidad Nacional del Sur - IIIE-CONICET. cad@uns.edu.ar
 
 \begin{frame}
   \titlepage
+    \centering
+    MECOM 2012
     \begin{center}
-    \includegraphics[scale=0.08]{cifasislogo}
+    \includegraphics[scale=0.06]{cifasislogo}
     \end{center}
 \end{frame}
 
@@ -203,16 +205,35 @@ Se presentan resultados de clasificaci\'on sobre muestras de im\'agenes digitali
 \subsection{Caracter\'isticas Utilizadas}
 \begin{frame}
 {\huge Caracter\'isticas Utilizadas}
-\begin{itemize}
-\item Dimensi\'on Box: simplificaci\'on del c\'alculo de la dimensi\'on de Hausdorff. Medida de c\'omo una estructura ocupa el espacio que la contiene. De esta forma, una imagen blanca tiene dimensi\'on box $2$. Una imagen con huecos posee dimensi\'on box $< 2$ y $>= 1$.
-\item Dimensi\'on fractal Morfol\'ogica: impacto de una determinada {\em forma} (Ej. rombo, c\'irculo) en una estructura.
-\item Espectro multifractal ($40$ Features)
+\textbf{Dimensi\'on Box}
+
+Simplificaci\'on del c\'alculo de la dimensi\'on de Hausdorff. Medida de {\em relleno} del espacio contenedor de la estructura. 
+
+Imagen blanca (plano): dimensi\'on box $2$. Una imagen con huecos posee dimensi\'on box $< 2$ y $>= 1$
+$$D_{b} \triangleq \displaystyle\lim_{\epsilon \to 0}{\frac{\log(N_{\epsilon})}{\log (1/\epsilon)}}.$$
+\begin{figure}
+\centering
+\includegraphics[scale=0.9]{../imagenes/salvado19}
+\includegraphics[scale = 0.2]{../imagenes/fitbox}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\textbf{Dimensi\'on fractal Morfol\'ogica}: impacto de una determinada {\em forma} (Ej. rombo, c\'irculo) en una estructura.
+
+\textbf{Espectro multifractal}
     \begin{itemize}
         \item $\alpha$ imagen (caracteriza la regularidad {\em local} de la imagen)
         \item distribuci\'on de valores $\alpha$ en la imagen (caracterizaci\'on {\em global} de la regularidad)
     \end{itemize}
-\item Para establecer una comparaci\'on, caracter\'isticas RGB fueron extra\'idas (promedio R, promedio G, promedio B)
-\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale=1]{../imagenes/lactal31}
+\includegraphics[scale = 0.2]{../imagenes/emf}
+\end{figure}
+
+Para establecer una comparaci\'on, caracter\'isticas RGB fueron extra\'idas (promedio R, promedio G, promedio B)
 
 \end{frame}
 
