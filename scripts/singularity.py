@@ -43,7 +43,6 @@ def spec(filename,v,b,cuantas):
 
     #plt.imshow(gray, cmap=matplotlib.cm.gray)
     #plt.show()
-    # La imagen esta al reves!
 
     alphaIm = np.zeros((Nx,Ny), dtype=np.double ) # Nx rows x Ny columns
     #measure = np.zeros(4, dtype=np.double ) # Ny rows x 4 columns
@@ -59,20 +58,38 @@ def spec(filename,v,b,cuantas):
             measure[1] = min(gray.crop((max(i-2,0),max(j-2,0),min(i+2,Nx-1),min(j+2,Ny-1))).getdata()) + 1
             measure[2] = min(gray.crop((max(i-3,0),max(j-3,0),min(i+3,Nx-1),min(j+3,Ny-1))).getdata()) + 1
             measure[3] = min(gray.crop((max(i-4,0),max(j-4,0),min(i+4,Nx-1),min(j+4,Ny-1))).getdata()) + 1
-            alphaIm[j,i] = np.polyfit(temp,np.log(measure),1)[0]
+            #alphaIm[j,i] = np.polyfit(temp,np.log(measure),1)[0]
 
-    maxim = np.max(alphaIm)
-    minim = np.min(alphaIm)
+    #maxim = np.max(alphaIm)
+    #minim = np.min(alphaIm)
 
-    paso = (maxim-minim)/cuantas;
-    clases = np.arange(minim,maxim-paso,paso);
-    print "Alpha im", alphaIm
-    print "Paso: ", paso
-    print "Clases: ", clases
+    # Alpha image
+    #plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
+    #plt.show()
 
-    plt.imshow(alphaIm, cmap=matplotlib.cm.gray)
-    plt.show()
-    print maxim, minim
+    #paso = (maxim-minim)/cuantas;
+    #clases = np.arange(minim,maxim,paso);
+    #print "Alpha im", alphaIm
+    #print "Paso: ", paso
+    #print "Clases: ", clases
+
+    # Window
+    cant = int(np.floor(np.log(Nx)));
+
+    for c in range(cuantas):
+        N = np.zeros(cant+1)
+        for k in range(cant+1):
+            sizeBlocks = 2*k+1
+            numBlocks_x = int(np.ceil(Nx/sizeBlocks))
+            numBlocks_y = int(np.ceil(Ny/sizeBlocks))
+            print sizeBlocks, numBlocks_x, numBlocks_y
+
+            flag = np.zeros((numBlocks_x,numBlocks_y))
+
+            for i in range(1,numBlocks_x):
+                for j in range(1,numBlocks_y):
+                    block = alphaIm[(i-1)*sizeBlocks + 1:i*sizeBlocks, (j-1)*sizeBlocks + 1:j*sizeBlocks]
+
     t =  time.clock()-t
     print "Time: ", t
 
