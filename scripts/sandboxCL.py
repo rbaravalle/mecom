@@ -74,29 +74,31 @@ def sat(img,Nx,Ny,which):
 
 def white(img,Nx,Ny,vent,bias):
            
-    #im = np.zeros((Nx,Ny),dtype=np.float32)
-
     intImg = sat(img,Nx,Ny,'img')
-    print "A:" , intImg[200][300]
+    #print "A:" , intImg[200][300]
     a = np.array(intImg).astype(np.float32)
     im = np.empty_like(a).astype(np.float32)
     a_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
-
-    #b_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
+    b = np.array(img).astype(np.float32)
+    b_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
     # where to store results
     dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
 
 
     prg = cl.Program(ctx, """
-    __kernel void white(__global float *a, __global float *c) {
+    __kernel void mww(void) {
+        return;
+    }
+    __kernel void white(__global float *a, __global float *b, __global float *c, const int Ny) {
          int gidx = get_global_id(0);
          int gidy = get_global_id(1);
-         c[gidx+gidy*380] = a[gidy+gidx*380];
+         //if(gidx>1000)
+         c[gidx+gidy*Ny] = b[gidy+gidx*Ny];
     }
     """).build()
 
     #print intImg
-    prg.white(queue, a.shape, a_buf, dest_buf)
+    prg.white(queue, a.shape, a_buf, b_buf, dest_buf, np.int32(Ny))
     cl.enqueue_read_buffer(queue, dest_buf, im).wait()
     im = im.astype(np.int32) # !!
     print "IM: ", im[300][200]
@@ -213,5 +215,5 @@ def Dq(c,q,L,m0,down):
     (ar,br)=np.polyfit(sizes,up2,1)
     return ar
     
-spec('baguette9.png',40,1.2)
+spec('../imagenes/scanner/baguette/baguette9.png',40,1.2)
 
