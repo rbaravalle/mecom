@@ -22,9 +22,9 @@ queue = cl.CommandQueue(ctx)
 print ctx, queue
 mf = cl.mem_flags
 
-total = 50*50      # number of pixels for averaging
+total = 10*10      # number of pixels for averaging
 P = 40             # window
-cant = 20+1           # number of fractal dimensions (-1 x2)
+cant = 4+1           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -97,7 +97,7 @@ def white(img,Nx,Ny,vent,bias):
             sum -= intImg[x1-1 + y2*Ny];
         if (y1 >= 1)
             sum -= intImg[x2 + (y1-1)*Ny];
-        return sum /= ((x2-x1+1)*(y2-y1+1));
+        return sum *= 1.0f/((x2-x1+1)*(y2-y1+1));
     }
     __kernel void white(__global float *intImg, __global float *img, __global float *dest, const int Nx, const int Ny, const int vent, const int bias) {
          int gidx = get_global_id(0);
@@ -106,7 +106,7 @@ def white(img,Nx,Ny,vent,bias):
          if(mww(max(0,gidx-vent),max(0,gidy-vent),min(Nx-1,gidx+vent),min(Ny-1,gidy+vent),intImg,Ny) 
                     >= img[gidx + gidy*Ny]*bias )
             dest[gidx+gidy*Ny] = img[gidy+gidx*Ny];
-        else dest[gidx+gidy*Ny] = 0.0;
+         else dest[gidx+gidy*Ny] = 0.0;
     }
     """).build()
 
@@ -228,5 +228,5 @@ def Dq(c,q,L,m0,down):
     (ar,br)=np.polyfit(sizes,up2,1)
     return ar
     
-spec('../imagenes/scanner/baguette/baguette9.tif',40,1.2)
+print spec('../imagenes/scanner/baguette/baguette9.tif',40,1.15)
 
