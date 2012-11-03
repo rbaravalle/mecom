@@ -85,9 +85,19 @@ def white(img,Nx,Ny,vent,bias):
     dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
 
 
+	
     prg = cl.Program(ctx, """
-    __kernel void mww(void) {
-        return;
+    __kernel void mww(int x1, int y1, int x2, int y2, __global float* intImg, const int Ny, __global float *sum) {
+        //float sum = intImg[x2+y2*Ny];
+        *sum = intImg[x2+y2*Ny];
+        if (x1>= 1 && y1 >= 1) 
+            *sum += intImg[x1-1 + (y1-1)*Ny];
+        if (x1 >= 1)
+            *sum -= intImg[x1-1 + y2*Ny];
+        if (y1 >= 1)
+            *sum -= intImg[x2 + (y1-1)*Ny];
+        *sum /= ((x2-x1+1)*(y2-y1+1));
+
     }
     __kernel void white(__global float *a, __global float *b, __global float *c, const int Ny) {
          int gidx = get_global_id(0);
@@ -215,5 +225,5 @@ def Dq(c,q,L,m0,down):
     (ar,br)=np.polyfit(sizes,up2,1)
     return ar
     
-spec('../imagenes/scanner/baguette/baguette9.png',40,1.2)
+spec('../imagenes/scanner/baguette/baguette9.tif',40,1.2)
 
