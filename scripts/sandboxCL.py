@@ -99,21 +99,21 @@ def white(img,Nx,Ny,vent,bias):
             sum -= intImg[x2 + (y1-1)*Ny];
         return sum *= 1.0f/((x2-x1+1)*(y2-y1+1));
     }
-    __kernel void white(__global float *intImg, __global float *img, __global float *dest, const int Nx, const int Ny, const int vent, const int bias) {
+    __kernel void white(__global float *intImg, __global float *img, __global float *dest, const int Nx, const int Ny, const int vent, const float bias) {
          int gidx = get_global_id(0);
          int gidy = get_global_id(1);
 
          if(mww(max(0,gidx-vent),max(0,gidy-vent),min(Nx-1,gidx+vent),min(Ny-1,gidy+vent),intImg,Ny) 
                     >= img[gidx + gidy*Ny]*bias )
-            dest[gidx+gidy*Ny] = img[gidy+gidx*Ny];
-         else dest[gidx+gidy*Ny] = 0.0;
+            dest[gidx+gidy*Ny] = 255;//img[gidy+gidx*Ny]/2;
+         else dest[gidx+gidy*Ny] = 0;
     }
     """).build()
 
     #print intImg
     prg.white(queue, a.shape, a_buf, b_buf, dest_buf, np.int32(Nx), np.int32(Ny), np.int32(vent), np.float32(bias))
     cl.enqueue_read_buffer(queue, dest_buf, im).wait()
-    #im = im.astype(np.int32) # !!
+    im = im.astype(np.int32) # !!
     print "IM: ", im
     arrNx = range(Nx)
     arrNy = range(Ny)
@@ -121,8 +121,8 @@ def white(img,Nx,Ny,vent,bias):
     #for i in arrNx:
     #    for j in arrNy:
     #        if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias ): 
-    #            im[j,i] = img.getpixel((i,j))
-
+    #            im[i,j] = img.getpixel((i,j))
+    #print "IM: ", im
     # do an opening operation to remove small elements
     return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int32)
 
@@ -139,7 +139,7 @@ def count(x1,y1,x2,y2,intImg):
             
 
 # v: window size
-def spec(filename,v,b):
+def spec(filename,v,bias):
     #import psyco # magical speed up
     #psyco.full()
     t = time.clock()
@@ -155,7 +155,7 @@ def spec(filename,v,b):
     points = []     # number of elements in the structure
     gray = a.convert('L') # rgb 2 gray
 
-    gray = white(gray,Nx,Ny,v,b) # local thresholding algorithm
+    gray = white(gray,Nx,Ny,v,bias) # local thresholding algorithm
     plt.imshow(gray, cmap=matplotlib.cm.gray)
     plt.show()
     #return
