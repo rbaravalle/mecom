@@ -77,9 +77,11 @@ def white(img,Nx,Ny,vent,bias):
     intImg = sat(img,Nx,Ny,'img')
     #print "A:" , intImg[200][300]
     a = np.array(intImg).astype(np.float32)
-    im = np.empty_like(a).astype(np.float32)
+    im = np.zeros((Nx,Ny)).astype(np.float32)
     a_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
+    print img
     b = np.array(img).astype(np.float32)
+    print b
     b_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
     # where to store results
     dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
@@ -96,23 +98,23 @@ def white(img,Nx,Ny,vent,bias):
         if (y1 >= 1)
             sum -= intImg[x2 + (y1-1)*Ny];
         return sum /= ((x2-x1+1)*(y2-y1+1));
-
     }
-    __kernel void white(__global float *a, __global float *b, __global float *c, const int Nx, const int Ny, const int vent, const int bias) {
+    __kernel void white(__global float *intImg, __global float *img, __global float *dest, const int Nx, const int Ny, const int vent, const int bias) {
          int gidx = get_global_id(0);
          int gidy = get_global_id(1);
 
-         if(mww(max(0,gidx-vent),max(0,gidy-vent),min(Nx-1,gidx+vent),min(Ny-1,gidy+vent),a,Ny) 
-                    >= b[gidx + gidy*Ny]*bias )
-            c[gidx+gidy*Ny] = b[gidy+gidx*Ny];
+         if(mww(max(0,gidx-vent),max(0,gidy-vent),min(Nx-1,gidx+vent),min(Ny-1,gidy+vent),intImg,Ny) 
+                    >= img[gidx + gidy*Ny]*bias )
+            dest[gidx+gidy*Ny] = img[gidy+gidx*Ny];
+        else dest[gidx+gidy*Ny] = 0.0;
     }
     """).build()
 
     #print intImg
     prg.white(queue, a.shape, a_buf, b_buf, dest_buf, np.int32(Nx), np.int32(Ny), np.int32(vent), np.float32(bias))
     cl.enqueue_read_buffer(queue, dest_buf, im).wait()
-    im = im.astype(np.int32) # !!
-    print "IM: ", im[300][200]
+    #im = im.astype(np.int32) # !!
+    print "IM: ", im
     arrNx = range(Nx)
     arrNy = range(Ny)
 
@@ -122,7 +124,7 @@ def white(img,Nx,Ny,vent,bias):
     #            im[j,i] = img.getpixel((i,j))
 
     # do an opening operation to remove small elements
-    return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int)
+    return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int32)
 
 
 def count(x1,y1,x2,y2,intImg):
