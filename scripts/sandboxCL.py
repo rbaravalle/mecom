@@ -98,18 +98,18 @@ def white(img,Nx,Ny,vent,bias):
         return sum /= ((x2-x1+1)*(y2-y1+1));
 
     }
-    __kernel void white(__global float *a, __global float *b, __global float *c, const int Ny, const int vent) {
+    __kernel void white(__global float *a, __global float *b, __global float *c, const int Nx, const int Ny, const int vent, const int bias) {
          int gidx = get_global_id(0);
          int gidy = get_global_id(1);
 
-         float pepe = max(1.0,2.0);
-         //if(gidx>1000)
-         c[gidx+gidy*Ny] = b[gidy+gidx*Ny];
+         if(mww(max(0,gidx-vent),max(0,gidy-vent),min(Nx-1,gidx+vent),min(Ny-1,gidy+vent),a,Ny) 
+                    >= b[gidx + gidy*Ny]*bias )
+            c[gidx+gidy*Ny] = b[gidy+gidx*Ny];
     }
     """).build()
 
     #print intImg
-    prg.white(queue, a.shape, a_buf, b_buf, dest_buf, np.int32(Ny), np.int32(vent))
+    prg.white(queue, a.shape, a_buf, b_buf, dest_buf, np.int32(Nx), np.int32(Ny), np.int32(vent), np.float32(bias))
     cl.enqueue_read_buffer(queue, dest_buf, im).wait()
     im = im.astype(np.int32) # !!
     print "IM: ", im[300][200]
