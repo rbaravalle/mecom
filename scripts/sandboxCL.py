@@ -209,31 +209,27 @@ def Dq(c,q,L,m0,down):
 
     # padded_c has the same shape as c, transposed and padded
     trans_c = zip(*c)  # transpose c
-    padded_c = np.hstack((trans_c,np.zeros((P,pot-total)).astype(np.float32)))
-    print len(padded_c[4]), pot, total
+    #padded_c = np.hstack((trans_c,np.zeros((P,pot-total)).astype(np.float32)))
+    #print len(padded_c[4]), pot, total
 
-    for h in range(1,2):        
+    for h in range(1,P):        
  #       for i in range(total):
  #           c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/aux1) # mean of "total" points
 # c[i] = sum(...)
  #           c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
 
-        a = np.array(padded_c[h]).astype(np.float32)
+        a = np.array(c[h-1]).astype(np.float32)
         #print a[0:100], "C:", trans_c[h]
         in_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
         # where to store results
         dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
-        #print c[h]
-        # parallel reduction of the sum in c[i]
-
+        # parallel reduction of the sum in c[h]
         a = pyopencl.array.to_device(queue,a)
-
         c[h-1][0] = pyopencl.array.sum(a).get()
-        
-        #prg.reduce(queue, padded_c[h].shape, in_buf, dest_buf, np.int32(pot+1), np.int32(aux1), [])
-        #cl.enqueue_read_buffer(queue, dest_buf, c[h]).wait()
-        #print c[h]
+        print "A VER: ", c[h-1][0]
+        print c[h-1]
 
+    print "C[0]:", c[1]
     c = zip(*trans_c); # again!
     print "C[0]:", c[0]
     up = map(lambda i: log(i)-aux2-q*log(m0), c[0])
