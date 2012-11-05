@@ -211,28 +211,21 @@ def Dq(c,q,L,m0,down):
     trans_c = zip(*c)  # transpose c
     #padded_c = np.hstack((trans_c,np.zeros((P,pot-total)).astype(np.float32)))
     #print len(padded_c[4]), pot, total
+    d = np.zeros(P).astype(np.float32)
 
-    for h in range(1,P):        
- #       for i in range(total):
- #           c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/aux1) # mean of "total" points
-# c[i] = sum(...)
- #           c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
+    for h in range(1,P+1):        
+ #      c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
 
-        a = np.array(c[h-1]).astype(np.float32)
-        #print a[0:100], "C:", trans_c[h]
+        a = np.array(c[h]).astype(np.float32)
         in_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
         # where to store results
         dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
         # parallel reduction of the sum in c[h]
         a = pyopencl.array.to_device(queue,a)
-        c[h-1][0] = pyopencl.array.sum(a).get()
-        print "A VER: ", c[h-1][0]
-        print c[h-1]
+        d[h-1] = pyopencl.array.sum(a).get()
 
-    print "C[0]:", c[1]
-    c = zip(*trans_c); # again!
-    print "C[0]:", c[0]
-    up = map(lambda i: log(i)-aux2-q*log(m0), c[0])
+    print "d: ", d
+    up = map(lambda i: log(i)-aux2-q*log(m0), d)
     #print up
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
     sizes = range(1,P+1)
