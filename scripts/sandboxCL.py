@@ -22,9 +22,9 @@ queue = cl.CommandQueue(ctx)
 #print ctx, queue
 mf = cl.mem_flags
 
-total = 10*10      # number of pixels for averaging
+total = 40*40      # number of pixels for averaging
 P = 40             # window
-cant = 4+1           # number of fractal dimensions (-1 x2)
+cant = 10+1           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -75,14 +75,12 @@ def sat(img,Nx,Ny,which):
 def white(img,Nx,Ny,vent,bias):
            
     intImg = sat(img,Nx,Ny,'img')
-    #print "A:" , intImg[200][300]
     a = np.array(intImg).astype(np.int32)
     im = np.zeros((Nx,Ny)).astype(np.int32)
     intImg_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
-    #print img
     b = np.array(img).astype(np.int32)
-    #print b
     img_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
+
     # where to store results
     dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
 	
@@ -102,26 +100,15 @@ def white(img,Nx,Ny,vent,bias):
          int gidy = get_global_id(1);
          int i = gidy;
          int j = gidx;
-               //max(0,i-vent),   max(0,j-vent),   min(Nx-1,i+vent),   min(Ny-1,j+vent)
          if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg,Ny) 
                     >= (float)img[j + i*Ny]*bias )
             dest[j+i*Ny] = img[j+i*Ny];
     }
     """).build()
 
-    #print intImg
     prg.white(queue, a.shape, intImg_buf, img_buf, dest_buf, np.int32(Nx), np.int32(Ny), np.int32(vent), np.float32(bias))
     cl.enqueue_read_buffer(queue, dest_buf, im).wait()
-    #im = im.astype(np.int32) # !!
-    #print "IM: ", im
-    #arrNx = range(Nx)
-    #arrNy = range(Ny)
 
-    #for i in arrNx:
-    #    for j in arrNy:
-    #        if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias ): 
-    #            im[i,j] = img.getpixel((i,j))
-    #print "IM: ", im
     # do an opening operation to remove small elements
     return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int32)
 
@@ -176,8 +163,7 @@ def spec(filename,v,bias):
         points.append([x,y])
         cantSelected = cantSelected+1
 
-
-    c = np.zeros((total+1,P), dtype=np.double ) # total+1 rows x P columns
+    c = np.zeros((total+1,P), dtype=np.float32 ) # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
@@ -214,11 +200,89 @@ def Dq(c,q,L,m0,down):
         aux1 = 1
         aux2 = log(float(total))
 
-    for h in range(1,P+1):        
-        for i in range(total):
-            c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/aux1) # mean of "total" points
+    # next power of two, bigger than total
+    pot = 1;
+    while(pot <= total):
+        pot = pot*2
 
-    #print "C[0]:", c[0]
+    # padded_c has the same shape as c, transposed and padded
+    trans_c = zip(*c)  # transpose c
+    padded_c = np.hstack((trans_c,np.zeros((P,pot-total)).astype(np.float32)))
+    print len(padded_c[4]), pot, total
+
+    for h in range(1,2):        
+ #       for i in range(total):
+ #           c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/aux1) # mean of "total" points
+# c[i] = sum(...)
+ #           c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
+
+        a = np.array(padded_c[h]).astype(np.float32)
+        print a[0:100], "C:", trans_c[h]
+        in_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
+        # where to store results
+        dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
+        print c[h]
+        # parallel reduction of the sum in c[i]
+
+        prg = cl.Program(ctx, """
+        __kernel void reduce(__global float *g_idata, __global float *g_odata, unsigned int n, __local float* sdata)
+        {
+            // load shared mem
+            unsigned int tid = get_local_id(0);
+            unsigned int i = get_global_id(0);
+            
+            sdata[tid] = (i < n) ? g_idata[i] : 0;
+            
+            barrier(CLK_LOCAL_MEM_FENCE);
+
+            // do reduction in shared mem
+            for(unsigned int s=1; s < get_local_size(0); s *= 2) {
+                // modulo arithmetic is slow!
+                if ((tid % (2*s)) == 0) {
+                    sdata[tid] += sdata[tid + s];
+                }
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+
+            // write result for this block to global mem
+            if (tid == 0) g_odata[get_group_id(0)] = sdata[0];
+        }
+        """).build()
+
+
+        #prg = cl.Program(ctx, """
+        #__kernel void reduce(__global float * in, __global float * out, const int n, const int aux)
+        #{
+        #     __local float* sdata;
+        #    // load shared mem
+        #    unsigned int tid = get_local_id(0);
+        #    unsigned int i = get_global_id(0);
+        #    
+        #    sdata[tid] = (i < n) ? in[i] : 0;
+            
+        #    barrier(CLK_LOCAL_MEM_FENCE);
+
+        #    // do reduction in shared mem
+        #    for(unsigned int s=get_local_size(0)/2; s>0; s>>=1) 
+        #    {
+        #        if (tid < s) 
+        #        {
+        #            sdata[tid] += pow(sdata[tid + s],2)/aux;
+        #        }
+        #        barrier(CLK_LOCAL_MEM_FENCE);
+        #    }
+
+        #    // write result for this block to global mem
+        #    if (tid == 0) out[get_group_id(0)] = sdata[0];
+        #}
+        #""").build()
+
+        prg.reduce(queue, padded_c[h].shape, in_buf, dest_buf, np.int32(pot+1), np.int32(aux1), [])
+        cl.enqueue_read_buffer(queue, dest_buf, c[h]).wait()
+        print c[h]
+
+    c = zip(*trans_c); # again!
+    print "C[0]:", c[0]
     up = map(lambda i: log(i)-aux2-q*log(m0), c[0])
     #print up
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
