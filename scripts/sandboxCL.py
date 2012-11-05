@@ -16,6 +16,8 @@ import numpy as np
 import sys
 import os
 import pyopencl as cl
+import pyopencl.array
+import pyopencl.reduction
 
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
@@ -217,69 +219,20 @@ def Dq(c,q,L,m0,down):
  #           c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
 
         a = np.array(padded_c[h]).astype(np.float32)
-        print a[0:100], "C:", trans_c[h]
+        #print a[0:100], "C:", trans_c[h]
         in_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
         # where to store results
         dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
-        print c[h]
+        #print c[h]
         # parallel reduction of the sum in c[i]
 
-        prg = cl.Program(ctx, """
-        __kernel void reduce(__global float *g_idata, __global float *g_odata, unsigned int n, __local float* sdata)
-        {
-            // load shared mem
-            unsigned int tid = get_local_id(0);
-            unsigned int i = get_global_id(0);
-            
-            sdata[tid] = (i < n) ? g_idata[i] : 0;
-            
-            barrier(CLK_LOCAL_MEM_FENCE);
+        a = pyopencl.array.to_device(queue,a)
 
-            // do reduction in shared mem
-            for(unsigned int s=1; s < get_local_size(0); s *= 2) {
-                // modulo arithmetic is slow!
-                if ((tid % (2*s)) == 0) {
-                    sdata[tid] += sdata[tid + s];
-                }
-                barrier(CLK_LOCAL_MEM_FENCE);
-            }
-
-            // write result for this block to global mem
-            if (tid == 0) g_odata[get_group_id(0)] = sdata[0];
-        }
-        """).build()
-
-
-        #prg = cl.Program(ctx, """
-        #__kernel void reduce(__global float * in, __global float * out, const int n, const int aux)
-        #{
-        #     __local float* sdata;
-        #    // load shared mem
-        #    unsigned int tid = get_local_id(0);
-        #    unsigned int i = get_global_id(0);
-        #    
-        #    sdata[tid] = (i < n) ? in[i] : 0;
-            
-        #    barrier(CLK_LOCAL_MEM_FENCE);
-
-        #    // do reduction in shared mem
-        #    for(unsigned int s=get_local_size(0)/2; s>0; s>>=1) 
-        #    {
-        #        if (tid < s) 
-        #        {
-        #            sdata[tid] += pow(sdata[tid + s],2)/aux;
-        #        }
-        #        barrier(CLK_LOCAL_MEM_FENCE);
-        #    }
-
-        #    // write result for this block to global mem
-        #    if (tid == 0) out[get_group_id(0)] = sdata[0];
-        #}
-        #""").build()
-
-        prg.reduce(queue, padded_c[h].shape, in_buf, dest_buf, np.int32(pot+1), np.int32(aux1), [])
-        cl.enqueue_read_buffer(queue, dest_buf, c[h]).wait()
-        print c[h]
+        c[h-1][0] = pyopencl.array.sum(a).get()
+        
+        #prg.reduce(queue, padded_c[h].shape, in_buf, dest_buf, np.int32(pot+1), np.int32(aux1), [])
+        #cl.enqueue_read_buffer(queue, dest_buf, c[h]).wait()
+        #print c[h]
 
     c = zip(*trans_c); # again!
     print "C[0]:", c[0]
