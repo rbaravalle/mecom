@@ -7,9 +7,9 @@
 from random import randrange,randint
 from math import log
 from scipy import ndimage
-from pylab import plot, title, show , legend
-import matplotlib
-from matplotlib import pyplot as plt
+#from pylab import plot, title, show , legend
+#import matplotlib
+#from matplotlib import pyplot as plt
 import time
 import Image
 import numpy as np
@@ -19,7 +19,7 @@ import pyopencl as cl
 
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
-print ctx, queue
+#print ctx, queue
 mf = cl.mem_flags
 
 total = 10*10      # number of pixels for averaging
@@ -76,20 +76,18 @@ def white(img,Nx,Ny,vent,bias):
            
     intImg = sat(img,Nx,Ny,'img')
     #print "A:" , intImg[200][300]
-    a = np.array(intImg).astype(np.float32)
-    im = np.zeros((Nx,Ny)).astype(np.float32)
-    a_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
-    print img
-    b = np.array(img).astype(np.float32)
-    print b
-    b_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
+    a = np.array(intImg).astype(np.int32)
+    im = np.zeros((Nx,Ny)).astype(np.int32)
+    intImg_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
+    #print img
+    b = np.array(img).astype(np.int32)
+    #print b
+    img_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
     # where to store results
     dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
-
-
 	
     prg = cl.Program(ctx, """
-    float mww(int x1, int y1, int x2, int y2, __global float* intImg, const int Ny) {
+    float mww(int x1, int y1, int x2, int y2, __global int* intImg, const int Ny) {
         float sum = intImg[x2+y2*Ny];
         if (x1>= 1 && y1 >= 1) 
             sum += intImg[x1-1 + (y1-1)*Ny];
@@ -99,24 +97,25 @@ def white(img,Nx,Ny,vent,bias):
             sum -= intImg[x2 + (y1-1)*Ny];
         return sum *= 1.0f/((x2-x1+1)*(y2-y1+1));
     }
-    __kernel void white(__global float *intImg, __global float *img, __global float *dest, const int Nx, const int Ny, const int vent, const float bias) {
+    __kernel void white(__global int *intImg, __global int *img, __global int *dest, const int Nx, const int Ny, const int vent, const float bias) {
          int gidx = get_global_id(0);
          int gidy = get_global_id(1);
-
-         if(mww(max(0,gidx-vent),max(0,gidy-vent),min(Nx-1,gidx+vent),min(Ny-1,gidy+vent),intImg,Ny) 
-                    >= img[gidx + gidy*Ny]*bias )
-            dest[gidx+gidy*Ny] = 255;//img[gidy+gidx*Ny]/2;
-         else dest[gidx+gidy*Ny] = 0;
+         int i = gidy;
+         int j = gidx;
+               //max(0,i-vent),   max(0,j-vent),   min(Nx-1,i+vent),   min(Ny-1,j+vent)
+         if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg,Ny) 
+                    >= (float)img[j + i*Ny]*bias )
+            dest[j+i*Ny] = img[j+i*Ny];
     }
     """).build()
 
     #print intImg
-    prg.white(queue, a.shape, a_buf, b_buf, dest_buf, np.int32(Nx), np.int32(Ny), np.int32(vent), np.float32(bias))
+    prg.white(queue, a.shape, intImg_buf, img_buf, dest_buf, np.int32(Nx), np.int32(Ny), np.int32(vent), np.float32(bias))
     cl.enqueue_read_buffer(queue, dest_buf, im).wait()
-    im = im.astype(np.int32) # !!
-    print "IM: ", im
-    arrNx = range(Nx)
-    arrNy = range(Ny)
+    #im = im.astype(np.int32) # !!
+    #print "IM: ", im
+    #arrNx = range(Nx)
+    #arrNy = range(Ny)
 
     #for i in arrNx:
     #    for j in arrNy:
@@ -156,8 +155,8 @@ def spec(filename,v,bias):
     gray = a.convert('L') # rgb 2 gray
 
     gray = white(gray,Nx,Ny,v,bias) # local thresholding algorithm
-    plt.imshow(gray, cmap=matplotlib.cm.gray)
-    plt.show()
+    #plt.imshow(gray, cmap=matplotlib.cm.gray)
+    #plt.show()
     #return
     intImg = sat(gray,Nx,Ny,'array')
 
