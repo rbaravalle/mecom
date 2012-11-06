@@ -7,18 +7,18 @@
 from random import randrange,randint
 from math import log
 from scipy import ndimage
-#from pylab import plot, title, show , legend
-#import matplotlib
-#from matplotlib import pyplot as plt
+from pylab import plot, title, show , legend
+import matplotlib
+from matplotlib import pyplot as plt
 import time
 import Image
 import numpy as np
 import sys
 import os
 
-total = 30*30      # number of pixels for averaging
-P = 20             # window
-cant = 4+1           # number of fractal dimensions (-1 x2)
+total = 40*40      # number of pixels for averaging
+P = 40             # window
+cant = 10+1           # number of fractal dimensions (-1 x2)
 
 # returns the sum of (summed area) image pixels in the box between
 # (x1,y1) and (x2,y2)
@@ -78,7 +78,7 @@ def white(img,Nx,Ny,vent,bias):
     for i in arrNx:
         for j in arrNy:
             if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg) >= img.getpixel((i,j))*bias ): 
-                im[j,i] = img.getpixel((i,j))
+                im[j,i] = 255#img.getpixel((i,j))
 
     # do an opening operation to remove small elements
     return ndimage.binary_opening(im, structure=np.ones((2,2))).astype(np.int)
@@ -135,13 +135,13 @@ def spec(filename,v,b):
         cantSelected = cantSelected+1
 
 
-    c = np.zeros((total+1,P), dtype=np.double ) # total+1 rows x P columns
+    c = np.zeros((P,total), dtype=np.double ) # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
         for h in range(1,P+1):
             # how many points in the box. M(R) in the literature
-            c[i+1][h-1] = count(x-(h),y-(h),x+(h),y+(h),intImg)
+            c[h-1][i] = count(x-(h),y-(h),x+(h),y+(h),intImg)
 
     down = range(1,P+1)
     # Generalized Multifractal Dimentions 
@@ -172,12 +172,12 @@ def Dq(c,q,L,m0,down):
         aux1 = 1
         aux2 = log(float(total))
 
-    for h in range(1,P+1):        
-        for i in range(total):
-            c[0][h-1] = c[0][h-1] + ((c[i+1][h-1]**q)/aux1) # mean of "total" points
+    d = np.zeros(P).astype(np.float32)
 
-    #print "C[0]:", c[0]
-    up = map(lambda i: log(i)-aux2-q*log(m0), c[0])
+    for h in range(1,P+1):        
+        d[h-1]= np.sum(map(lambda i: (i**q)/aux1,c[h-1]))
+
+    up = map(lambda i: log(i)-aux2-q*log(m0), d)
     #print up
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
     sizes = range(1,P+1)
@@ -186,4 +186,4 @@ def Dq(c,q,L,m0,down):
     return ar
     
 
-
+print spec('../imagenes/scanner/baguette/baguette1.tif',40,1.15)
