@@ -165,13 +165,13 @@ def spec(filename,v,bias):
         points.append([x,y])
         cantSelected = cantSelected+1
 
-    c = np.zeros((total+1,P), dtype=np.float32 ) # total+1 rows x P columns
+    c = np.zeros((P,total), dtype=np.float32 ) # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
         for h in range(1,P+1):
             # how many points in the box. M(R) in the literature
-            c[i+1][h-1] = count(x-(h),y-(h),x+(h),y+(h),intImg)
+            c[h-1][i] = count(x-(h),y-(h),x+(h),y+(h),intImg)
 
     down = range(1,P+1)
     # Generalized Multifractal Dimentions 
@@ -191,6 +191,11 @@ def spec(filename,v,bias):
     #print "Dims: ", s
     return s
 
+# parallel reduction of the sum in c[h]
+krnl = pyopencl.reduction.ReductionKernel(ctx, np.float32, neutral="0",
+        reduce_expr="a+b", map_expr="pow(x[i],q)/aux1",
+        arguments="__global float *x, float q, const int aux1")
+
 def Dq(c,q,L,m0,down):
 
     #aux = 1
@@ -208,23 +213,21 @@ def Dq(c,q,L,m0,down):
         pot = pot*2
 
     # padded_c has the same shape as c, transposed and padded
-    trans_c = zip(*c)  # transpose c
+    trans_c = np.array(zip(*c)).astype(np.float32)  # transpose c
     #padded_c = np.hstack((trans_c,np.zeros((P,pot-total)).astype(np.float32)))
     #print len(padded_c[4]), pot, total
     d = np.zeros(P).astype(np.float32)
 
-    for h in range(1,P+1):        
+    for h in range(P):        
  #      c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
-
         a = np.array(c[h]).astype(np.float32)
         in_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
-        # where to store results
         dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
-        # parallel reduction of the sum in c[h]
+        # where to store results      
         a = pyopencl.array.to_device(queue,a)
-        d[h-1] = pyopencl.array.sum(a).get()
+        d[h] = krnl(a, np.float32(q), np.int32(aux1)).get()  
 
-    print "d: ", d
+    #print "d: ", d
     up = map(lambda i: log(i)-aux2-q*log(m0), d)
     #print up
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
