@@ -8,15 +8,15 @@ from random import randrange,randint
 from math import log
 from scipy import ndimage
 from pylab import plot, title, show , legend
-import matplotlib
-from matplotlib import pyplot as plt
+#import matplotlib
+#from matplotlib import pyplot as plt
 import time
 import Image
 import numpy as np
 import sys
 import os
 
-total = 40*40      # number of pixels for averaging
+total = 2000      # number of pixels for averaging
 P = 40             # window
 cant = 10+1           # number of fractal dimensions (-1 x2)
 
@@ -174,11 +174,10 @@ def Dq(c,q,L,m0,down):
 
     d = np.zeros(P).astype(np.float32)
 
-    for h in range(1,P+1):        
-        d[h-1]= np.sum(map(lambda i: (i**q)/aux1,c[h-1]))
+    for h in range(P):        
+        d[h]= np.sum(map(lambda i: (i**q)/aux1,c[h]))
 
     up = map(lambda i: log(i)-aux2-q*log(m0), d)
-    #print up
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
     sizes = range(1,P+1)
 

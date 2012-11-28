@@ -21,10 +21,9 @@ import pyopencl.reduction
 
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
-#print ctx, queue
 mf = cl.mem_flags
 
-total = 40*40      # number of pixels for averaging
+total = 2000      # number of pixels for averaging
 P = 40             # window
 cant = 10+1           # number of fractal dimensions (-1 x2)
 
@@ -104,7 +103,8 @@ def white(img,Nx,Ny,vent,bias):
          int j = gidx;
          if(mww(max(0,i-vent),max(0,j-vent),min(Nx-1,i+vent),min(Ny-1,j+vent),intImg,Ny) 
                     >= (float)img[j + i*Ny]*bias )
-            dest[j+i*Ny] = img[j+i*Ny];
+            dest[j+i*Ny] = 255;
+         else dest[j+i*Ny] = 0;
     }
     """).build()
 
@@ -128,8 +128,6 @@ def count(x1,y1,x2,y2,intImg):
 
 # v: window size
 def spec(filename,v,bias):
-    #import psyco # magical speed up
-    #psyco.full()
     t = time.clock()
     tP = (P)   # tP : two raised to P
     x = tP+1
@@ -165,7 +163,7 @@ def spec(filename,v,bias):
         points.append([x,y])
         cantSelected = cantSelected+1
 
-    c = np.zeros((P,total), dtype=np.float32 ) # total+1 rows x P columns
+    c = np.zeros((P,total), dtype=np.double ) # total+1 rows x P columns
     for i in range(total): # for each point randomly selected
         x = points[i][0]
         y = points[i][1]
@@ -175,7 +173,7 @@ def spec(filename,v,bias):
 
     down = range(1,P+1)
     # Generalized Multifractal Dimentions 
-    s = [0 for i in range(2*cant-2)]
+    s = np.array([0 for i in range(2*cant-2)]).astype(np.double)
     l = range(-cant+1,0)+  range(1,cant)
     j = 0
     for i in l:
@@ -192,49 +190,33 @@ def spec(filename,v,bias):
     return s
 
 # parallel reduction of the sum in c[h]
-krnl = pyopencl.reduction.ReductionKernel(ctx, np.float32, neutral="0",
+krnl = pyopencl.reduction.ReductionKernel(ctx, np.double, neutral="0",
         reduce_expr="a+b", map_expr="pow(x[i],q)/aux1",
-        arguments="__global float *x, float q, const int aux1")
+        arguments="__global double *x, double q, const int aux1")
 
 def Dq(c,q,L,m0,down):
 
     #aux = 1
     # sum in each radius, all the points
     if q>0: # math representation issue
-        aux1 = float(total)
+        aux1 = total
         aux2 = 0
     else:
         aux1 = 1
         aux2 = log(float(total))
 
-    # next power of two, bigger than total
-    pot = 1;
-    while(pot <= total):
-        pot = pot*2
-
-    # padded_c has the same shape as c, transposed and padded
-    trans_c = np.array(zip(*c)).astype(np.float32)  # transpose c
-    #padded_c = np.hstack((trans_c,np.zeros((P,pot-total)).astype(np.float32)))
-    #print len(padded_c[4]), pot, total
-    d = np.zeros(P).astype(np.float32)
-
+    d = np.zeros(P).astype(np.double)
     for h in range(P):        
- #      c[h-1][0] = c[h-1][0] + ((c[h-1][i+1]**q)/aux1) # mean of "total" points
-        a = np.array(c[h]).astype(np.float32)
-        in_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
-        dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, a.nbytes)
-        # where to store results      
-        a = pyopencl.array.to_device(queue,a)
-        d[h] = krnl(a, np.float32(q), np.int32(aux1)).get()  
+        a = pyopencl.array.to_device(queue,c[h])
+        d[h] = krnl(a, np.double(q), np.int32(aux1)).get()  
 
-    #print "d: ", d
+
     up = map(lambda i: log(i)-aux2-q*log(m0), d)
-    #print up
     up2 = map(lambda i: up[i]/(q*down[i]), range(len(up)))
     sizes = range(1,P+1)
 
     (ar,br)=np.polyfit(sizes,up2,1)
     return ar
     
-print spec('../imagenes/scanner/baguette/baguette9.tif',40,1.15)
+print spec('../imagenes/scanner/baguette/baguette1.tif',40,1.15)
 
